@@ -1,0 +1,16 @@
+.main-nav .logo {
+  background-color: #ffffff;
+  width:60px;
+  height:60px;
+  border-radius: 30px;
+  padding:5px;
+}
+
+.main-nav .logo img {
+  width: 50px;
+  height: 50px;
+}
+
+.main-nav .nav ul li a {
+  text-decoration: none;
+}

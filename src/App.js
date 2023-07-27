@@ -1,24 +1,21 @@
-import logo from './logo.svg';
-import './App.css';
+import { ToastContainer } from "react-toastify";
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'animate.css';
+import './assets/styles/style.css';
+import './assets/styles/colors.css';
+import './assets/styles/custom.css';
+import './assets/styles/responsive.css';
+import Home from "./pages/Home";
+import MetaTag from "./components/_main/MetaTag";
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <div id="wrapper">
+        <Home />
+      </div>
+      <ToastContainer hideProgressBar={true} />
+    </>
   );
 }
 

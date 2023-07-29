@@ -5,6 +5,7 @@ import SpecialPizzaSelection from "../components/_main/SpecialPizzaSelection";
 import { useParams } from "react-router-dom";
 import { getDips, getSpecialDetails } from "../services";
 import { data } from "jquery";
+import pizzaImage from "../assets/images/pz.png";
 
 function SpecialMenu() {
   const { sid } = useParams();

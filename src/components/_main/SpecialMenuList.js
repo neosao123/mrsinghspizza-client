@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { specialIngredients } from "../../services";
+import pizzaImage from "../../assets/images/pz.png";
 
 function SpecialMenuList() {
   const [specialData, setSpecialData] = useState();
@@ -28,7 +29,7 @@ function SpecialMenuList() {
               <div className="d-flex justify-content-center mb-3">
                 <div className="image-div d-flex justify-content-center">
                   <img
-                    src={data.image ? data.image : "images/pz.png"}
+                    src={data.image ? data.image : pizzaImage}
                     alt=""
                     className="img-fluid image"
                   />

@@ -8,7 +8,7 @@ import SidesMenu from "../components/_main/SidesMenu";
 import DipsMenu from "../components/_main/DipsMenu";
 import DrinksMenu from "../components/_main/DrinksMenu";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
-
+import pizzaImage from "../assets/images/pz.png";
 const Home = () => {
   return (
     <>
@@ -176,7 +176,7 @@ const Home = () => {
                               <div className="d-flex justify-content-center mb-3">
                                 <div className="image-div d-flex justify-content-center">
                                   <img
-                                    src="/images/pz.png"
+                                    src={pizzaImage}
                                     alt=""
                                     className="img-fluid image"
                                   />

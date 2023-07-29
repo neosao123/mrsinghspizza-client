@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getSides } from "../../services";
+import pizzaimage from "../../assets/images/pz.png"
 
 function SidesMenu() {
   const [sidesData, setSideData] = useState();
@@ -28,7 +29,7 @@ function SidesMenu() {
               <div className="d-flex justify-content-center mb-3">
                 <div className="image-div d-flex justify-content-center">
                   <img
-                    src={data.image ? data.image : "/images/pz.png"}
+                    src={data.image ? data.image : pizzaimage}
                     alt=""
                     className="img-fluid image"
                   />

@@ -48,7 +48,7 @@
 
 @media (max-width: 1700px) {
   .block-stl13 h3 {
-    margin-bottom: 15px;
+    /* margin-bottom: 15px; */
   }
   .block-stl13 p {
     margin-bottom: 10px;
@@ -416,7 +416,7 @@
     font-size: 20px;
   }
   .block-stl1 {
-    padding: 30px 10px 20px;
+    /* padding: 30px 10px 20px; */
   }
   .amezing-offers {
     padding: 80px 0 0;
@@ -495,7 +495,7 @@
     min-width: 140px;
   }
   .special-offer-inr-block {
-    padding: 50px 40px 0;
+    /* padding: 50px 40px 0; */
   }
   .deal-of-day .dsCountDown.ds-white {
     margin-bottom: 70px;
@@ -934,7 +934,7 @@
     min-width: 150px;
   }
   .special-offer-inr-block {
-    padding: 50px 40px 0;
+    /* padding: 50px 40px 0; */
   }
   .deal-of-day {
     padding: 50px 0 70px;
@@ -1095,7 +1095,7 @@
     padding: 10px 0 0;
   }
   .special-offer-inr-block {
-    padding: 40px 20px 0;
+    /* padding: 40px 20px 0; */
   }
   .deal-of-day {
     padding: 40px 0 0;
@@ -1727,7 +1727,7 @@
     display: none;
   }
   .cat-block .block-stl1 {
-    padding: 20px 10px 20px;
+    /* padding: 20px 10px 20px; */
   }
   .filter-tabnav {
     margin-bottom: 40px;
@@ -1976,7 +1976,7 @@
     margin: 0 auto;
   }
   .cat-block .block-stl1 {
-    padding: 12px 10px 12px;
+    /* padding: 12px 10px 12px; */
   }
   .tab-flr-btn {
     display: block;
@@ -3570,7 +3570,7 @@ a.btn1.stl1.animated {
   width: 100%;
   float: left;
   text-align: center;
-  padding: 45px 10px 25px;
+  /* padding: 45px 10px 25px; */
   position: relative;
   z-index: 1;
 }
@@ -3674,7 +3674,7 @@ a.btn1.stl1.animated {
   margin-bottom: 30px;
 }
 .special-offer-inr-block {
-  padding: 75px 60px 0;
+  /* padding: 75px 60px 0; */
   background: #f1f1f1;
 }
 .special-offer-block {
@@ -3682,7 +3682,7 @@ a.btn1.stl1.animated {
 }
 .special-offer-block .nav .filterer {
   font-size: 18px;
-  padding: 8px 5px ;
+  padding: 8px 5px;
   position: relative;
   float: left;
   color: #000000;
@@ -3711,6 +3711,7 @@ a.btn1.stl1.animated {
   float: none;
   height: auto;
   /* border-bottom: 1px solid #cccccc; */
+  border: none !important;
 }
 .special-offer-block .nav .filterer span:before {
   content: "";

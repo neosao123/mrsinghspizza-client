@@ -22,19 +22,13 @@ const Header = () => {
                     <Link>Home</Link>
                   </li>
                   <li>
-                    <Link>Create Own</Link>
-                  </li>
-                  <li>
-                    <Link>Specials</Link>
-                  </li>
-                  <li>
                     <Link href="">About</Link>
                   </li>
                   <li>
                     <Link href="">Contact Us</Link>
                   </li>
                   <li>
-                    <Link>Login/Signup</Link>
+                    <Link to="/login">Login/Signup</Link>
                   </li>
                 </ul>
               </nav>

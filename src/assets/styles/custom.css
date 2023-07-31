@@ -60,16 +60,27 @@
   background-color: #606060 !important;
 }
 .nav-tabs .nav-item.show .nav-link,
-.nav-tabs .nav-link.active {
-  border-color: transparent;
-  border-bottom: 0.2rem solid #ef831b;
+.nav-tabs .nav-link {
+  background-color: #f29640;
+  border-color: transparent !important;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link.active,
+.nav-tabs .nav-item.show .nav-link,
+.nav-tabs .nav-link:focus {
+  background-color: #ee7c11;
+  border-color: transparent !important;
+  color: #ffffff;
 }
 .nav-tabs .nav-item.show .nav-link,
 .nav-tabs .nav-link:hover {
   border-color: transparent;
 }
 .nav-tabs .nav-link {
-  width: 166px;
+  /* width: 166px; */
   border-radius: 0%;
 }
 .sidesTitle h3,
@@ -118,15 +129,23 @@
 }
 
 .customizedBtn,
-.addtocartBtn {
+.addtocartBtn,
+.loginBtn,
+.regBtn {
   background-color: #ef831b;
   color: #ffffff !important;
 }
+
 .customizedBtn:hover,
 .customizedBtn.active,
 .addtocartBtn:hover,
-.addtocartBtn.active {
-  background-color: #414141 !important;
+.addtocartBtn.active,
+.regBtn.active,
+.regBtn:hover,
+.loginBtn:hover,
+.loginBtn.active,
+.loginBtn:focus {
+  background-color: #2e2e2e !important;
 }
 
 .image-div {
@@ -139,4 +158,23 @@
   width: 100%;
   height: 100%;
   object-fit: contain !important;
+}
+
+.loginBox {
+  width: 25rem;
+  min-height: 28rem;
+  padding: 2rem;
+}
+.loginBox .images,
+.regPage .images {
+  width: 65px;
+  height: 65px;
+}
+.loginBox .content h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+}
+
+.regPage h3 {
+  font-size: 1.5rem;
 }

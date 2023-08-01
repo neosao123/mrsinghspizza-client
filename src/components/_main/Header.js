@@ -35,7 +35,7 @@ const Header = () => {
               <div className="nav-right-block">
                 <ul className="list-unstyled">
                   <li>
-                    <Link>
+                    <Link to="/addtocart" className="text-decoration-none">
                       <i className="flaticon-scooter-front-view"></i>
                       <span className="nav-price">$00.00</span>
                     </Link>

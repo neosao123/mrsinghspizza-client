@@ -1,0 +1,29 @@
+.productList h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #ef831b;
+}
+.addtocart {
+  background-color: #ef831b;
+  color: #ffffff !important;
+  border: none;
+}
+.addtocart.active,
+.addtocart:hover {
+  background-color: #2e2e2e !important;
+  transition: 0.3s all ease-in-out;
+}
+.block-stl10 h3 {
+  font-size: 1.2rem !important;
+}
+.cartlistitem .image img {
+  width: 75px;
+  height: 75px;
+}
+.cartlistitem h5 {
+  font-size: 1rem;
+  font-weight: 800;
+}
+.cartlistitem p {
+  font-size: 1rem;
+}

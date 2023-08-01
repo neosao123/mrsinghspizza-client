@@ -38,11 +38,11 @@ function DipsMenu() {
               <div className="d-flex justify-content-center flex-column align-items-center">
                 <div className="mb-3 d-flex align-items-center">
                   <button className="quantityBtn">
-                    <i className="fa fa-plus" aria-hidden="true"></i>
+                    <i className="fa fa-minus" aria-hidden="true"></i>
                   </button>
                   <p className="quantityText mx-3">1</p>
                   <button className="quantityBtn">
-                    <i className="fa fa-minus" aria-hidden="true"></i>
+                    <i className="fa fa-plus" aria-hidden="true"></i>
                   </button>
                 </div>
                 <p className="dipsPrice text-dark mb-3">

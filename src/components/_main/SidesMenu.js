@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { getSides } from "../../services";
-import pizzaimage from "../../assets/images/pz.png"
+import pizzaimage from "../../assets/images/pz.png";
 
 function SidesMenu() {
   const [sidesData, setSideData] = useState();
@@ -53,11 +53,11 @@ function SidesMenu() {
                 </select>
                 <div className="mb-3 d-flex align-items-center">
                   <button className="quantityBtn">
-                    <i className="fa fa-plus" aria-hidden="true"></i>
+                    <i className="fa fa-minus" aria-hidden="true"></i>
                   </button>
                   <p className="quantityText mx-3">1</p>
                   <button className="quantityBtn">
-                    <i className="fa fa-minus" aria-hidden="true"></i>
+                    <i className="fa fa-plus" aria-hidden="true"></i>
                   </button>
                 </div>
                 <button

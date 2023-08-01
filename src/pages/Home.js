@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
 
@@ -9,7 +9,6 @@ import DipsMenu from "../components/_main/DipsMenu";
 import DrinksMenu from "../components/_main/DrinksMenu";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
-import { useGeolocated } from "react-geolocated";
 
 const Home = () => {
   const [longitude, setLongitude] = useState();
@@ -32,6 +31,7 @@ const Home = () => {
     }
   };
 
+  
   useEffect(() => {
     getLocation();
     localStorage.setItem("latitude", latitude);

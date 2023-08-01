@@ -4,6 +4,7 @@ import Home from "../pages/Home";
 import SpecialMenu from "../pages/SpecialMenu";
 import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
+import AddToCart from "../pages/AddToCart";
 
 const AllRoutes = () => {
   return (
@@ -13,6 +14,7 @@ const AllRoutes = () => {
       <Route exact path="/registration" Component={Registration} />
       <Route exact path="/create-your-own" Component={CreateYourOwn} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
+      <Route exact path="/addtocart" Component={AddToCart} />
     </Routes>
   );
 };

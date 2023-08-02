@@ -9,6 +9,7 @@ import "./assets/styles/responsive.css";
 import Home from "./pages/Home";
 import MetaTag from "./components/_main/MetaTag";
 import AllRoutes from "./routes/AllRoutes";
+import "react-toastify/dist/ReactToastify.css";
 
 function App() {
   return (
@@ -16,7 +17,7 @@ function App() {
       <div id="wrapper">
         <AllRoutes />
       </div>
-      <ToastContainer hideProgressBar={true} />
+      <ToastContainer hideProgressBar={false} position="top-right" />
     </>
   );
 }

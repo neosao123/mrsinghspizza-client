@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useContext, useEffect } from "react";
 import logo from "../../assets/images/logo.png";
 import bgImage from "../../assets/images/bg-img.jpg";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Header from "../../components/_main/Header";
 import Footer from "../../components/_main/Footer";
+import { toast } from "react-toastify";
+import { customerRegistration } from "../../services";
+import GlobalContext from "../../context/GlobalContext";
+import { useNavigate } from "react-router-dom";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 // Validation Functions
@@ -33,10 +37,30 @@ const ValidateSchema = Yup.object({
 });
 
 function Registration() {
-  const onSubmit = () => {
-    //
-  };
+  const globalctx = useContext(GlobalContext);
+  const [user, setUser] = globalctx.user;
+  const navigate = useNavigate();
 
+  const onSubmit = async (values) => {
+    console.log(values);
+    let payload = {
+      firstName: values.firstname,
+      lastName: values.lastname,
+      mobileNumber: values.phoneno,
+      city: values.city,
+      zipcode: values.postalcode,
+      password: values.password,
+      address: values.address,
+    };
+    console.log(payload);
+    await customerRegistration(payload)
+      .then((res) => {
+        toast.success("Account registered successfully...");
+      })
+      .catch((err) => {
+        toast.error(err);
+      });
+  };
   // Use Formik
   const formik = useFormik({
     initialValues: {
@@ -54,6 +78,19 @@ function Registration() {
     onSubmit,
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    const user = localStorage.getItem("user") ?? null;
+
+    if (user != null) {
+      const userData = JSON.parse(user);
+      if (userData) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
+    }
+  }, [navigate]);
   return (
     <>
       <Header />
@@ -130,6 +167,26 @@ function Registration() {
                     </div>
                   ) : null}
                 </div>
+
+                {/* Address */}
+                <div className="d-flex flex-row flex-wrap align-items-center mb-3">
+                  <label className="form-label">
+                    Address <small className="text-danger">*</small>
+                  </label>
+                  <input
+                    className=" form-control"
+                    type="text"
+                    name="address"
+                    value={formik.values.address}
+                    onChange={formik.handleChange}
+                    onBlur={formik.handleBlur}
+                  />
+                </div>
+                {formik.touched.address && formik.errors.address ? (
+                  <div className="text-danger mt-2 mb-3">
+                    {formik.errors.address}
+                  </div>
+                ) : null}
 
                 {/* City */}
                 <div className="d-flex flex-row flex-wrap align-items-center mb-3">
@@ -211,27 +268,12 @@ function Registration() {
                     </div>
                   ) : null}
                 </div>
-                {/* Address */}
-                <div className="d-flex flex-row flex-wrap align-items-center mb-3">
-                  <label className="form-label">
-                    Address <small className="text-danger">*</small>
-                  </label>
-                  <input
-                    className=" form-control"
-                    type="text"
-                    name="address"
-                    value={formik.values.address}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                </div>
-                {formik.touched.address && formik.errors.address ? (
-                  <div className="text-danger mb-2">
-                    {formik.errors.address}
-                  </div>
-                ) : null}
+
                 <div className="w-100 text-center mb-3 mt-4">
-                  <button className="w-100 py-2 fw-bold btn btn-md regBtn">
+                  <button
+                    className="w-100 py-2 fw-bold btn btn-md regBtn"
+                    type="submit"
+                  >
                     Create An Account
                   </button>
                 </div>

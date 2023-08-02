@@ -1,10 +1,18 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import SpecialPizzaSelection from "../components/_main/SpecialPizzaSelection";
-import { useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDips, getSpecialDetails, getToppings } from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
+import { toast } from "react-toastify";
+import GlobalContext from "../context/GlobalContext";
 
 function SpecialMenu() {
   const { sid } = useParams();
@@ -13,6 +21,10 @@ function SpecialMenu() {
   const [toppingsData, setToppingsData] = useState();
   const [pizzaSize, setPizzaSize] = useState("Large");
   const [loading, setLoading] = useState(false);
+  const globalCtx = useContext(GlobalContext);
+  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const handlePrice = async (e) => {
     setPizzaSize(e.target.value);
@@ -24,7 +36,6 @@ function SpecialMenu() {
       setLoading(false);
     });
   };
-
   const dips = async () => {
     setLoading(true);
     await getDips()
@@ -36,7 +47,6 @@ function SpecialMenu() {
         console.log("ERROR From Special Dips: ", err);
       });
   };
-
   const toppings = async () => {
     setLoading(true);
     await getToppings()
@@ -61,6 +71,14 @@ function SpecialMenu() {
       />
     );
   }
+  const handlePlaceOrder = () => {
+    if (isAuthenticated) {
+      toast.success("Order Placed Successfully..");
+    } else {
+      localStorage.setItem("redirectTo", location?.pathname);
+      navigate("/login");
+    }
+  };
 
   useEffect(() => {
     getSpecial();
@@ -440,7 +458,10 @@ function SpecialMenu() {
                   </div>
                 </div>
                 <div className="placeOrderBtn w-100 mt-3">
-                  <button className="btn btn-md w-100 btn-pills">
+                  <button
+                    className="btn btn-md w-100 btn-pills"
+                    onClick={handlePlaceOrder}
+                  >
                     Place Order{" "}
                   </button>
                 </div>

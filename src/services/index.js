@@ -56,12 +56,12 @@ export const specialIngredients = async (payload) => {
 };
 
 // customer API
-export const customerLogin = async (page, search, payload) => {
+export const customerLogin = async (payload, page, search) => {
   const { data: response } = await http.post(`/customer/login`, payload);
   return response;
 };
-export const customerRegistration = async (page, search, payload) => {
-  const { data: response } = await http.post(`/customer/register`);
+export const customerRegistration = async (payload, page, search) => {
+  const { data: response } = await http.post(`/customer/register`, payload);
   return response;
 };
 export const customerLogout = async (page, search, payload) => {

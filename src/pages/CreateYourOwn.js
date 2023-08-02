@@ -1,15 +1,88 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import "../assets/styles/custom.css";
 import { getAllIngredients, getSides } from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import "../assets/styles/CreateYourOwn/style.css";
+import GlobalContext from "../context/GlobalContext";
+import { useLocation, useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
 
 function CreateYourOwn() {
   const [allIngredients, setAllIngredients] = useState();
   const [sideData, setSideData] = useState();
   const [loading, setLoading] = useState(false);
+  const [userLongitude, setUserLongitude] = useState();
+  const [userLatitude, setUserLatitude] = useState();
+  const globalCtx = useContext(GlobalContext);
+  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  function calculateCoordinates(centerLat, centerLng, radiusInKm, angle) {
+    const earthRadius = 6371; // Earth's radius in kilometers
+
+    const lat1 = (Math.PI / 180) * centerLat;
+    const lng1 = (Math.PI / 180) * centerLng;
+    const angularDistance = radiusInKm / earthRadius;
+
+    const lat2 = Math.asin(
+      Math.sin(lat1) * Math.cos(angularDistance) +
+        Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(angle)
+    );
+
+    const lng2 =
+      lng1 +
+      Math.atan2(
+        Math.sin(angle) * Math.sin(angularDistance) * Math.cos(lat1),
+        Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2)
+      );
+
+    return {
+      latitude: (180 / Math.PI) * lat2,
+      longitude: (180 / Math.PI) * lng2,
+    };
+  }
+
+  // Usage in your component
+
+  // Assuming you have set the userLongitude and userLatitude somehow
+  const centerLongitude = userLongitude;
+  const centerLatitude = userLatitude;
+  const radiusInKm = 5; // Set the desired radius in kilometers
+
+  // Create an array to hold the coordinates for the circle points
+  const circlePoints = [];
+
+  for (let i = 0; i < 360; i += 10) {
+    const angle = (Math.PI / 180) * i;
+    const point = calculateCoordinates(
+      centerLatitude,
+      centerLongitude,
+      radiusInKm,
+      angle
+    );
+    circlePoints.push(point);
+  }
+
+  // Now, the circlePoints array contains the coordinates of points on the circumference of the circle.
+  // You can use this array to plot the circle on a map or perform any other desired action.
+
+  const handlePlaceOrder = () => {
+    if (isAuthenticated) {
+      toast.success("Order Placed Successfully..");
+    } else {
+      localStorage.setItem("redirectTo", location?.pathname);
+      navigate("/login");
+    }
+  };
 
   const allIngredinant = async () => {
     setLoading(true);
@@ -514,7 +587,10 @@ function CreateYourOwn() {
                   </div>
                 </div>
                 <div className="placeOrderBtn w-100 mt-3">
-                  <button className="btn btn-md w-100 btn-pills">
+                  <button
+                    className="btn btn-md w-100 btn-pills"
+                    onClick={handlePlaceOrder}
+                  >
                     Place Order{" "}
                   </button>
                 </div>

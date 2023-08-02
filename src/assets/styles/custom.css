@@ -174,6 +174,9 @@
   font-size: 1.3rem;
   font-weight: 600;
 }
+.content {
+  opacity: 0.95;
+}
 .create-acc-txt {
   color: #1e3ef6;
   line-height: 12px;

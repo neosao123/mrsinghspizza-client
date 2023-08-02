@@ -8,6 +8,7 @@ import Popper from "popper.js";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import MetaTag from "./components/_main/MetaTag";
+import { GlobalProvider } from "./context/GlobalContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
@@ -15,9 +16,11 @@ root.render(
   <React.StrictMode>
     <HelmetProvider>
       <MetaTag />
-      <BrowserRouter basename="mrsinghsclient">
-        <App />
-      </BrowserRouter>
+      <GlobalProvider>
+        <BrowserRouter basename="mrsinghsclient">
+          <App />
+        </BrowserRouter>
+      </GlobalProvider>
     </HelmetProvider>
   </React.StrictMode>
 );

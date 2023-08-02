@@ -9,37 +9,39 @@ import DipsMenu from "../components/_main/DipsMenu";
 import DrinksMenu from "../components/_main/DrinksMenu";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
+import { toast } from "react-toastify";
 
 const Home = () => {
-  const [longitude, setLongitude] = useState();
-  const [latitude, setLattitude] = useState();
+  const [userLongitude, setUserLongitude] = useState();
+  const [userLatitude, setUserLatitude] = useState();
+  const [storeLongitude, setStoreLongitude] = useState();
+  const [storeLatitude, setStoreLatitude] = useState();
 
   const getLocation = () => {
     if (navigator.geolocation) {
-      console.log(navigator.geolocation);
+      // console.log(navigator.geolocation);
       navigator.geolocation.getCurrentPosition(
         function (position) {
-          setLattitude(position.coords.latitude);
-          setLongitude(position.coords.longitude);
+          setUserLatitude(position.coords.latitude);
+          setUserLongitude(position.coords.longitude);
         },
         function (error) {
-          console.log("error code :", error.code);
+          // console.log("error code :", error.code);
         }
       );
     } else {
-      console.log("Geolocation is not supported");
+      // console.log("Geolocation is not supported");
     }
   };
 
-  
   useEffect(() => {
     getLocation();
-    localStorage.setItem("latitude", latitude);
-    localStorage.setItem("longitude", longitude);
+    localStorage.setItem("userLatitude", userLatitude);
+    localStorage.setItem("userLongitude", userLongitude);
   }, []);
 
   return (
-    <>
+    <div style={{ position: "relative", overflow: "initial" }}>
       <Header />
 
       <HeroSlider />
@@ -265,7 +267,7 @@ const Home = () => {
       </section>
 
       <Footer />
-    </>
+    </div>
   );
 };
 

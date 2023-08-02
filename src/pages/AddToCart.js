@@ -1,10 +1,28 @@
-import React from "react";
+import React, { useContext } from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import "../assets/styles/AddToCart/style.css";
 import bgImage from "../assets/images/bg-img.jpg";
+import GlobalContext from "../context/GlobalContext";
+import { toast } from "react-toastify";
+import { useLocation, useNavigate } from "react-router-dom";
 
 function AddToCart() {
+  const globalCtx = useContext(GlobalContext);
+  const [user, setUser] = globalCtx.user;
+  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+
+  const navigate = useNavigate();
+  const location = useLocation();
+
+  const handleCheckout = () => {
+    if (isAuthenticated) {
+      toast.success("Order Placed Successfully..");
+    } else {
+      localStorage.setItem("redirectTo", location?.pathname);
+      navigate("/login");
+    }
+  };
   return (
     <>
       <Header />
@@ -107,7 +125,11 @@ function AddToCart() {
                 </div>
               </div>
               <div className="w-100 text-end">
-                <button className="px-5 rounded my-3 py-3 addtocart">
+                <button
+                  type="submit"
+                  className="px-5 rounded my-3 py-3 addtocart"
+                  onClick={handleCheckout}
+                >
                   Check out
                 </button>
               </div>

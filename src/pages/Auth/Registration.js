@@ -58,7 +58,9 @@ function Registration() {
         toast.success("Account registered successfully...");
       })
       .catch((err) => {
-        toast.error(err);
+        if (err.response.status === 400 || err.response.status === 500) {
+          toast.error(err.response.data.message);
+        }
       });
   };
   // Use Formik

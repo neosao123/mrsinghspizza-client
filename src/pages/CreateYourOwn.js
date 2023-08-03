@@ -19,8 +19,8 @@ function CreateYourOwn() {
   const [allIngredients, setAllIngredients] = useState();
   const [sideData, setSideData] = useState();
   const [loading, setLoading] = useState(false);
-  const [userLongitude, setUserLongitude] = useState();
-  const [userLatitude, setUserLatitude] = useState();
+  const [userLongitude, setUserLongitude] = useState("40.42");
+  const [userLatitude, setUserLatitude] = useState("20.22");
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const navigate = useNavigate();
@@ -70,10 +70,8 @@ function CreateYourOwn() {
       angle
     );
     circlePoints.push(point);
+    console.log("circlePoints", circlePoints);
   }
-
-  // Now, the circlePoints array contains the coordinates of points on the circumference of the circle.
-  // You can use this array to plot the circle on a map or perform any other desired action.
 
   const handlePlaceOrder = () => {
     if (isAuthenticated) {
@@ -109,6 +107,9 @@ function CreateYourOwn() {
   };
 
   useEffect(() => {
+    setLoading(false);
+    window.scrollTo(0, 0);
+    setLoading(true);
     allIngredinant();
     sides();
   }, []);

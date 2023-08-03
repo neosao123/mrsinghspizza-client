@@ -25,6 +25,7 @@ function SpecialMenu() {
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const navigate = useNavigate();
   const location = useLocation();
+  window.scrollTo(0, 0);
 
   const handlePrice = async (e) => {
     setPizzaSize(e.target.value);
@@ -81,6 +82,9 @@ function SpecialMenu() {
   };
 
   useEffect(() => {
+    setLoading(false);
+    window.scrollTo(0, 0);
+    setLoading(true);
     getSpecial();
     dips();
     toppings();

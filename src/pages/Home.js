@@ -4,18 +4,20 @@ import HeroSlider from "../components/_main/Carousel/HeroSlider";
 
 import Footer from "../components/_main/Footer";
 import { Link, NavLink } from "react-router-dom";
-import SidesMenu from "../components/_main/SidesMenu";
-import DipsMenu from "../components/_main/DipsMenu";
-import DrinksMenu from "../components/_main/DrinksMenu";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
 import { toast } from "react-toastify";
+import DrinkMenu from "./DrinkMenu";
+import DipsMenu from "./DipsMenu";
+import SidesMenu from "./SidesMenu";
 
 const Home = () => {
   const [userLongitude, setUserLongitude] = useState();
   const [userLatitude, setUserLatitude] = useState();
   const [storeLongitude, setStoreLongitude] = useState();
   const [storeLatitude, setStoreLatitude] = useState();
+
+  const [cartProduct, setCartProduct] = useState([]);
 
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -34,11 +36,56 @@ const Home = () => {
     }
   };
 
+  const addCart = () => {
+    if (localStorage.getItem("cart")) {
+      if (cartProduct.length > 0) {
+        let sub = 0.0;
+        let discount = 0.0;
+        let taxPer = 2.2;
+        cartProduct.map((data) => {
+          sub = Number(sub) + Number(data.price) * Number(data.quantity);
+        });
+
+        let disAmount = Number(sub) - Number(discount);
+        let taxAmount = (disAmount * taxPer) / 100;
+        let gTotal = Number(disAmount) - Number(taxAmount);
+        const cart = {
+          product: cartProduct,
+          subtotal: sub.toFixed(2),
+          discount: Number(discount).toFixed(2),
+          taxPer: taxPer,
+          grandtotal: gTotal.toFixed(2),
+        };
+        localStorage.setItem("cart", JSON.stringify(cart));
+      }
+    }
+  };
+
+  const createCart = () => {
+    if (localStorage.getItem("cart") === null) {
+      let sub = 0.0;
+      let discount = 0.0;
+      let taxPer = 0.0;
+      let gTotal = 0.0;
+      const cart = {
+        product: [],
+        subtotal: sub.toFixed(2),
+        discount: Number(discount).toFixed(2),
+        taxPer: taxPer,
+        grandtotal: gTotal.toFixed(2),
+      };
+      localStorage.setItem("cart", JSON.stringify(cart));
+    }
+  };
+
   useEffect(() => {
+    createCart();
+    addCart();
+
     getLocation();
     localStorage.setItem("userLatitude", userLatitude);
     localStorage.setItem("userLongitude", userLongitude);
-  }, []);
+  }, [cartProduct]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
@@ -238,7 +285,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="sides-tab"
                     >
-                      <SidesMenu />
+                      <SidesMenu setCartProduct={setCartProduct} />
                     </div>
                     {/* Dips Menu */}
                     <div
@@ -247,7 +294,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="dips-tab"
                     >
-                      <DipsMenu />
+                      <DipsMenu setCartProduct={setCartProduct} />
                     </div>
                     {/* Drinks Menu */}
                     <div
@@ -256,7 +303,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="drinks-tab"
                     >
-                      <DrinksMenu />
+                      <DrinkMenu setCartProduct={setCartProduct} />
                     </div>
                   </div>
                 </div>

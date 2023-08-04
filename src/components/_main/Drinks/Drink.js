@@ -1,8 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import GlobalContext from "../../../context/GlobalContext";
 
-const Drink = ({ data, idx, setCartProduct }) => {
+const Drink = ({ data, idx, setCartProduct, setFindCode }) => {
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
 
   const countDec = () => {
     if (count > 1) {
@@ -15,12 +18,14 @@ const Drink = ({ data, idx, setCartProduct }) => {
   };
 
   const handleDrinks = (code) => {
+    const totalPrice = data?.price * count;
     const obj = {
       productCode: data.softdrinkCode,
       productName: data.softDrinksName,
       productType: "drinks",
       quantity: count,
       price: data.price,
+      totalPrice: totalPrice,
     };
     setProduct(obj);
     setCount(1);
@@ -29,8 +34,18 @@ const Drink = ({ data, idx, setCartProduct }) => {
   useEffect(() => {
     if (product !== null) {
       let ct = JSON.parse(localStorage.getItem("cart"));
+      // const pCode = cart?.product.find(
+      //   (code) => code.productCode === product.productCode
+      // );
+      // console.log("pCode", pCode);
+      // if (pCode) {
+      //   console.log("pcode is available");
+      //   setFindCode(product);
+      // } else {
+      //   console.log("push");
       ct.product.push(product);
       setCartProduct(ct.product);
+      // }
     }
   }, [product]);
 

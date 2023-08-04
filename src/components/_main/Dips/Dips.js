@@ -15,12 +15,14 @@ function Dips({ data, setCartProduct }) {
   };
 
   const handleDips = () => {
+    const totalPrice = data?.price * count;
     const obj = {
       productCode: data.dipsCode,
       productName: data.dipsName,
       productType: "dips",
       quantity: count,
       price: data.price,
+      totalPrice: totalPrice,
     };
     setProduct(obj);
     setCount(1);

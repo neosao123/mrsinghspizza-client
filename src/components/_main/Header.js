@@ -7,8 +7,10 @@ const Header = () => {
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [user, setUser] = globalCtx.user;
+  const [cart, setCart] = globalCtx.cart;
 
   const navigate = useNavigate();
+
   const handleLogout = () => {
     if (isAuthenticated !== false) {
       localStorage.removeItem("user");
@@ -21,10 +23,9 @@ const Header = () => {
       }, 500);
     }
   };
-  useEffect(() => {}, [isAuthenticated]);
 
   return (
-    <div className="position-sticky top-0" style={{ zIndex: "15" }}>
+    <div className="position-sticky top-0">
       <header className="new-block main-header">
         <div className="main-nav new-block">
           <div className="container-fluid ">
@@ -44,19 +45,19 @@ const Header = () => {
                       <Link to="/">Home</Link>
                     </li>
                     <li>
-                      <Link href="">Sides</Link>
+                      <Link to="">Sides</Link>
                     </li>
                     <li>
-                      <Link href="">Dips</Link>
+                      <Link to="">Dips</Link>
                     </li>
                     <li>
-                      <Link href="">Drinks</Link>
+                      <Link to="">Drinks</Link>
                     </li>
                     <li>
-                      <Link href="">About</Link>
+                      <Link to="">About</Link>
                     </li>
                     <li>
-                      <Link href="">Contact Us</Link>
+                      <Link to="">Contact Us</Link>
                     </li>
                     <li onClick={handleLogout}>
                       <Link to={isAuthenticated === false ? "/login" : "/"}>
@@ -70,9 +71,17 @@ const Header = () => {
                 <div className="nav-right-block">
                   <ul className="list-unstyled">
                     <li>
-                      <Link to="/addtocart" className="text-decoration-none">
+                      <Link
+                        to="/addtocart"
+                        className="text-decoration-none py-3 px-1"
+                      >
                         <i className="flaticon-scooter-front-view"></i>
-                        <span className="nav-price">$00.00</span>
+                        <span className="nav-price">
+                          $
+                          {cart?.grandtotal
+                            ? cart?.grandtotal
+                            : (0.0).toFixed(2)}
+                        </span>
                       </Link>
                     </li>
                   </ul>

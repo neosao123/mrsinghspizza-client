@@ -6,11 +6,12 @@ import bgImage from "../assets/images/bg-img.jpg";
 import GlobalContext from "../context/GlobalContext";
 import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
+import MainCartList from "../components/_main/Cart/MainCartList";
 
 function AddToCart() {
   const globalCtx = useContext(GlobalContext);
-  const [user, setUser] = globalCtx.user;
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const [cart, setCart] = globalCtx.cart;
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -35,93 +36,43 @@ function AddToCart() {
                 <h3 className="mx-4 px-3 mb-3">Price</h3>
               </div>
               <ul className="list-group">
-                <li className="list-group-item cartlistitem d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center py-2">
-                    <div className="image rounded">
-                      <img src={bgImage} alt="" className="rounded" />
-                    </div>
-                    <div className="mx-4">
-                      <h5 className="mb-2">Product Name</h5>
-                      <p className="text-secondary mb-2">Large</p>
-                      <p className="text-secondary mb-2">
-                        Quantity : <span>1</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mx-4">
-                    <h5 className="d-inline mx-4">$ 27.5</h5>
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </li>
-                <li className="list-group-item cartlistitem d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center py-2">
-                    <div className="image rounded">
-                      <img src={bgImage} alt="" className="rounded" />
-                    </div>
-                    <div className="mx-4">
-                      <h5 className="mb-2">Product Name</h5>
-                      <p className="text-secondary mb-2">Large</p>
-                      <p className="text-secondary mb-2">
-                        Quantity : <span>1</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mx-4">
-                    <h5 className="d-inline mx-4">$ 27.5</h5>
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </li>
-                <li className="list-group-item cartlistitem d-flex justify-content-between align-items-center">
-                  <div className="d-flex align-items-center py-2">
-                    <div className="image rounded">
-                      <img src={bgImage} alt="" className="rounded" />
-                    </div>
-                    <div className="mx-4">
-                      <h5 className="mb-2">Product Name</h5>
-                      <p className="text-secondary mb-2">Large</p>
-                      <p className="text-secondary mb-2">
-                        Quantity : <span>1</span>
-                      </p>
-                    </div>
-                  </div>
-                  <div className="mx-4">
-                    <h5 className="d-inline mx-4">$ 27.5</h5>
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </li>
+                {cart?.product.map((cData) => {
+                  return <MainCartList cData={cData} key={cData.productCode} />;
+                })}
               </ul>
             </div>
+
+            {/* Order Summary */}
             <div className="col-lg-4 col-md-12 col-sm-12 p-4 mt-3">
               <div className="block-stl10 odr-summary">
-                <h3>order summary :</h3>
+                <h3>Order Summary :</h3>
                 <ul className="list-unstyled">
                   <li>
-                    <span className="ttl">Subtotal</span>{" "}
-                    <span className="stts">$145</span>
+                    <span className="ttl">Sub Total</span>{" "}
+                    <span className="stts">
+                      $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+                    </span>
                   </li>
                   <li>
-                    <span className="ttl">Tax</span>{" "}
-                    <span className="stts">$10</span>
+                    <span className="ttl">Tax Percentage (%)</span>{" "}
+                    <span className="stts">
+                      {cart?.taxPer ? cart?.taxPer : 0}
+                    </span>
                   </li>
                   <li>
                     <span className="ttl">Discount</span>{" "}
                     <span className="stts">
-                      <del>$40</del>
+                      <del>
+                        $ {cart?.discount ? cart?.discount : (0.0).toFixed(2)}
+                      </del>
                     </span>
                   </li>
                 </ul>
                 <div className="ttl-all">
-                  <span className="ttlnm">Total</span>
-                  <span className="odr-stts">$110</span>
+                  <span className="ttlnm">Grand Total</span>
+                  <span className="odr-stts">
+                    $ {cart?.grandtotal ? cart?.grandtotal : (0.0).toFixed(2)}
+                  </span>
                 </div>
               </div>
               <div className="w-100 text-end">

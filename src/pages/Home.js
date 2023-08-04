@@ -1,4 +1,10 @@
-import React, { useEffect, useLayoutEffect, useRef, useState } from "react";
+import React, {
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
 
@@ -10,14 +16,17 @@ import { toast } from "react-toastify";
 import DrinkMenu from "./DrinkMenu";
 import DipsMenu from "./DipsMenu";
 import SidesMenu from "./SidesMenu";
+import GlobalContext from "../context/GlobalContext";
 
 const Home = () => {
   const [userLongitude, setUserLongitude] = useState();
   const [userLatitude, setUserLatitude] = useState();
   const [storeLongitude, setStoreLongitude] = useState();
   const [storeLatitude, setStoreLatitude] = useState();
-
   const [cartProduct, setCartProduct] = useState([]);
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+  const [findCode, setFindCode] = useState();
 
   const getLocation = () => {
     if (navigator.geolocation) {
@@ -37,26 +46,42 @@ const Home = () => {
   };
 
   const addCart = () => {
-    if (localStorage.getItem("cart")) {
+    if (localStorage.getItem("cart") && localStorage.getItem("cart") !== null) {
       if (cartProduct.length > 0) {
         let sub = 0.0;
         let discount = 0.0;
         let taxPer = 2.2;
         cartProduct.map((data) => {
-          sub = Number(sub) + Number(data.price) * Number(data.quantity);
+          sub = Number(sub) + Number(data?.totalPrice);
         });
 
         let disAmount = Number(sub) - Number(discount);
         let taxAmount = (disAmount * taxPer) / 100;
-        let gTotal = Number(disAmount) - Number(taxAmount);
-        const cart = {
+        let gTotal = Number(disAmount) + Number(taxAmount);
+
+        // console.log("findCode :", findCode);
+
+        // const data = cartProduct.map((data) => {
+        //   const pCode = cart?.product.find(
+        //     (code) => code.productCode === findCode.productCode
+        //   );
+        //   console.log(pCode);
+        //   if (pCode && pCode !== undefined) {
+        //     data.quantity = data.quantity + findCode.quantity;
+        //     return data.quantity;
+        //   }
+        // });
+        // console.log("data", data);
+        const currentCart = {
           product: cartProduct,
           subtotal: sub.toFixed(2),
           discount: Number(discount).toFixed(2),
           taxPer: taxPer,
           grandtotal: gTotal.toFixed(2),
         };
-        localStorage.setItem("cart", JSON.stringify(cart));
+
+        localStorage.setItem("cart", JSON.stringify(currentCart));
+        setCart(currentCart);
       }
     }
   };
@@ -67,25 +92,25 @@ const Home = () => {
       let discount = 0.0;
       let taxPer = 0.0;
       let gTotal = 0.0;
-      const cart = {
+      const currentCart = {
         product: [],
         subtotal: sub.toFixed(2),
         discount: Number(discount).toFixed(2),
         taxPer: taxPer,
         grandtotal: gTotal.toFixed(2),
       };
-      localStorage.setItem("cart", JSON.stringify(cart));
+      localStorage.setItem("cart", JSON.stringify(currentCart));
+      setCart(currentCart);
     }
   };
 
   useEffect(() => {
     createCart();
     addCart();
-
     getLocation();
     localStorage.setItem("userLatitude", userLatitude);
     localStorage.setItem("userLongitude", userLongitude);
-  }, [cartProduct]);
+  }, [cartProduct, findCode]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
@@ -294,7 +319,10 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="dips-tab"
                     >
-                      <DipsMenu setCartProduct={setCartProduct} />
+                      <DipsMenu
+                        setCartProduct={setCartProduct}
+                        addCart={addCart}
+                      />
                     </div>
                     {/* Drinks Menu */}
                     <div
@@ -303,7 +331,10 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="drinks-tab"
                     >
-                      <DrinkMenu setCartProduct={setCartProduct} />
+                      <DrinkMenu
+                        setCartProduct={setCartProduct}
+                        setFindCode={setFindCode}
+                      />
                     </div>
                   </div>
                 </div>

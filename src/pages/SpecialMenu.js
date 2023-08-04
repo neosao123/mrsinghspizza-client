@@ -13,6 +13,8 @@ import { getDips, getSpecialDetails, getToppings } from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import { toast } from "react-toastify";
 import GlobalContext from "../context/GlobalContext";
+import CartList from "../components/_main/Cart/CartList";
+import OrderSummary from "../components/_main/Cart/OrderSummary";
 
 function SpecialMenu() {
   const { sid } = useParams();
@@ -23,6 +25,7 @@ function SpecialMenu() {
   const [loading, setLoading] = useState(false);
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const [cart, setCart] = globalCtx.cart;
   const navigate = useNavigate();
   const location = useLocation();
   window.scrollTo(0, 0);
@@ -311,156 +314,13 @@ function SpecialMenu() {
               {/* Cart List */}
               <div className="cartlist w-100 mt-5">
                 <h2 className="p-3 text-center orderTitle">Your Orders</h2>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
-                <div className="row m-0 px-1 py-3 list-item">
-                  <div className="col-lg-6 mb-2">Product Name</div>
-                  <div className="col-lg-6 text-end mb-2">$ 20</div>
-                  <div className="col-lg-6 mb-2">
-                    <strong>Size :</strong> <span className="mx-2">Large</span>
-                  </div>
-                  <div className="col-lg-6 text-end mb-2">
-                    <strong className="mx-2">Quantity :</strong> <span>1</span>
-                  </div>
-                  <div className="col-lg-6 mt-1">
-                    <i
-                      className="fa fa-trash deleteIcon"
-                      aria-hidden="true"
-                    ></i>
-                    <i
-                      className="fa fa-pencil editIcon mx-3"
-                      aria-hidden="true"
-                    ></i>
-                  </div>
-                </div>
+                {cart?.product.map((cData) => {
+                  return <CartList cData={cData} key={cData.productCode} />;
+                })}
               </div>
               {/* Place Order */}
               <div className="placeorder w-100 mt-5">
-                <input
-                  type="number"
-                  step={0.01}
-                  defaultValue={0.0}
-                  className="form-control mb-4 text-end d-none"
-                />
-
-                <div className="row">
-                  <div className="col-lg-4 text-start mb-3">
-                    <strong>Sub Total : </strong>
-                  </div>
-                  <div className="col-lg-8 text-start mb-3">
-                    <span className="mx-4">$ 24.7</span>
-                  </div>
-                  <div className="col-lg-4 text-start mb-3">
-                    <strong>Tax : </strong>
-                  </div>
-                  <div className="col-lg-8 text-start mb-3">
-                    <span className="mx-4">$ 24.7</span>
-                  </div>
-                  <div className="col-lg-4 text-start mb-3">
-                    <strong>Grand Total : </strong>
-                  </div>
-                  <div className="col-lg-8 text-start mb-3">
-                    <span className="mx-4">$ 24.7</span>
-                  </div>
-                </div>
+                <OrderSummary cart={cart} />
                 <div className="placeOrderBtn w-100 mt-3">
                   <button
                     className="btn btn-md w-100 btn-pills"

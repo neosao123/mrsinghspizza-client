@@ -1,28 +1,45 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import pizzaimage from "../../../assets/images/pz.png";
 
 function Sides({ data, setCartProduct }) {
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
+  const sPlacementRef = useRef(null);
+
+  // Count Deacrease
   const countDec = () => {
     if (count > 1) {
       setCount((count) => count - 1);
     }
   };
+  // Count Increase
   const countInc = () => {
     setCount((count) => count + 1);
   };
+  // Handle Sides - Add To Cart Button
   const handleSides = () => {
+    let combinationData = {};
+    if (sPlacementRef.current) {
+      const selectedCode = sPlacementRef.current.value;
+      combinationData = data?.combination?.find(
+        (code) => code.lineCode === selectedCode
+      );
+    }
+    const totalPrice = combinationData?.price * count;
     const obj = {
       productCode: data.sideCode,
       productName: data.sideName,
       productType: "sides",
+      lineCode: combinationData?.lineCode,
+      size: combinationData?.size,
+      price: combinationData?.price,
       quantity: count,
-      price: data.price,
+      totalPrice: totalPrice,
     };
     setProduct(obj);
     setCount(1);
   };
+
   useEffect(() => {
     if (product !== null) {
       let ct = JSON.parse(localStorage.getItem("cart"));
@@ -47,7 +64,10 @@ function Sides({ data, setCartProduct }) {
           <h3>{data.sideName}</h3>
         </div>
         <div className="d-flex justify-content-center flex-column align-items-center">
-          <select className="form-select w-75 sideSize mb-3">
+          <select
+            className="form-select w-75 sideSize mb-3"
+            ref={sPlacementRef}
+          >
             {data?.combination?.map((combination) => {
               return (
                 <option value={combination.lineCode} key={combination.lineCode}>

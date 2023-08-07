@@ -1,0 +1,98 @@
+import { data } from "jquery";
+import React, { useEffect, useReducer, useRef, useState } from "react";
+
+export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
+  // handle Crust On Change
+  const handleCrust = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedCrust = allIngredients?.crust?.find(
+        (data) => data.crustCode === e.target.value
+      );
+      setCrust({
+        crustCode: selectedCrust.crustCode,
+        crustName: selectedCrust.crustName,
+        price: selectedCrust.price,
+      });
+    }
+  };
+  useEffect(() => {}, []);
+  return (
+    <select
+      className="form-select form-drop mx-4"
+      defaultValue={crust}
+      onChange={handleCrust}
+    >
+      {allIngredients?.crust?.map((data) => {
+        return (
+          <option key={data.crustCode} value={data.crustCode}>
+            {data.crustName} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+export const SelectedCheeseDropDown = ({ allIngredients, setCheese }) => {
+  // handle Cheese On Change
+  const handleCheese = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedCheese = allIngredients?.cheese?.find(
+        (data) => data.cheeseCode === e.target.value
+      );
+      setCheese({
+        cheeseCode: selectedCheese.cheeseCode,
+        cheeseName: selectedCheese.cheeseName,
+        price: selectedCheese.price,
+      });
+    }
+  };
+  useEffect(() => {}, []);
+  return (
+    <select className="form-select form-drop mx-4" onChange={handleCheese}>
+      <option value={""}>---- Choose Cheese ----</option>
+      {allIngredients?.cheese?.map((data) => {
+        return (
+          <option key={data.cheeseCode} value={data.cheeseCode}>
+            {data.cheeseName} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+export const SelectedSpecialbasesDropDown = ({
+  allIngredients,
+  setSpecialbases,
+}) => {
+  // handle Specialbases On Change
+  const handleSpecialBases = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedSb = allIngredients?.specialbases?.find(
+        (data) => data.specialbaseCode === e.target.value
+      );
+      setSpecialbases({
+        specialbaseCode: selectedSb.specialbaseCode,
+        specialbaseName: selectedSb.specialbaseName,
+        price: selectedSb.price,
+      });
+    }
+  };
+  useEffect(() => {}, []);
+  return (
+    <select
+      className="form-select form-drop mx-4"
+      onChange={handleSpecialBases}
+    >
+      <option value={""}>---- Choose Specialbases ----</option>
+      {allIngredients?.specialbases?.map((data) => {
+        return (
+          <option key={data.specialbaseCode} value={data.specialbaseCode}>
+            {data.specialbaseName} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};

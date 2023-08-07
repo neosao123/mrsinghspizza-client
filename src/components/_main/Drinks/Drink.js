@@ -1,23 +1,23 @@
-import React, { useContext, useEffect, useState } from "react";
-import GlobalContext from "../../../context/GlobalContext";
+import React, { useEffect, useState } from "react";
 
-const Drink = ({ data, idx, setCartProduct, setFindCode }) => {
+const Drink = ({ data, setCartProduct }) => {
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
-  const globalctx = useContext(GlobalContext);
-  const [cart, setCart] = globalctx.cart;
 
+  // Count Decrease
   const countDec = () => {
     if (count > 1) {
       setCount((count) => count - 1);
     }
   };
 
+  // Count Decrease
   const countInc = () => {
     setCount((count) => count + 1);
   };
 
-  const handleDrinks = (code) => {
+  // Handle Drinks
+  const handleDrinks = () => {
     const totalPrice = data?.price * count;
     const obj = {
       productCode: data.softdrinkCode,
@@ -28,32 +28,31 @@ const Drink = ({ data, idx, setCartProduct, setFindCode }) => {
       totalPrice: totalPrice,
     };
     setProduct(obj);
-    setCount(1);
+    setCount(1); // count set to 1
   };
 
   useEffect(() => {
     if (product !== null) {
       let ct = JSON.parse(localStorage.getItem("cart"));
-      // const pCode = cart?.product.find(
-      //   (code) => code.productCode === product.productCode
-      // );
-      // console.log("pCode", pCode);
-      // if (pCode) {
-      //   console.log("pcode is available");
-      //   setFindCode(product);
-      // } else {
-      //   console.log("push");
-      ct.product.push(product);
-      setCartProduct(ct.product);
-      // }
+      const pCode = ct?.product.find(
+        (code) => code.productCode === product.productCode
+      );
+      if (pCode) {
+        ct?.product.map((data) => {
+          if (data.productCode === pCode.productCode) {
+            pCode.quantity = pCode.quantity + product.quantity;
+          }
+        });
+        setCartProduct(ct.product);
+      } else {
+        ct.product.push(product);
+        setCartProduct(ct.product);
+      }
     }
   }, [product]);
 
   return (
-    <div
-      className="col-lg-3 col-md-4 col-sm-12 mb-3"
-      key={data.softdrinkCode + "" + idx}
-    >
+    <div className="col-lg-3 col-md-4 col-sm-12 mb-3" key={data.softdrinkCode}>
       <div className="d-flex justify-content-center flex-column p-3 box">
         {/* Image */}
         <div className="d-flex justify-content-center mb-3">

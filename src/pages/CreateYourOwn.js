@@ -1,10 +1,4 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import "../assets/styles/custom.css";
@@ -16,70 +10,36 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { toast } from "react-toastify";
 import CartList from "../components/_main/Cart/CartList";
 import OrderSummary from "../components/_main/Cart/OrderSummary";
+import {
+  SelectedCheeseDropDown,
+  SelectedCrustDropDown,
+  SelectedSpecialbasesDropDown,
+} from "../components/CreateYourOwn/SelectedDropDown";
+import CountAsTwo from "../components/CreateYourOwn/Toppings/CountAsTwo";
 
 function CreateYourOwn() {
+  // Global Context
+  const globalCtx = useContext(GlobalContext);
+  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const [cart, setCart] = globalCtx.cart;
+  // API States
+  const [allIngredients, setAllIngredients] = useState();
+  const [sideData, setSideData] = useState();
+  //
   const navigate = useNavigate();
   const location = useLocation();
   //
   const [loading, setLoading] = useState(false);
   const [userLongitude, setUserLongitude] = useState("40.42");
   const [userLatitude, setUserLatitude] = useState("20.22");
-  // API States
-  const [allIngredients, setAllIngredients] = useState();
-  const [sideData, setSideData] = useState();
-  // Context
-  const globalCtx = useContext(GlobalContext);
-  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
-  const [cart, setCart] = globalCtx.cart;
+  // All State
+  const [crust, setCrust] = useState();
+  const [cheese, setCheese] = useState();
+  const [specialbases, setSpecialbases] = useState();
+  const [totalPrice, setTotalPrice] = useState();
+  const [countTwoToppingsArr, setCountTwoToppingsArr] = useState([]);
 
-  function calculateCoordinates(centerLat, centerLng, radiusInKm, angle) {
-    const earthRadius = 6371; // Earth's radius in kilometers
-
-    const lat1 = (Math.PI / 180) * centerLat;
-    const lng1 = (Math.PI / 180) * centerLng;
-    const angularDistance = radiusInKm / earthRadius;
-
-    const lat2 = Math.asin(
-      Math.sin(lat1) * Math.cos(angularDistance) +
-        Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(angle)
-    );
-
-    const lng2 =
-      lng1 +
-      Math.atan2(
-        Math.sin(angle) * Math.sin(angularDistance) * Math.cos(lat1),
-        Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2)
-      );
-
-    return {
-      latitude: (180 / Math.PI) * lat2,
-      longitude: (180 / Math.PI) * lng2,
-    };
-  }
-
-  // Usage in your component
-
-  // Assuming you have set the userLongitude and userLatitude somehow
-  const centerLongitude = userLongitude;
-  const centerLatitude = userLatitude;
-  const radiusInKm = 5; // Set the desired radius in kilometers
-
-  // Create an array to hold the coordinates for the circle points
-  const circlePoints = [];
-
-  for (let i = 0; i < 360; i += 10) {
-    const angle = (Math.PI / 180) * i;
-    const point = calculateCoordinates(
-      centerLatitude,
-      centerLongitude,
-      radiusInKm,
-      angle
-    );
-    circlePoints.push(point);
-    console.log("circlePoints", circlePoints);
-  }
-
-  // handle Place Order
+  // Handle Place Order
   const handlePlaceOrder = () => {
     if (isAuthenticated) {
       toast.success("Order Placed Successfully..");
@@ -87,6 +47,44 @@ function CreateYourOwn() {
       localStorage.setItem("redirectTo", location?.pathname);
       navigate("/login");
     }
+  };
+
+  let calculatedPrice = Number(0.0);
+
+  // Calculate Price
+  const calulatePrice = () => {
+    console.log("crust :", crust);
+    calculatedPrice += Number(crust?.price) || 0;
+    calculatedPrice += Number(cheese?.price) || 0;
+    calculatedPrice += Number(specialbases?.price) || 0;
+    setTotalPrice(calculatedPrice);
+  };
+
+  // Handle Add To Cart
+  const handleAddToCart = () => {
+    console.log("Count As Two Toppings Array : ", countTwoToppingsArr);
+    const payload = {
+      productCode: "",
+      productName: "Customized Pizza",
+      productType: "custom_pizza",
+      config: {
+        pizza: [
+          {
+            crust: crust,
+            cheese: cheese,
+            specialbases: specialbases,
+            toppings: {
+              countAsTwo: countTwoToppingsArr,
+            },
+          },
+        ],
+      },
+      quantity: "1",
+      totalPrice: "",
+    };
+    console.log(payload);
+    setCountTwoToppingsArr([]);
+    console.log("Count After Add To Cart: ", countTwoToppingsArr);
   };
 
   //API - All Ingredient
@@ -115,14 +113,79 @@ function CreateYourOwn() {
       });
   };
 
+  // // Calculate Radius
+  // const calculateRadius = () => {
+  //   function calculateCoordinates(userLatitude, userLongitude, radiusInKm, angle) {
+  //     const earthRadius = 6371; // Earth's radius in kilometers
+
+  //     const lat1 = (Math.PI / 180) * centerLat;
+  //     const lng1 = (Math.PI / 180) * centerLng;
+  //     const angularDistance = radiusInKm / earthRadius;
+
+  //     const lat2 = Math.asin(
+  //       Math.sin(lat1) * Math.cos(angularDistance) +
+  //         Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(angle)
+  //     );
+
+  //     const lng2 =
+  //       lng1 +
+  //       Math.atan2(
+  //         Math.sin(angle) * Math.sin(angularDistance) * Math.cos(lat1),
+  //         Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2)
+  //       );
+
+  //     return {
+  //       latitude: (180 / Math.PI) * lat2,
+  //       longitude: (180 / Math.PI) * lng2,
+  //     };
+  //   }
+
+  //   // Usage in your component
+
+  //   // Assuming you have set the userLongitude and userLatitude somehow
+  //   const centerLongitude = userLongitude;
+  //   const centerLatitude = userLatitude;
+  //   const radiusInKm = 5; // Set the desired radius in kilometers
+
+  //   // Create an array to hold the coordinates for the circle points
+  //   const circlePoints = [];
+
+  //   for (let i = 0; i < 360; i += 10) {
+  //     const angle = (Math.PI / 180) * i;
+  //     const point = calculateCoordinates(
+  //       centerLatitude,
+  //       centerLongitude,
+  //       radiusInKm,
+  //       angle
+  //     );
+  //     circlePoints.push(point);
+  //     console.log("circlePoints", circlePoints);
+  //   }
+  // };
+
   useEffect(() => {
+    setCrust({
+      crustCode: allIngredients?.crust[0].crustCode,
+      crustName: allIngredients?.crust[0].crustName,
+      price: allIngredients?.crust[0].price,
+    });
+  }, [allIngredients]);
+
+  useEffect(() => {
+    // Screen Always Set To Top after UseEffect Called
     setLoading(false);
     window.scrollTo(0, 0);
     setLoading(true);
-
+    // API
     allIngredinant();
     sides();
   }, []);
+
+  // Calculate Function
+  useEffect(() => {
+    calulatePrice();
+    console.log(countTwoToppingsArr);
+  }, [crust, cheese, specialbases, countTwoToppingsArr]);
 
   return (
     <div>
@@ -163,46 +226,29 @@ function CreateYourOwn() {
                 <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
                   <div className="d-flex justify-content-start align-items-center w-100">
                     <p className="mb-1 ">Crust :</p>
-                    <select className="form-select form-drop mx-4">
-                      {allIngredients?.crust?.map((data) => {
-                        return (
-                          <option key={data.crustCode} value={data.crustCode}>
-                            {data.crustName} - $ {data.price}
-                          </option>
-                        );
-                      })}
-                    </select>
+                    <SelectedCrustDropDown
+                      allIngredients={allIngredients}
+                      setCrust={setCrust}
+                      crust={crust}
+                    />
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="d-flex justify-content-start align-items-center w-100">
                     <p className="mb-1 ">Cheese :</p>
-                    <select className="form-select form-drop mx-4">
-                      {allIngredients?.cheese?.map((data) => {
-                        return (
-                          <option key={data.cheeseCode} value={data.cheeseCode}>
-                            {data.cheeseName} - $ {data.price}
-                          </option>
-                        );
-                      })}
-                    </select>
+                    <SelectedCheeseDropDown
+                      allIngredients={allIngredients}
+                      setCheese={setCheese}
+                    />
                   </div>
                 </div>
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <div className="d-flex justify-content-start align-items-center w-100">
                     <p className="mb-1">Specialbases :</p>
-                    <select className="form-select form-drop mx-4">
-                      {allIngredients?.specialbases?.map((data) => {
-                        return (
-                          <option
-                            key={data.specialbaseCode}
-                            value={data.specialbaseCode}
-                          >
-                            {data.specialbaseName} - $ {data.price}
-                          </option>
-                        );
-                      })}
-                    </select>
+                    <SelectedSpecialbasesDropDown
+                      allIngredients={allIngredients}
+                      setSpecialbases={setSpecialbases}
+                    />
                   </div>
                 </div>
               </div>
@@ -219,32 +265,12 @@ function CreateYourOwn() {
                   </p>
                   {allIngredients?.toppings?.countAsTwo?.map((data) => {
                     return (
-                      <div
-                        className="d-flex justify-content-between align-items-center py-3 border-bottom"
+                      <CountAsTwo
                         key={data.toppingsCode}
-                      >
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-left mx-1">
-                            {data.toppingsName}
-                          </span>
-                          <select className="form-select w-100">
-                            <option value="Whole">Whole</option>
-                            <option value="Left Half">Left Half</option>
-                            <option value="Left Half">Right Half</option>
-                          </select>
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-end mx-1">
-                            $ {data.price}
-                          </span>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        setCountTwoToppingsArr={setCountTwoToppingsArr}
+                        countTwoToppingsArr={countTwoToppingsArr}
+                      />
                     );
                   })}
                 </div>
@@ -434,11 +460,17 @@ function CreateYourOwn() {
             <div className="w-25 m-3 p-3">
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
                 <p className="text-drak mb-3 mx-1">
-                  <strong>$ 0.00</strong>
+                  <strong>
+                    $
+                    {totalPrice
+                      ? Number(totalPrice).toFixed(2)
+                      : (0.0).toFixed(2)}
+                  </strong>
                 </p>
                 <button
                   type="button"
                   className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
+                  onClick={handleAddToCart}
                 >
                   <b>Add to Cart</b>
                 </button>

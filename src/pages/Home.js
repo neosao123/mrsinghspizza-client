@@ -1,33 +1,28 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
-
 import Footer from "../components/_main/Footer";
-import { Link, NavLink } from "react-router-dom";
+import { Link } from "react-router-dom";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
-import { toast } from "react-toastify";
 import DrinkMenu from "./DrinkMenu";
 import DipsMenu from "./DipsMenu";
 import SidesMenu from "./SidesMenu";
 import GlobalContext from "../context/GlobalContext";
 
 const Home = () => {
+  // Global Context
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+
+  //
   const [userLongitude, setUserLongitude] = useState();
   const [userLatitude, setUserLatitude] = useState();
   const [storeLongitude, setStoreLongitude] = useState();
   const [storeLatitude, setStoreLatitude] = useState();
   const [cartProduct, setCartProduct] = useState([]);
-  const globalctx = useContext(GlobalContext);
-  const [cart, setCart] = globalctx.cart;
-  const [findCode, setFindCode] = useState();
 
+  // Permission for GeoLocation
   const getLocation = () => {
     if (navigator.geolocation) {
       // console.log(navigator.geolocation);
@@ -45,6 +40,7 @@ const Home = () => {
     }
   };
 
+  // Adding New Product In Cart
   const addCart = () => {
     if (localStorage.getItem("cart") && localStorage.getItem("cart") !== null) {
       if (cartProduct.length > 0) {
@@ -59,19 +55,6 @@ const Home = () => {
         let taxAmount = (disAmount * taxPer) / 100;
         let gTotal = Number(disAmount) + Number(taxAmount);
 
-        // console.log("findCode :", findCode);
-
-        // const data = cartProduct.map((data) => {
-        //   const pCode = cart?.product.find(
-        //     (code) => code.productCode === findCode.productCode
-        //   );
-        //   console.log(pCode);
-        //   if (pCode && pCode !== undefined) {
-        //     data.quantity = data.quantity + findCode.quantity;
-        //     return data.quantity;
-        //   }
-        // });
-        // console.log("data", data);
         const currentCart = {
           product: cartProduct,
           subtotal: sub.toFixed(2),
@@ -86,6 +69,7 @@ const Home = () => {
     }
   };
 
+  // Create Empty Cart In LocalStorage
   const createCart = () => {
     if (localStorage.getItem("cart") === null) {
       let sub = 0.0;
@@ -110,7 +94,7 @@ const Home = () => {
     getLocation();
     localStorage.setItem("userLatitude", userLatitude);
     localStorage.setItem("userLongitude", userLongitude);
-  }, [cartProduct, findCode]);
+  }, [cartProduct]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
@@ -157,6 +141,7 @@ const Home = () => {
         <div className="special-offer-inr-block new-block">
           <div className="container-fluid">
             <div className="row">
+              {/* Title */}
               <div className="col-lg-12 p-4">
                 <div className="title">
                   <p className="top-h">today special</p>
@@ -172,13 +157,17 @@ const Home = () => {
                   </div>
                 </div>
               </div>
+
+              {/* Tabs & Tabs-Content */}
               <div className="col-lg-12 pd0">
                 <div className="special-offer-block ol_flr new-block">
+                  {/* Tabs */}
                   <div className="ol_flr cat-sec mb-3 nav nav-tabs">
                     <ul
                       className="cat-sec nav nav-tabs mt-2 d-flex justify-content-between"
                       role="tablist"
                     >
+                      {/* Create Your Own - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
                           aria-controls="home"
@@ -193,6 +182,8 @@ const Home = () => {
                           <span>Create Your Own</span>
                         </button>
                       </li>
+
+                      {/* Special Pizza - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
                           className="block-stl1 p-4 bg1 nav-link btn"
@@ -208,6 +199,7 @@ const Home = () => {
                         </button>
                       </li>
 
+                      {/* Sides - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
                           data-bs-target="#sides"
@@ -222,6 +214,8 @@ const Home = () => {
                           <span>Sides</span>
                         </button>
                       </li>
+
+                      {/* Dips - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
                           data-bs-target="#dips"
@@ -236,6 +230,8 @@ const Home = () => {
                           <span>Dips</span>
                         </button>
                       </li>
+
+                      {/* Drinks - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
                           data-bs-target="#drinks"
@@ -252,6 +248,7 @@ const Home = () => {
                       </li>
                     </ul>
                   </div>
+
                   {/* Tabs Content */}
                   <div
                     className="tab-content d-flex justify-content-center p-4"
@@ -294,6 +291,7 @@ const Home = () => {
                         </div>
                       </div>
                     </div>
+
                     {/* Special Pizza List */}
                     <div
                       className="tab-pane w-100"
@@ -303,6 +301,7 @@ const Home = () => {
                     >
                       <SpecialMenuList />
                     </div>
+
                     {/* Sides Menu */}
                     <div
                       className="tab-pane w-100"
@@ -312,6 +311,7 @@ const Home = () => {
                     >
                       <SidesMenu setCartProduct={setCartProduct} />
                     </div>
+
                     {/* Dips Menu */}
                     <div
                       className="tab-pane w-100"
@@ -324,6 +324,7 @@ const Home = () => {
                         addCart={addCart}
                       />
                     </div>
+
                     {/* Drinks Menu */}
                     <div
                       className="tab-pane w-100"
@@ -331,10 +332,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="drinks-tab"
                     >
-                      <DrinkMenu
-                        setCartProduct={setCartProduct}
-                        setFindCode={setFindCode}
-                      />
+                      <DrinkMenu setCartProduct={setCartProduct} />
                     </div>
                   </div>
                 </div>

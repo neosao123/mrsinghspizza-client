@@ -1,16 +1,18 @@
-import React, { useContext, useEffect } from "react";
+import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import appLogo from "../../assets/images/logo.png";
 import GlobalContext from "../../context/GlobalContext";
 import { toast } from "react-toastify";
 const Header = () => {
+  // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [user, setUser] = globalCtx.user;
   const [cart, setCart] = globalCtx.cart;
-
+  //
   const navigate = useNavigate();
 
+  // Handle Logout
   const handleLogout = () => {
     if (isAuthenticated !== false) {
       localStorage.removeItem("user");

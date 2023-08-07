@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { getDrinks } from "../services";
 import Drink from "../components/_main/Drinks/Drink";
 
-function DrinkMenu({ setCartProduct, setFindCode }) {
+function DrinkMenu({ setCartProduct }) {
   const [drinksData, setDrinksData] = useState();
 
   const drinks = async () => {
@@ -22,7 +22,14 @@ function DrinkMenu({ setCartProduct, setFindCode }) {
     <>
       <div className="row gx-4 mt-3 mb-3 d-flex justify-content-center align-items-center ">
         {drinksData?.map((data, idx) => {
-          return <Drink data={data} idx={idx} key={data?.softdrinkCode} setCartProduct={setCartProduct} setFindCode={setFindCode} />;
+          return (
+            <Drink
+              data={data}
+              idx={idx}
+              key={data?.softdrinkCode}
+              setCartProduct={setCartProduct}
+            />
+          );
         })}
       </div>
     </>

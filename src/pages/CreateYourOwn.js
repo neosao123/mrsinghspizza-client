@@ -16,6 +16,10 @@ import {
   SelectedSpecialbasesDropDown,
 } from "../components/CreateYourOwn/SelectedDropDown";
 import CountAsTwo from "../components/CreateYourOwn/Toppings/CountAsTwo";
+import CountAsOne from "../components/CreateYourOwn/Toppings/CountAsOne";
+import FreeToppings from "../components/CreateYourOwn/Toppings/FreeToppings";
+import Drinks from "../components/CreateYourOwn/Drinks";
+import Dips from "../components/CreateYourOwn/Dips";
 
 function CreateYourOwn() {
   // Global Context
@@ -32,12 +36,18 @@ function CreateYourOwn() {
   const [loading, setLoading] = useState(false);
   const [userLongitude, setUserLongitude] = useState("40.42");
   const [userLatitude, setUserLatitude] = useState("20.22");
+
   // All State
+  const [totalPrice, setTotalPrice] = useState();
   const [crust, setCrust] = useState();
   const [cheese, setCheese] = useState();
   const [specialbases, setSpecialbases] = useState();
-  const [totalPrice, setTotalPrice] = useState();
   const [countTwoToppingsArr, setCountTwoToppingsArr] = useState([]);
+  const [countOneToppingsArr, setCountOneToppingsArr] = useState([]);
+  const [freeToppingsArr, setFreeToppingsArr] = useState([]);
+  const [drinksArr, setDrinksArr] = useState([]);
+  const [dipsArr, setDipsArr] = useState([]);
+  const [reset, setReset] = useState(false);
 
   // Handle Place Order
   const handlePlaceOrder = () => {
@@ -49,20 +59,50 @@ function CreateYourOwn() {
     }
   };
 
-  let calculatedPrice = Number(0.0);
-
   // Calculate Price
   const calulatePrice = () => {
-    console.log("crust :", crust);
+    let calculatedPrice = Number(0);
+    let totalTwoToppings = Number(0);
+    let totalOneToppings = Number(0);
+    let totalFreeToppings = Number(0);
+    let totalDrinks = Number(0);
+    let totalDips = Number(0);
+
+    if (countTwoToppingsArr) {
+      countTwoToppingsArr.map(
+        (twoTps) => (totalTwoToppings += Number(twoTps.toppingsPrice))
+      );
+    }
+    if (countOneToppingsArr) {
+      countOneToppingsArr.map(
+        (oneTps) => (totalOneToppings += Number(oneTps.toppingsPrice))
+      );
+    }
+    if (freeToppingsArr) {
+      freeToppingsArr.map(
+        (freeTps) => (totalFreeToppings += Number(freeTps.toppingsPrice))
+      );
+    }
+    if (drinksArr) {
+      drinksArr.map((drinks) => (totalDrinks += Number(drinks.totalPrice)));
+    }
+    if (dipsArr) {
+      dipsArr.map((dips) => (totalDips += Number(dips.totalPrice)));
+    }
     calculatedPrice += Number(crust?.price) || 0;
     calculatedPrice += Number(cheese?.price) || 0;
     calculatedPrice += Number(specialbases?.price) || 0;
+    calculatedPrice += Number(totalTwoToppings) || 0;
+    calculatedPrice += Number(totalOneToppings) || 0;
+    calculatedPrice += Number(totalFreeToppings) || 0;
+    calculatedPrice += Number(totalDrinks) || 0;
+    calculatedPrice += Number(totalDips) || 0;
+
     setTotalPrice(calculatedPrice);
   };
 
   // Handle Add To Cart
   const handleAddToCart = () => {
-    console.log("Count As Two Toppings Array : ", countTwoToppingsArr);
     const payload = {
       productCode: "",
       productName: "Customized Pizza",
@@ -75,16 +115,36 @@ function CreateYourOwn() {
             specialbases: specialbases,
             toppings: {
               countAsTwo: countTwoToppingsArr,
+              countAsOne: countOneToppingsArr,
+              freeToppings: freeToppingsArr,
             },
           },
         ],
+        dips: dipsArr,
+        drinks: drinksArr,
       },
       quantity: "1",
       totalPrice: "",
     };
     console.log(payload);
+    setCrust({
+      crustCode: allIngredients?.crust[0].crustCode,
+      crustName: allIngredients?.crust[0].crustName,
+      price: allIngredients?.crust[0].price,
+    });
+    setCheese({
+      cheeseCode: allIngredients?.cheese[0].cheeseCode,
+      cheeseName: allIngredients?.cheese[0].cheeseName,
+      price: allIngredients?.cheese[0].price,
+    });
+    setSpecialbases({});
     setCountTwoToppingsArr([]);
-    console.log("Count After Add To Cart: ", countTwoToppingsArr);
+    setCountOneToppingsArr([]);
+    setFreeToppingsArr([]);
+    setDrinksArr([]);
+    setDipsArr([]);
+    resetControls();
+    console.log(crust);
   };
 
   //API - All Ingredient
@@ -113,61 +173,24 @@ function CreateYourOwn() {
       });
   };
 
-  // // Calculate Radius
-  // const calculateRadius = () => {
-  //   function calculateCoordinates(userLatitude, userLongitude, radiusInKm, angle) {
-  //     const earthRadius = 6371; // Earth's radius in kilometers
-
-  //     const lat1 = (Math.PI / 180) * centerLat;
-  //     const lng1 = (Math.PI / 180) * centerLng;
-  //     const angularDistance = radiusInKm / earthRadius;
-
-  //     const lat2 = Math.asin(
-  //       Math.sin(lat1) * Math.cos(angularDistance) +
-  //         Math.cos(lat1) * Math.sin(angularDistance) * Math.cos(angle)
-  //     );
-
-  //     const lng2 =
-  //       lng1 +
-  //       Math.atan2(
-  //         Math.sin(angle) * Math.sin(angularDistance) * Math.cos(lat1),
-  //         Math.cos(angularDistance) - Math.sin(lat1) * Math.sin(lat2)
-  //       );
-
-  //     return {
-  //       latitude: (180 / Math.PI) * lat2,
-  //       longitude: (180 / Math.PI) * lng2,
-  //     };
-  //   }
-
-  //   // Usage in your component
-
-  //   // Assuming you have set the userLongitude and userLatitude somehow
-  //   const centerLongitude = userLongitude;
-  //   const centerLatitude = userLatitude;
-  //   const radiusInKm = 5; // Set the desired radius in kilometers
-
-  //   // Create an array to hold the coordinates for the circle points
-  //   const circlePoints = [];
-
-  //   for (let i = 0; i < 360; i += 10) {
-  //     const angle = (Math.PI / 180) * i;
-  //     const point = calculateCoordinates(
-  //       centerLatitude,
-  //       centerLongitude,
-  //       radiusInKm,
-  //       angle
-  //     );
-  //     circlePoints.push(point);
-  //     console.log("circlePoints", circlePoints);
-  //   }
-  // };
+  // Reset Controls
+  const resetControls = () => {
+    setReset(true);
+    setTimeout(() => {
+      setReset(false);
+    }, 1000);
+  };
 
   useEffect(() => {
     setCrust({
       crustCode: allIngredients?.crust[0].crustCode,
       crustName: allIngredients?.crust[0].crustName,
       price: allIngredients?.crust[0].price,
+    });
+    setCheese({
+      cheeseCode: allIngredients?.cheese[0].cheeseCode,
+      cheeseName: allIngredients?.cheese[0].cheeseName,
+      price: allIngredients?.cheese[0].price,
     });
   }, [allIngredients]);
 
@@ -184,8 +207,16 @@ function CreateYourOwn() {
   // Calculate Function
   useEffect(() => {
     calulatePrice();
-    console.log(countTwoToppingsArr);
-  }, [crust, cheese, specialbases, countTwoToppingsArr]);
+  }, [
+    crust,
+    cheese,
+    specialbases,
+    countTwoToppingsArr,
+    countOneToppingsArr,
+    freeToppingsArr,
+    drinksArr,
+    dipsArr,
+  ]);
 
   return (
     <div>
@@ -239,6 +270,7 @@ function CreateYourOwn() {
                     <SelectedCheeseDropDown
                       allIngredients={allIngredients}
                       setCheese={setCheese}
+                      cheese={cheese}
                     />
                   </div>
                 </div>
@@ -248,6 +280,8 @@ function CreateYourOwn() {
                     <SelectedSpecialbasesDropDown
                       allIngredients={allIngredients}
                       setSpecialbases={setSpecialbases}
+                      specialbases={specialbases}
+                      reset={reset}
                     />
                   </div>
                 </div>
@@ -270,6 +304,7 @@ function CreateYourOwn() {
                         data={data}
                         setCountTwoToppingsArr={setCountTwoToppingsArr}
                         countTwoToppingsArr={countTwoToppingsArr}
+                        reset={reset}
                       />
                     );
                   })}
@@ -281,32 +316,13 @@ function CreateYourOwn() {
                   </p>
                   {allIngredients?.toppings?.countAsOne?.map((data) => {
                     return (
-                      <div
-                        className="d-flex justify-content-between align-items-center py-3 border-bottom"
+                      <CountAsOne
                         key={data.toppingsCode}
-                      >
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-left mx-1">
-                            {data.toppingsName}
-                          </span>
-                          <select className="form-select w-100">
-                            <option value="Whole">Whole</option>
-                            <option value="Left Half">Left Half</option>
-                            <option value="Left Half">Right Half</option>
-                          </select>
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-end mx-1">
-                            $ {data.price}
-                          </span>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        countOneToppingsArr={countOneToppingsArr}
+                        setCountOneToppingsArr={setCountOneToppingsArr}
+                        reset={reset}
+                      />
                     );
                   })}
                 </div>
@@ -317,32 +333,13 @@ function CreateYourOwn() {
                   </p>
                   {allIngredients?.toppings?.freeToppings?.map((data) => {
                     return (
-                      <div
-                        className="d-flex justify-content-between align-items-center py-3 border-bottom"
+                      <FreeToppings
                         key={data.toppingsCode}
-                      >
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-left mx-1">
-                            {data.toppingsName}
-                          </span>
-                          <select className="form-select w-100">
-                            <option value="Whole">Whole</option>
-                            <option value="Left Half">Left Half</option>
-                            <option value="Left Half">Right Half</option>
-                          </select>
-                        </div>
-                        <div className="d-flex flex-column">
-                          <span className="mb-3 text-end mx-1">
-                            $ {data.price}
-                          </span>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        setFreeToppingsArr={setFreeToppingsArr}
+                        freeToppingsArr={freeToppingsArr}
+                        reset={reset}
+                      />
                     );
                   })}
                 </div>
@@ -395,27 +392,13 @@ function CreateYourOwn() {
                 <div id="dips" className="mb-3">
                   {allIngredients?.dips?.map((data) => {
                     return (
-                      <div
-                        className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                      <Dips
                         key={data.dipsCode}
-                      >
-                        <span className="mx-2">{data.dipsName}</span>
-                        <div className="w-50 d-flex justify-content-end align-items-center">
-                          <input
-                            type="number"
-                            className="form-control text-end w-25"
-                            step={0.0}
-                            defaultValue={1}
-                          />
-                          <span className="mx-4">$ {data.price}</span>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        setDipsArr={setDipsArr}
+                        dipsArr={dipsArr}
+                        reset={reset}
+                      />
                     );
                   })}
                 </div>
@@ -429,27 +412,13 @@ function CreateYourOwn() {
                 <div id="drinks" className="mb-3">
                   {allIngredients?.softdrinks?.map((data) => {
                     return (
-                      <div
-                        className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                      <Drinks
                         key={data.softdrinkCode}
-                      >
-                        <span className="mx-2">{data.softDrinksName}</span>
-                        <div className="w-50 d-flex justify-content-end align-items-center">
-                          <input
-                            type="number"
-                            className="form-control text-end w-25"
-                            step={0.0}
-                            defaultValue={1}
-                          />
-                          <span className="mx-4">$ {data.price}</span>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        setDrinksArr={setDrinksArr}
+                        drinksArr={drinksArr}
+                        reset={reset}
+                      />
                     );
                   })}
                 </div>

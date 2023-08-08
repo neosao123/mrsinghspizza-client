@@ -1,11 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function CountAsTwo({
-  data,
-  setCountTwoToppingsArr,
-  countTwoToppingsArr,
-  reset,
-}) {
+function FreeToppings({ data, reset, freeToppingsArr, setFreeToppingsArr }) {
   const tpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
   const [tpsButtonColor, setTpsButttonColor] = useState("#606060");
@@ -20,7 +15,7 @@ function CountAsTwo({
           toppingsPrice: data?.price ? data?.price : "0",
           toppingsPlacement: tpsRef.current.value,
         };
-        setCountTwoToppingsArr((prev) => [...prev, toppingsObject]);
+        setFreeToppingsArr((prev) => [...prev, toppingsObject]);
         setTpsButton(true);
         setTpsButttonColor("#e40000");
       }
@@ -28,14 +23,14 @@ function CountAsTwo({
       setTpsButton(false);
       setTpsButttonColor("#606060");
       tpsRef.current.value = "Whole";
-      setCountTwoToppingsArr((prev) =>
+      setFreeToppingsArr((prev) =>
         prev.filter((item) => item.toppingsCode !== data.toppingsCode)
       );
     }
   };
   // Handle Placement And Update Array
   const handlePlacement = () => {
-    const updatedData = countTwoToppingsArr.map((tps) => {
+    const updatedData = freeToppingsArr.map((tps) => {
       if (tps.toppingsCode === data.toppingsCode) {
         return {
           ...tps,
@@ -44,7 +39,7 @@ function CountAsTwo({
       }
       return tps;
     });
-    setCountTwoToppingsArr(updatedData);
+    setFreeToppingsArr(updatedData);
   };
 
   useEffect(() => {
@@ -87,4 +82,4 @@ function CountAsTwo({
   );
 }
 
-export default CountAsTwo;
+export default FreeToppings;

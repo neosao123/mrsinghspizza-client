@@ -1,9 +1,9 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function CountAsTwo({
+function CountAsOne({
   data,
-  setCountTwoToppingsArr,
-  countTwoToppingsArr,
+  countOneToppingsArr,
+  setCountOneToppingsArr,
   reset,
 }) {
   const tpsRef = useRef(null);
@@ -20,7 +20,7 @@ function CountAsTwo({
           toppingsPrice: data?.price ? data?.price : "0",
           toppingsPlacement: tpsRef.current.value,
         };
-        setCountTwoToppingsArr((prev) => [...prev, toppingsObject]);
+        setCountOneToppingsArr((prev) => [...prev, toppingsObject]);
         setTpsButton(true);
         setTpsButttonColor("#e40000");
       }
@@ -28,14 +28,14 @@ function CountAsTwo({
       setTpsButton(false);
       setTpsButttonColor("#606060");
       tpsRef.current.value = "Whole";
-      setCountTwoToppingsArr((prev) =>
+      setCountOneToppingsArr((prev) =>
         prev.filter((item) => item.toppingsCode !== data.toppingsCode)
       );
     }
   };
   // Handle Placement And Update Array
   const handlePlacement = () => {
-    const updatedData = countTwoToppingsArr.map((tps) => {
+    const updatedData = countOneToppingsArr.map((tps) => {
       if (tps.toppingsCode === data.toppingsCode) {
         return {
           ...tps,
@@ -44,7 +44,7 @@ function CountAsTwo({
       }
       return tps;
     });
-    setCountTwoToppingsArr(updatedData);
+    setCountOneToppingsArr(updatedData);
   };
 
   useEffect(() => {
@@ -87,4 +87,4 @@ function CountAsTwo({
   );
 }
 
-export default CountAsTwo;
+export default CountAsOne;

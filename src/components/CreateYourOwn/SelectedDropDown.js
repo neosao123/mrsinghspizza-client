@@ -1,5 +1,5 @@
 import { data } from "jquery";
-import React, { useEffect, useReducer, useRef, useState } from "react";
+import React, { useEffect } from "react";
 
 export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
   // handle Crust On Change
@@ -15,25 +15,34 @@ export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
       });
     }
   };
+
   useEffect(() => {}, []);
+
   return (
-    <select
-      className="form-select form-drop mx-4"
-      defaultValue={crust}
-      onChange={handleCrust}
-    >
-      {allIngredients?.crust?.map((data) => {
-        return (
-          <option key={data.crustCode} value={data.crustCode}>
-            {data.crustName} - $ {data.price}
-          </option>
-        );
-      })}
-    </select>
+    <>
+      <select
+        className="form-select form-drop mx-4"
+        defaultValue={crust}
+        value={crust?.crustCode}
+        onChange={handleCrust}
+      >
+        {allIngredients?.crust?.map((data) => {
+          return (
+            <option key={data.crustCode} value={data.crustCode}>
+              {data.crustName} - $ {data.price}
+            </option>
+          );
+        })}
+      </select>
+    </>
   );
 };
 
-export const SelectedCheeseDropDown = ({ allIngredients, setCheese }) => {
+export const SelectedCheeseDropDown = ({
+  allIngredients,
+  setCheese,
+  cheese,
+}) => {
   // handle Cheese On Change
   const handleCheese = (e) => {
     if (e.target.value !== null && e.target.value !== "") {
@@ -49,8 +58,12 @@ export const SelectedCheeseDropDown = ({ allIngredients, setCheese }) => {
   };
   useEffect(() => {}, []);
   return (
-    <select className="form-select form-drop mx-4" onChange={handleCheese}>
-      <option value={""}>---- Choose Cheese ----</option>
+    <select
+      className="form-select form-drop mx-4"
+      onChange={handleCheese}
+      defaultValue={cheese}
+      value={cheese?.cheeseCode}
+    >
       {allIngredients?.cheese?.map((data) => {
         return (
           <option key={data.cheeseCode} value={data.cheeseCode}>
@@ -65,6 +78,8 @@ export const SelectedCheeseDropDown = ({ allIngredients, setCheese }) => {
 export const SelectedSpecialbasesDropDown = ({
   allIngredients,
   setSpecialbases,
+  specialbases,
+  reset,
 }) => {
   // handle Specialbases On Change
   const handleSpecialBases = (e) => {
@@ -79,11 +94,17 @@ export const SelectedSpecialbasesDropDown = ({
       });
     }
   };
-  useEffect(() => {}, []);
+  useEffect(() => {
+    if (reset) {
+      setSpecialbases("");
+    }
+  }, [reset]);
   return (
     <select
       className="form-select form-drop mx-4"
       onChange={handleSpecialBases}
+      defaultValue={""}
+      value={specialbases?.length === 0 ? "" : specialbases?.specialbaseCode}
     >
       <option value={""}>---- Choose Specialbases ----</option>
       {allIngredients?.specialbases?.map((data) => {

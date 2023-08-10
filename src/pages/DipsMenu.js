@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Dips from "../components/_main/Dips/Dips";
 import { getDips } from "../services";
+import CartFunction from "../components/cart";
 
-function DipsMenu({ setCartProduct }) {
+function DipsMenu() {
   const [dipsData, setDipsData] = useState();
+  const cartFn = new CartFunction();
 
   const dips = async () => {
     await getDips()
@@ -21,13 +23,7 @@ function DipsMenu({ setCartProduct }) {
   return (
     <div className="row gx-4 d-flex justify-content-center mt-3 mb-3">
       {dipsData?.map((data) => {
-        return (
-          <Dips
-            key={data.dipsCode}
-            data={data}
-            setCartProduct={setCartProduct}
-          />
-        );
+        return <Dips key={data.dipsCode} data={data} cartFn={cartFn} />;
       })}
     </div>
   );

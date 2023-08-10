@@ -315,7 +315,7 @@ function SpecialMenu() {
               <div className="cartlist w-100 mt-5">
                 <h2 className="p-3 text-center orderTitle">Your Orders</h2>
                 {cart?.product.map((cData) => {
-                  return <CartList cData={cData} key={cData.productCode} />;
+                  return <CartList cData={cData} key={cData.productID} />;
                 })}
               </div>
               {/* Place Order */}

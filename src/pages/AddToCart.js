@@ -37,7 +37,7 @@ function AddToCart() {
               </div>
               <ul className="list-group">
                 {cart?.product.map((cData) => {
-                  return <MainCartList cData={cData} key={cData.productCode} />;
+                  return <MainCartList cData={cData} key={cData.productID} />;
                 })}
               </ul>
             </div>

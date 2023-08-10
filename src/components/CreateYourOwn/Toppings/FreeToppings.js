@@ -73,7 +73,11 @@ function FreeToppings({ data, reset, freeToppingsArr, setFreeToppingsArr }) {
           type="button"
           className="btn btn-sm px-4 text-white"
           onClick={(e) => handleTwoToppings(e, data.toppingsCode)}
-          style={{ backgroundColor: tpsButtonColor, transition: ".3s" }}
+          style={{
+            backgroundColor: tpsButtonColor,
+            transition: ".3s",
+            width: "100px",
+          }}
         >
           {tpsButton === false ? "Add" : "Remove"}
         </button>

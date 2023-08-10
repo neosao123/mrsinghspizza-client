@@ -9,6 +9,8 @@ import Footer from "../../components/_main/Footer";
 import GlobalContext from "../../context/GlobalContext";
 import { customerLogin } from "../../services";
 import { toast } from "react-toastify";
+import { useDispatch } from "react-redux";
+import { LOGIN_SUCCESS } from "../../redux/authProvider/actionType";
 
 // Validation Functions
 const getCharacterValidationError = (str) => {
@@ -41,7 +43,7 @@ function Login() {
   const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
   const navigate = useNavigate();
   const location = useLocation();
-  console.log(location);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const user = localStorage.getItem("user") ?? null;
@@ -67,6 +69,7 @@ function Login() {
       .then((res) => {
         setIsAuthenticated(true);
         setUser(res.data);
+        dispatch({ type: LOGIN_SUCCESS, payload: res.data, token: res.token });
         localStorage.setItem("user", JSON.stringify(res.data));
         localStorage.setItem("token", res.token);
         const redirectTo = localStorage.getItem("redirectTo");

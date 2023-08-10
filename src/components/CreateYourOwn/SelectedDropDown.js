@@ -22,7 +22,6 @@ export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
     <>
       <select
         className="form-select form-drop mx-4"
-        defaultValue={crust}
         value={crust?.crustCode}
         onChange={handleCrust}
       >
@@ -61,7 +60,6 @@ export const SelectedCheeseDropDown = ({
     <select
       className="form-select form-drop mx-4"
       onChange={handleCheese}
-      defaultValue={cheese}
       value={cheese?.cheeseCode}
     >
       {allIngredients?.cheese?.map((data) => {
@@ -103,7 +101,6 @@ export const SelectedSpecialbasesDropDown = ({
     <select
       className="form-select form-drop mx-4"
       onChange={handleSpecialBases}
-      defaultValue={""}
       value={specialbases?.length === 0 ? "" : specialbases?.specialbaseCode}
     >
       <option value={""}>---- Choose Specialbases ----</option>

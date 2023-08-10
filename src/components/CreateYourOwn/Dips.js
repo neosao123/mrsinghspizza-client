@@ -29,27 +29,31 @@ function Dips({ data, reset, setDipsArr, dipsArr }) {
   };
   // handle Quantity and TotalPrice
   const handleQuantity = (e) => {
-    setQuantity(e.target.value);
-    const updatedQuantity = dipsArr.map((dips) => {
-      if (dips.dipsCode === data.dipsCode) {
-        return {
-          ...dips,
-          qauntity: e.target.value,
-        };
-      }
-      return dips;
-    });
-    if (updatedQuantity) {
-      const updatedTotalPrice = updatedQuantity.map((dips) => {
+    if (e.target.value > 1) {
+      setQuantity(e.target.value);
+      const updatedQuantity = dipsArr.map((dips) => {
         if (dips.dipsCode === data.dipsCode) {
           return {
             ...dips,
-            totalPrice: (Number(dips.qauntity) * Number(dips.price)).toFixed(2),
+            qauntity: e.target.value,
           };
         }
         return dips;
       });
-      setDipsArr(updatedTotalPrice);
+      if (updatedQuantity) {
+        const updatedTotalPrice = updatedQuantity.map((dips) => {
+          if (dips.dipsCode === data.dipsCode) {
+            return {
+              ...dips,
+              totalPrice: (Number(dips.qauntity) * Number(dips.price)).toFixed(
+                2
+              ),
+            };
+          }
+          return dips;
+        });
+        setDipsArr(updatedTotalPrice);
+      }
     }
   };
 
@@ -78,9 +82,13 @@ function Dips({ data, reset, setDipsArr, dipsArr }) {
         <span className="mx-4">$ {data.price}</span>
         <button
           type="button"
-          className="addbtn btn btn-sm px-4 text-white"
+          className="addbtn btn btn-sm px-4 text-white text-center"
           onClick={(e) => handleDrinks(e, data.softdrinkCode)}
-          style={{ backgroundColor: dispButtonColor, transition: ".3s" }}
+          style={{
+            backgroundColor: dispButtonColor,
+            transition: ".3s",
+            width: "100px",
+          }}
         >
           {dipsButton === false ? "Add" : "Remove"}
         </button>

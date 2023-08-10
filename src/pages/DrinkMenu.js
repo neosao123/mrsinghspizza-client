@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { getDrinks } from "../services";
 import Drink from "../components/_main/Drinks/Drink";
+import CartFunction from "../components/cart";
 
-function DrinkMenu({ setCartProduct }) {
+function DrinkMenu() {
   const [drinksData, setDrinksData] = useState();
+  const cartFn = new CartFunction();
 
   const drinks = async () => {
     await getDrinks()
@@ -27,7 +29,7 @@ function DrinkMenu({ setCartProduct }) {
               data={data}
               idx={idx}
               key={data?.softdrinkCode}
-              setCartProduct={setCartProduct}
+              cartFn={cartFn}
             />
           );
         })}

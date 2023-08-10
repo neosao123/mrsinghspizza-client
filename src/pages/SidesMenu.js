@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import Sides from "../components/_main/Sides/Sides";
 import { getSides } from "../services";
+import CartFunction from "../components/cart";
 
-function SidesMenu({ setCartProduct }) {
+function SidesMenu() {
   const [sidesData, setSideData] = useState();
+  const cartFn = new CartFunction();
 
   const sides = async () => {
     await getSides()
@@ -22,13 +24,7 @@ function SidesMenu({ setCartProduct }) {
   return (
     <div className="row gx-4 mt-3 mb-3">
       {sidesData?.map((data) => {
-        return (
-          <Sides
-            data={data}
-            key={data.sideCode}
-            setCartProduct={setCartProduct}
-          />
-        );
+        return <Sides data={data} key={data.sideCode} cartFn={cartFn} />;
       })}
     </div>
   );

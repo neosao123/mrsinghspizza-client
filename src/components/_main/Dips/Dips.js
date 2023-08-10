@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import GlobalContext from "../../../context/GlobalContext";
+import { v4 as uuidv4 } from "uuid";
 
-function Dips({ data, setCartProduct }) {
+function Dips({ data, cartFn }) {
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
 
@@ -10,16 +15,15 @@ function Dips({ data, setCartProduct }) {
       setCount((count) => count - 1);
     }
   };
-
   // Count Increase
   const countInc = () => {
     setCount((count) => count + 1);
   };
-
   // Handle Dips
   const handleDips = () => {
     const totalPrice = data?.price * count;
     const obj = {
+      productID: uuidv4(),
       productCode: data.dipsCode,
       productName: data.dipsName,
       productType: "dips",
@@ -30,6 +34,10 @@ function Dips({ data, setCartProduct }) {
     setProduct(obj);
     setCount(1);
   };
+
+  useEffect(() => {
+    cartFn.createCart(setCart);
+  }, [setCart]);
 
   useEffect(() => {
     if (product !== null) {
@@ -44,10 +52,12 @@ function Dips({ data, setCartProduct }) {
             pCode.totalPrice = pCode.totalPrice + product.totalPrice;
           }
         });
-        setCartProduct(ct.product);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart);
       } else {
         ct.product.push(product);
-        setCartProduct(ct.product);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart);
       }
     }
   }, [product]);

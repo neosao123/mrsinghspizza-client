@@ -2,26 +2,28 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import { BrowserRouter, HashRouter } from "react-router-dom";
-import $ from "jquery";
-import Popper from "popper.js";
+import { BrowserRouter } from "react-router-dom";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import { HelmetProvider, Helmet } from "react-helmet-async";
 import MetaTag from "./components/_main/MetaTag";
 import { GlobalProvider } from "./context/GlobalContext";
+import { Provider } from "react-redux";
+import { store } from "./redux/store";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 
 root.render(
   <React.StrictMode>
-    <HelmetProvider>
-      <MetaTag />
-      <GlobalProvider>
-        <BrowserRouter basename="mrsinghsclient">
-          <App />
-        </BrowserRouter>
-      </GlobalProvider>
-    </HelmetProvider>
+    <Provider store={store}>
+      <HelmetProvider>
+        <MetaTag />
+        <GlobalProvider>
+          <BrowserRouter basename="mrsinghsclient">
+            <App />
+          </BrowserRouter>
+        </GlobalProvider>
+      </HelmetProvider>
+    </Provider>
   </React.StrictMode>
 );
 

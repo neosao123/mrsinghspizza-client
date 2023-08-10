@@ -20,8 +20,21 @@ import CountAsOne from "../components/CreateYourOwn/Toppings/CountAsOne";
 import FreeToppings from "../components/CreateYourOwn/Toppings/FreeToppings";
 import Drinks from "../components/CreateYourOwn/Drinks";
 import Dips from "../components/CreateYourOwn/Dips";
+import Sides from "../components/CreateYourOwn/Sides";
+import CartFunction from "../components/cart";
+import { v4 as uuidv4 } from "uuid";
 
 function CreateYourOwn() {
+  const pizzaSizeArr = [
+    {
+      size: "Large",
+      price: "3.00",
+    },
+    {
+      size: "Extra Large",
+      price: "6.00",
+    },
+  ];
   // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
@@ -34,11 +47,12 @@ function CreateYourOwn() {
   const location = useLocation();
   //
   const [loading, setLoading] = useState(false);
-  const [userLongitude, setUserLongitude] = useState("40.42");
-  const [userLatitude, setUserLatitude] = useState("20.22");
-
+  // Use Ref
+  const pizzaSizeRef = useRef(null);
   // All State
   const [totalPrice, setTotalPrice] = useState();
+  const [pizzaSizePrice, setPizzaSizePrice] = useState();
+  const [pizzaSize, setPizzaSize] = useState();
   const [crust, setCrust] = useState();
   const [cheese, setCheese] = useState();
   const [specialbases, setSpecialbases] = useState();
@@ -47,18 +61,20 @@ function CreateYourOwn() {
   const [freeToppingsArr, setFreeToppingsArr] = useState([]);
   const [drinksArr, setDrinksArr] = useState([]);
   const [dipsArr, setDipsArr] = useState([]);
+  const [sidesArr, setSidesArr] = useState([]);
   const [reset, setReset] = useState(false);
+  const cartFn = new CartFunction();
 
-  // Handle Place Order
-  const handlePlaceOrder = () => {
-    if (isAuthenticated) {
-      toast.success("Order Placed Successfully..");
-    } else {
-      localStorage.setItem("redirectTo", location?.pathname);
-      navigate("/login");
+  // Handle Pizza Size and Its Price
+  const handlePizzaSize = () => {
+    if (pizzaSizeRef.current) {
+      const filteredData = pizzaSizeArr.find(
+        (data) => data.size === pizzaSizeRef.current.value
+      );
+      setPizzaSize(filteredData?.size);
+      setPizzaSizePrice(filteredData?.price);
     }
   };
-
   // Calculate Price
   const calulatePrice = () => {
     let calculatedPrice = Number(0);
@@ -67,6 +83,7 @@ function CreateYourOwn() {
     let totalFreeToppings = Number(0);
     let totalDrinks = Number(0);
     let totalDips = Number(0);
+    let totalSides = Number(0);
 
     if (countTwoToppingsArr) {
       countTwoToppingsArr.map(
@@ -89,6 +106,10 @@ function CreateYourOwn() {
     if (dipsArr) {
       dipsArr.map((dips) => (totalDips += Number(dips.totalPrice)));
     }
+    if (sidesArr) {
+      sidesArr.map((side) => (totalSides += Number(side.sidePrice)));
+    }
+    calculatedPrice += Number(pizzaSizePrice) || 0;
     calculatedPrice += Number(crust?.price) || 0;
     calculatedPrice += Number(cheese?.price) || 0;
     calculatedPrice += Number(specialbases?.price) || 0;
@@ -97,56 +118,90 @@ function CreateYourOwn() {
     calculatedPrice += Number(totalFreeToppings) || 0;
     calculatedPrice += Number(totalDrinks) || 0;
     calculatedPrice += Number(totalDips) || 0;
+    calculatedPrice += Number(totalSides) || 0;
 
     setTotalPrice(calculatedPrice);
   };
-
   // Handle Add To Cart
   const handleAddToCart = () => {
-    const payload = {
-      productCode: "",
-      productName: "Customized Pizza",
-      productType: "custom_pizza",
-      config: {
-        pizza: [
-          {
-            crust: crust,
-            cheese: cheese,
-            specialbases: specialbases,
-            toppings: {
-              countAsTwo: countTwoToppingsArr,
-              countAsOne: countOneToppingsArr,
-              freeToppings: freeToppingsArr,
+    if (
+      crust &&
+      cheese &&
+      specialbases &&
+      (countOneToppingsArr.length > 0 ||
+        countTwoToppingsArr.length > 0 ||
+        freeToppingsArr.length > 0)
+    ) {
+      const payload = {
+        productID: uuidv4(),
+        productCode: "#NA",
+        productName: "Customized Pizza",
+        productType: "custom_pizza",
+        config: {
+          pizza: [
+            {
+              crust: crust,
+              cheese: cheese,
+              specialbases: specialbases,
+              toppings: {
+                countAsTwo: countTwoToppingsArr,
+                countAsOne: countOneToppingsArr,
+                freeToppings: freeToppingsArr,
+              },
             },
-          },
-        ],
-        dips: dipsArr,
-        drinks: drinksArr,
-      },
-      quantity: "1",
-      totalPrice: "",
-    };
-    console.log(payload);
-    setCrust({
-      crustCode: allIngredients?.crust[0].crustCode,
-      crustName: allIngredients?.crust[0].crustName,
-      price: allIngredients?.crust[0].price,
-    });
-    setCheese({
-      cheeseCode: allIngredients?.cheese[0].cheeseCode,
-      cheeseName: allIngredients?.cheese[0].cheeseName,
-      price: allIngredients?.cheese[0].price,
-    });
-    setSpecialbases({});
-    setCountTwoToppingsArr([]);
-    setCountOneToppingsArr([]);
-    setFreeToppingsArr([]);
-    setDrinksArr([]);
-    setDipsArr([]);
-    resetControls();
-    console.log(crust);
-  };
+          ],
+          sidesArr: sidesArr,
+          dips: dipsArr,
+          drinks: drinksArr,
+        },
+        pizzaSize: pizzaSize,
+        quantity: "1",
+        totalPrice: totalPrice.toFixed(2),
+      };
+      if (payload) {
+        let ct = JSON.parse(localStorage.getItem("cart"));
+        ct.product.push(payload);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart);
+        toast.success("Cart Added Successfully...");
 
+        // Reset All Fields
+        setPizzaSize(pizzaSizeArr[0]?.size);
+        setPizzaSizePrice(pizzaSizeArr[0]?.price);
+        setCrust({
+          crustCode: allIngredients?.crust[0].crustCode,
+          crustName: allIngredients?.crust[0].crustName,
+          price: allIngredients?.crust[0].price,
+        });
+        setCheese({
+          cheeseCode: allIngredients?.cheese[0].cheeseCode,
+          cheeseName: allIngredients?.cheese[0].cheeseName,
+          price: allIngredients?.cheese[0].price,
+        });
+        setSpecialbases({});
+        setCountTwoToppingsArr([]);
+        setCountOneToppingsArr([]);
+        setFreeToppingsArr([]);
+        setDrinksArr([]);
+        setDipsArr([]);
+        setSidesArr([]);
+        resetControls();
+      }
+    } else {
+      toast.error(
+        "Crust, Cheese, Specialbases and Atleast One Toppings Must Be Selected"
+      );
+    }
+  };
+  // Handle Place Order
+  const handlePlaceOrder = () => {
+    if (isAuthenticated) {
+      toast.success("Order Placed Successfully..");
+    } else {
+      localStorage.setItem("redirectTo", location?.pathname);
+      navigate("/login");
+    }
+  };
   //API - All Ingredient
   const allIngredinant = async () => {
     setLoading(true);
@@ -159,7 +214,6 @@ function CreateYourOwn() {
         console.log("Error From All Ingredients : ", err);
       });
   };
-
   //API - Sides
   const sides = async () => {
     setLoading(true);
@@ -172,7 +226,6 @@ function CreateYourOwn() {
         console.log("Error From Sides ", err);
       });
   };
-
   // Reset Controls
   const resetControls = () => {
     setReset(true);
@@ -181,6 +234,20 @@ function CreateYourOwn() {
     }, 1000);
   };
 
+  useEffect(() => {
+    // Screen Always Set To Top after UseEffect Called
+    setLoading(false);
+    window.scrollTo(0, 0);
+    setLoading(true);
+    // API
+    allIngredinant();
+    sides();
+  }, []);
+  // UseEffect For CreateCart When Cart is Null
+  useEffect(() => {
+    cartFn.createCart(setCart);
+  }, [setCart]);
+  // UseEffect For Set DefaultValue
   useEffect(() => {
     setCrust({
       crustCode: allIngredients?.crust[0].crustCode,
@@ -192,19 +259,10 @@ function CreateYourOwn() {
       cheeseName: allIngredients?.cheese[0].cheeseName,
       price: allIngredients?.cheese[0].price,
     });
+    setPizzaSize(pizzaSizeArr[0].size);
+    setPizzaSizePrice(pizzaSizeArr[0].price);
   }, [allIngredients]);
-
-  useEffect(() => {
-    // Screen Always Set To Top after UseEffect Called
-    setLoading(false);
-    window.scrollTo(0, 0);
-    setLoading(true);
-    // API
-    allIngredinant();
-    sides();
-  }, []);
-
-  // Calculate Function
+  // UseEffect For Calculate Function
   useEffect(() => {
     calulatePrice();
   }, [
@@ -216,6 +274,9 @@ function CreateYourOwn() {
     freeToppingsArr,
     drinksArr,
     dipsArr,
+    sidesArr,
+    pizzaSizePrice,
+    pizzaSize,
   ]);
 
   return (
@@ -244,9 +305,19 @@ function CreateYourOwn() {
                 <div className="col-lg-4 col-md-6 col-md-6 mb-3">
                   <div className="d-flex flex-row flex-wrap justify-content-start align-items-center w-100">
                     <p className="mb-1">Size :</p>
-                    <select className="form-select form-drop mx-4">
-                      <option>Large</option>
-                      <option>Extra Large</option>
+                    <select
+                      className="form-select form-drop mx-4"
+                      ref={pizzaSizeRef}
+                      onChange={handlePizzaSize}
+                      value={pizzaSize}
+                    >
+                      {pizzaSizeArr?.map((data, index) => {
+                        return (
+                          <option value={data.size} key={index}>
+                            {data.size}
+                          </option>
+                        );
+                      })}
                     </select>
                   </div>
                 </div>
@@ -291,9 +362,12 @@ function CreateYourOwn() {
               <div className="p-2 pizza-heading text-center">
                 <h4 className="my-1">Toppings</h4>
               </div>
-              <div className="row gx-4 mb-3 mt-4">
+              <div
+                className="row gx-4 mb-3 mt-4"
+                style={{ maxHeight: "450px", overflowY: "scroll" }}
+              >
                 {/* count 2 toppings */}
-                <div className="col-lg-4 col-md-6 col-sm-12 mt-3">
+                <div className="col-lg-4 col-md-6 col-sm-12">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Toppings (Count 2)
                   </p>
@@ -310,7 +384,7 @@ function CreateYourOwn() {
                   })}
                 </div>
                 {/* count 1 toppings */}
-                <div className="col-lg-4 col-md-6 col-sm-12 mt-3">
+                <div className="col-lg-4 col-md-6 col-sm-12">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Toppings (Count 1)
                   </p>
@@ -327,7 +401,7 @@ function CreateYourOwn() {
                   })}
                 </div>
                 {/* indians toppings (free) */}
-                <div className="col-lg-4 col-md-6 col-sm-12 mt-3">
+                <div className="col-lg-4 col-md-6 col-sm-12">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Indians Toppings (Free)
                   </p>
@@ -349,36 +423,20 @@ function CreateYourOwn() {
               <div className="p-2 pizza-heading text-center">
                 <h4 className="my-1">Sides</h4>
               </div>
-              <div className="row mb-3">
+              <div
+                className="row mb-3"
+                style={{ maxHeight: "450px", overflowY: "scroll" }}
+              >
                 <div id="sides" className="mb-3">
                   {sideData?.map((data) => {
                     return (
-                      <div
-                        className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                      <Sides
                         key={data.sideCode}
-                      >
-                        <span className="mx-2">{data.sideName}</span>
-                        <div className="w-50 d-flex justify-content-end">
-                          <select className="form-select w-50 mx-4 d-inline-block">
-                            {data?.combination?.map((combination) => {
-                              return (
-                                <option
-                                  key={combination.lineCode}
-                                  value={combination.lineCode}
-                                >
-                                  {combination.size} - ${combination.price}
-                                </option>
-                              );
-                            })}
-                          </select>
-                          <button
-                            type="button"
-                            className="addbtn btn btn-sm px-4 text-white"
-                          >
-                            Add
-                          </button>
-                        </div>
-                      </div>
+                        data={data}
+                        setSidesArr={setSidesArr}
+                        sidesArr={sidesArr}
+                        reset={reset}
+                      />
                     );
                   })}
                 </div>
@@ -449,7 +507,7 @@ function CreateYourOwn() {
               <div className="cartlist w-100 mt-5">
                 <h2 className="p-3 text-center orderTitle">Your Orders</h2>
                 {cart?.product.map((cData) => {
-                  return <CartList cData={cData} key={cData.productCode} />;
+                  return <CartList cData={cData} key={cData.productID} />;
                 })}
               </div>
               {/* Place Order */}

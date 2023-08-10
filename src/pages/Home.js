@@ -9,92 +9,18 @@ import DrinkMenu from "./DrinkMenu";
 import DipsMenu from "./DipsMenu";
 import SidesMenu from "./SidesMenu";
 import GlobalContext from "../context/GlobalContext";
+import CartFunction from "../components/cart";
 
 const Home = () => {
   // Global Context
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
-
-  //
-  const [userLongitude, setUserLongitude] = useState();
-  const [userLatitude, setUserLatitude] = useState();
-  const [storeLongitude, setStoreLongitude] = useState();
-  const [storeLatitude, setStoreLatitude] = useState();
-  const [cartProduct, setCartProduct] = useState([]);
-
-  // Permission for GeoLocation
-  const getLocation = () => {
-    if (navigator.geolocation) {
-      // console.log(navigator.geolocation);
-      navigator.geolocation.getCurrentPosition(
-        function (position) {
-          setUserLatitude(position.coords.latitude);
-          setUserLongitude(position.coords.longitude);
-        },
-        function (error) {
-          // console.log("error code :", error.code);
-        }
-      );
-    } else {
-      // console.log("Geolocation is not supported");
-    }
-  };
-
-  // Adding New Product In Cart
-  const addCart = () => {
-    if (localStorage.getItem("cart") && localStorage.getItem("cart") !== null) {
-      if (cartProduct.length > 0) {
-        let sub = 0.0;
-        let discount = 0.0;
-        let taxPer = 2.2;
-        cartProduct.map((data) => {
-          sub = Number(sub) + Number(data?.totalPrice);
-        });
-
-        let disAmount = Number(sub) - Number(discount);
-        let taxAmount = (disAmount * taxPer) / 100;
-        let gTotal = Number(disAmount) + Number(taxAmount);
-
-        const currentCart = {
-          product: cartProduct,
-          subtotal: sub.toFixed(2),
-          discount: Number(discount).toFixed(2),
-          taxPer: taxPer,
-          grandtotal: gTotal.toFixed(2),
-        };
-
-        localStorage.setItem("cart", JSON.stringify(currentCart));
-        setCart(currentCart);
-      }
-    }
-  };
-
-  // Create Empty Cart In LocalStorage
-  const createCart = () => {
-    if (localStorage.getItem("cart") === null) {
-      let sub = 0.0;
-      let discount = 0.0;
-      let taxPer = 0.0;
-      let gTotal = 0.0;
-      const currentCart = {
-        product: [],
-        subtotal: sub.toFixed(2),
-        discount: Number(discount).toFixed(2),
-        taxPer: taxPer,
-        grandtotal: gTotal.toFixed(2),
-      };
-      localStorage.setItem("cart", JSON.stringify(currentCart));
-      setCart(currentCart);
-    }
-  };
+  // Helper Function
+  const cartFn = new CartFunction();
 
   useEffect(() => {
-    createCart();
-    addCart();
-    getLocation();
-    localStorage.setItem("userLatitude", userLatitude);
-    localStorage.setItem("userLongitude", userLongitude);
-  }, [cartProduct]);
+    cartFn.createCart(setCart);
+  }, [setCart]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
@@ -309,7 +235,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="sides-tab"
                     >
-                      <SidesMenu setCartProduct={setCartProduct} />
+                      <SidesMenu />
                     </div>
 
                     {/* Dips Menu */}
@@ -319,10 +245,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="dips-tab"
                     >
-                      <DipsMenu
-                        setCartProduct={setCartProduct}
-                        addCart={addCart}
-                      />
+                      <DipsMenu />
                     </div>
 
                     {/* Drinks Menu */}
@@ -332,7 +255,7 @@ const Home = () => {
                       role="tabpanel"
                       aria-labelledby="drinks-tab"
                     >
-                      <DrinkMenu setCartProduct={setCartProduct} />
+                      <DrinkMenu />
                     </div>
                   </div>
                 </div>

@@ -1,6 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
+import GlobalContext from "../../../context/GlobalContext";
+import { v4 as uuidv4 } from "uuid";
 
-const Drink = ({ data, setCartProduct }) => {
+const Drink = ({ data, cartFn }) => {
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
 
@@ -20,6 +25,7 @@ const Drink = ({ data, setCartProduct }) => {
   const handleDrinks = () => {
     const totalPrice = data?.price * count;
     const obj = {
+      productID: uuidv4(),
       productCode: data.softdrinkCode,
       productName: data.softDrinksName,
       productType: "drinks",
@@ -30,6 +36,10 @@ const Drink = ({ data, setCartProduct }) => {
     setProduct(obj);
     setCount(1); // count set to 1
   };
+
+  useEffect(() => {
+    cartFn.createCart(setCart);
+  }, [setCart]);
 
   useEffect(() => {
     if (product !== null) {
@@ -43,10 +53,12 @@ const Drink = ({ data, setCartProduct }) => {
             pCode.quantity = pCode.quantity + product.quantity;
           }
         });
-        setCartProduct(ct.product);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart);
       } else {
         ct.product.push(product);
-        setCartProduct(ct.product);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart);
       }
     }
   }, [product]);

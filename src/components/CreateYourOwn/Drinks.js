@@ -29,29 +29,31 @@ function Drinks({ data, setDrinksArr, drinksArr, reset }) {
   };
   // handle Quantity and TotalPrice
   const handleQuantity = (e) => {
-    setQuantity(e.target.value);
-    const updatedQuantity = drinksArr.map((drinks) => {
-      if (drinks.drinksCode === data.softdrinkCode) {
-        return {
-          ...drinks,
-          qauntity: e.target.value,
-        };
-      }
-      return drinks;
-    });
-    if (updatedQuantity) {
-      const updatedTotalPrice = updatedQuantity.map((drinks) => {
+    if (e.target.value > 0) {
+      setQuantity(e.target.value);
+      const updatedQuantity = drinksArr.map((drinks) => {
         if (drinks.drinksCode === data.softdrinkCode) {
           return {
             ...drinks,
-            totalPrice: (
-              Number(drinks.qauntity) * Number(drinks.price)
-            ).toFixed(2),
+            qauntity: e.target.value,
           };
         }
         return drinks;
       });
-      setDrinksArr(updatedTotalPrice);
+      if (updatedQuantity) {
+        const updatedTotalPrice = updatedQuantity.map((drinks) => {
+          if (drinks.drinksCode === data.softdrinkCode) {
+            return {
+              ...drinks,
+              totalPrice: (
+                Number(drinks.qauntity) * Number(drinks.price)
+              ).toFixed(2),
+            };
+          }
+          return drinks;
+        });
+        setDrinksArr(updatedTotalPrice);
+      }
     }
   };
 
@@ -82,7 +84,11 @@ function Drinks({ data, setDrinksArr, drinksArr, reset }) {
           type="button"
           className="addbtn btn btn-sm px-4 text-white"
           onClick={(e) => handleDrinks(e, data.softdrinkCode)}
-          style={{ backgroundColor: drinksButtonColor, transition: ".3s" }}
+          style={{
+            backgroundColor: drinksButtonColor,
+            transition: ".3s",
+            width: "100px",
+          }}
         >
           {drinksButton === false ? "Add" : "Remove"}
         </button>

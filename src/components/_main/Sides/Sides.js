@@ -1,7 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import pizzaimage from "../../../assets/images/pz.png";
+import GlobalContext from "../../../context/GlobalContext";
+import { v4 as uuidv4 } from "uuid";
 
-function Sides({ data, setCartProduct }) {
+function Sides({ data, cartFn }) {
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
   const sPlacementRef = useRef(null);
@@ -27,6 +32,7 @@ function Sides({ data, setCartProduct }) {
     }
     const totalPrice = combinationData?.price * count;
     const obj = {
+      productID: uuidv4(),
       productCode: data.sideCode,
       productName: data.sideName,
       productType: "sides",
@@ -41,10 +47,15 @@ function Sides({ data, setCartProduct }) {
   };
 
   useEffect(() => {
+    cartFn.createCart(setCart);
+  }, [setCart]);
+
+  useEffect(() => {
     if (product !== null) {
       let ct = JSON.parse(localStorage.getItem("cart"));
       ct.product.push(product);
-      setCartProduct(ct.product);
+      const cartProduct = ct.product;
+      cartFn.addCart(cartProduct, setCart);
     }
   }, [product]);
 

@@ -1,17 +1,23 @@
-import React from "react";
-import { NavLink } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, NavLink } from "react-router-dom";
 import OwlCarousel from "react-owl-carousel";
 import "owl.carousel/dist/assets/owl.carousel.css";
 import "owl.carousel/dist/assets/owl.theme.default.css";
 import bgSlider from "../../../assets/images/slider-bg1.jpg";
 import pizzaImage from "../../../assets/images/pz.png";
 
-const HeroSlider = () => {
-  //const fixedBgUrl = '/images/heroslider/slider-bg1.jpg';
+const HeroSlider = ({ onProductClick }) => {
   const fixedBgUrl = bgSlider;
   const containerStyle = {
     background: `url(${fixedBgUrl}) no-repeat center center`,
   };
+
+  const [productType, setProductType] = useState();
+  useEffect(() => {
+    if (productType && productType !== null) {
+      onProductClick(productType);
+    }
+  }, [productType]);
 
   return (
     <div className="banner slider1 new-block">
@@ -52,9 +58,12 @@ const HeroSlider = () => {
                       data-animation-out="animate-out fadeOutRight"
                     >
                       <div className="text-center">
-                        <NavLink href="/create-your-own" className="btn1 stl2">
+                        <Link
+                          to="/create-your-own"
+                          className="btn1 stl2 text-decoration-none"
+                        >
                           Create
-                        </NavLink>
+                        </Link>
                       </div>
                     </div>
                   </div>
@@ -89,9 +98,14 @@ const HeroSlider = () => {
                       data-animation-out="animate-out fadeOutRight"
                     >
                       <div className="text-center">
-                        <NavLink href="#" className="btn1 stl2">
-                          Add to Cart
-                        </NavLink>
+                        <Link
+                          className="btn1 stl2 text-decoration-none"
+                          onClick={() => {
+                            setProductType("special");
+                          }}
+                        >
+                          View
+                        </Link>
                       </div>
                     </div>
                   </div>

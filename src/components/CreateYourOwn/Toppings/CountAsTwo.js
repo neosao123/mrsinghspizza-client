@@ -5,6 +5,7 @@ function CountAsTwo({
   setCountTwoToppingsArr,
   countTwoToppingsArr,
   reset,
+  payloadEdit,
 }) {
   const tpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
@@ -54,6 +55,19 @@ function CountAsTwo({
       tpsRef.current.value = "Whole";
     }
   }, [reset]);
+
+  // Populate - Edit
+  useEffect(() => {
+    if (payloadEdit) {
+      payloadEdit?.config?.pizza[0]?.toppings?.countAsTwo.map((items) => {
+        if (items?.toppingsCode === data?.toppingsCode) {
+          setTpsButton(true);
+          setTpsButttonColor("#e40000");
+          tpsRef.current.value = items?.toppingsPlacement;
+        }
+      });
+    }
+  }, [payloadEdit]);
 
   return (
     <div

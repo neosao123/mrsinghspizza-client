@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function Sides({ data, setSidesArr, sidesArr, reset }) {
+function Sides({ data, setSidesArr, sidesArr, reset, payloadEdit }) {
   const sidesRef = useRef(null);
   const [sideButton, setSideButton] = useState(false);
   const [sideButtonColor, setSideButtonColor] = useState("#606060");
@@ -38,18 +38,18 @@ function Sides({ data, setSidesArr, sidesArr, reset }) {
       const value = data?.combination?.find(
         (code) => code.lineCode === sidesRef.current.value
       );
-      const updatedCombination = sidesArr?.map((data) => {
-        console.log("data :", data);
-        if (data.sideCode === data.sideCode) {
+      const updatedCombination = sidesArr?.map((sides) => {
+        console.log("data :", sides);
+        if (sides.sideCode === data.sideCode) {
           console.log("combinationData", value);
           return {
-            ...data,
+            ...sides,
             lineCode: value?.lineCode,
             sidePrice: value?.price,
             sideSize: value?.size,
           };
         }
-        return data;
+        return sides;
       });
       setSidesArr(updatedCombination);
     }
@@ -61,6 +61,20 @@ function Sides({ data, setSidesArr, sidesArr, reset }) {
       sidesRef.current.value = data?.combination[0]?.lineCode;
     }
   }, [reset]);
+
+  // Populate - Edit
+  useEffect(() => {
+    if (payloadEdit) {
+      payloadEdit?.config?.sides.map((items) => {
+        if (items?.sideCode === data?.sideCode) {
+          setSideButton(true);
+          setSideButtonColor("#e40000");
+          sidesRef.current.value = items?.lineCode;
+        }
+      });
+    }
+  }, [payloadEdit]);
+
   return (
     <div
       className="p-2 d-flex justify-content-between align-items-center border-bottom"

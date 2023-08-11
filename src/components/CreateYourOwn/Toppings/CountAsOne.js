@@ -4,6 +4,7 @@ function CountAsOne({
   data,
   countOneToppingsArr,
   setCountOneToppingsArr,
+  payloadEdit,
   reset,
 }) {
   const tpsRef = useRef(null);
@@ -54,6 +55,19 @@ function CountAsOne({
       tpsRef.current.value = "Whole";
     }
   }, [reset]);
+
+  // Populate - Edit
+  useEffect(() => {
+    if (payloadEdit) {
+      payloadEdit?.config?.pizza[0]?.toppings?.countAsOne.map((items) => {
+        if (items?.toppingsCode === data?.toppingsCode) {
+          setTpsButton(true);
+          setTpsButttonColor("#e40000");
+          tpsRef.current.value = items?.toppingsPlacement;
+        }
+      });
+    }
+  }, [payloadEdit]);
 
   return (
     <div

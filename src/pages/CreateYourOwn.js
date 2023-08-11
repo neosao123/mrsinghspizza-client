@@ -63,6 +63,8 @@ function CreateYourOwn() {
   const [dipsArr, setDipsArr] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
   const [reset, setReset] = useState(false);
+  const [payloadEdit, setPayloadEdit] = useState();
+  // Healper Function
   const cartFn = new CartFunction();
 
   // Handle Pizza Size and Its Price
@@ -132,60 +134,127 @@ function CreateYourOwn() {
         countTwoToppingsArr.length > 0 ||
         freeToppingsArr.length > 0)
     ) {
-      const payload = {
-        productID: uuidv4(),
-        productCode: "#NA",
-        productName: "Customized Pizza",
-        productType: "custom_pizza",
-        config: {
-          pizza: [
-            {
-              crust: crust,
-              cheese: cheese,
-              specialbases: specialbases,
-              toppings: {
-                countAsTwo: countTwoToppingsArr,
-                countAsOne: countOneToppingsArr,
-                freeToppings: freeToppingsArr,
+      if (
+        payloadEdit &&
+        payloadEdit !== undefined &&
+        payloadEdit.productType === "customized"
+      ) {
+        const editedPayload = {
+          productID: payloadEdit?.productID,
+          productCode: "#NA",
+          productName: "Customized Pizza",
+          productType: "customized",
+          config: {
+            pizza: [
+              {
+                crust: crust,
+                cheese: cheese,
+                specialbases: specialbases,
+                toppings: {
+                  countAsTwo: countTwoToppingsArr,
+                  countAsOne: countOneToppingsArr,
+                  freeToppings: freeToppingsArr,
+                },
               },
-            },
-          ],
-          sidesArr: sidesArr,
-          dips: dipsArr,
-          drinks: drinksArr,
-        },
-        pizzaSize: pizzaSize,
-        quantity: "1",
-        totalPrice: totalPrice.toFixed(2),
-      };
-      if (payload) {
-        let ct = JSON.parse(localStorage.getItem("cart"));
-        ct.product.push(payload);
-        const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart);
-        toast.success("Cart Added Successfully...");
+            ],
+            sides: sidesArr,
+            dips: dipsArr,
+            drinks: drinksArr,
+          },
+          pizzaSize: pizzaSize,
+          quantity: "1",
+          totalPrice: totalPrice.toFixed(2),
+        };
 
-        // Reset All Fields
-        setPizzaSize(pizzaSizeArr[0]?.size);
-        setPizzaSizePrice(pizzaSizeArr[0]?.price);
-        setCrust({
-          crustCode: allIngredients?.crust[0].crustCode,
-          crustName: allIngredients?.crust[0].crustName,
-          price: allIngredients?.crust[0].price,
-        });
-        setCheese({
-          cheeseCode: allIngredients?.cheese[0].cheeseCode,
-          cheeseName: allIngredients?.cheese[0].cheeseName,
-          price: allIngredients?.cheese[0].price,
-        });
-        setSpecialbases({});
-        setCountTwoToppingsArr([]);
-        setCountOneToppingsArr([]);
-        setFreeToppingsArr([]);
-        setDrinksArr([]);
-        setDipsArr([]);
-        setSidesArr([]);
-        resetControls();
+        if (editedPayload) {
+          let ct = JSON.parse(localStorage.getItem("cart"));
+
+          console.log("ct :", ct);
+          const filteredCart = ct?.product?.filter(
+            (items) => items?.productID !== editedPayload?.productID
+          );
+          filteredCart.push(editedPayload);
+          const cartProduct = filteredCart;
+          cartFn.addCart(cartProduct, setCart, true);
+
+          // Reset All Fields
+          setPizzaSize(pizzaSizeArr[0]?.size);
+          setPizzaSizePrice(pizzaSizeArr[0]?.price);
+          setCrust({
+            crustCode: allIngredients?.crust[0].crustCode,
+            crustName: allIngredients?.crust[0].crustName,
+            price: allIngredients?.crust[0].price,
+          });
+          setCheese({
+            cheeseCode: allIngredients?.cheese[0].cheeseCode,
+            cheeseName: allIngredients?.cheese[0].cheeseName,
+            price: allIngredients?.cheese[0].price,
+          });
+          setSpecialbases({});
+          setCountTwoToppingsArr([]);
+          setCountOneToppingsArr([]);
+          setFreeToppingsArr([]);
+          setDrinksArr([]);
+          setDipsArr([]);
+          setSidesArr([]);
+          resetControls();
+          setPayloadEdit();
+        }
+      } else {
+        const payload = {
+          productID: uuidv4(),
+          productCode: "#NA",
+          productName: "Customized Pizza",
+          productType: "customized",
+          config: {
+            pizza: [
+              {
+                crust: crust,
+                cheese: cheese,
+                specialbases: specialbases,
+                toppings: {
+                  countAsTwo: countTwoToppingsArr,
+                  countAsOne: countOneToppingsArr,
+                  freeToppings: freeToppingsArr,
+                },
+              },
+            ],
+            sides: sidesArr,
+            dips: dipsArr,
+            drinks: drinksArr,
+          },
+          pizzaSize: pizzaSize,
+          quantity: "1",
+          totalPrice: totalPrice.toFixed(2),
+        };
+        if (payload) {
+          let ct = JSON.parse(localStorage.getItem("cart"));
+          ct.product.push(payload);
+          const cartProduct = ct.product;
+          cartFn.addCart(cartProduct, setCart, false);
+
+          // Reset All Fields
+          setPizzaSize(pizzaSizeArr[0]?.size);
+          setPizzaSizePrice(pizzaSizeArr[0]?.price);
+          setCrust({
+            crustCode: allIngredients?.crust[0].crustCode,
+            crustName: allIngredients?.crust[0].crustName,
+            price: allIngredients?.crust[0].price,
+          });
+          setCheese({
+            cheeseCode: allIngredients?.cheese[0].cheeseCode,
+            cheeseName: allIngredients?.cheese[0].cheeseName,
+            price: allIngredients?.cheese[0].price,
+          });
+          setSpecialbases({});
+          setCountTwoToppingsArr([]);
+          setCountOneToppingsArr([]);
+          setFreeToppingsArr([]);
+          setDrinksArr([]);
+          setDipsArr([]);
+          setSidesArr([]);
+          resetControls();
+        }
       }
     } else {
       toast.error(
@@ -278,7 +347,33 @@ function CreateYourOwn() {
     pizzaSizePrice,
     pizzaSize,
   ]);
-
+  // Populate All Fields - Edit Pizza
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "customized"
+    ) {
+      setPizzaSize(payloadEdit?.pizzaSize);
+      const filteredData = pizzaSizeArr.find(
+        (data) => data.size === payloadEdit?.pizzaSize
+      );
+      setPizzaSizePrice(filteredData?.price);
+      setCrust(payloadEdit?.config?.pizza[0]?.crust);
+      setCheese(payloadEdit?.config?.pizza[0]?.cheese);
+      setSpecialbases(payloadEdit?.config?.pizza[0]?.specialbases);
+      setCountTwoToppingsArr(
+        payloadEdit?.config?.pizza[0]?.toppings?.countAsTwo
+      );
+      setCountOneToppingsArr(
+        payloadEdit?.config?.pizza[0]?.toppings?.countAsOne
+      );
+      setFreeToppingsArr(payloadEdit?.config?.pizza[0]?.toppings?.freeToppings);
+      setSidesArr(payloadEdit?.config?.sides);
+      setDipsArr(payloadEdit?.config?.dips);
+      setDrinksArr(payloadEdit?.config?.drinks);
+    }
+  }, [payloadEdit]);
   return (
     <div>
       <Header />
@@ -292,7 +387,11 @@ function CreateYourOwn() {
           <div className="position-sticky top-0 custmized-main">
             <div className="d-flex flex-wrap justify-content-center bg-dark align-items-center p-3 custmized">
               <h2 className="m-3 text-white">
-                <strong>Create Your Own - Pizza</strong>
+                <strong>
+                  {payloadEdit && payloadEdit !== undefined
+                    ? "Create Your Own - Pizza [ Edit ]"
+                    : "Create Your Own - Pizza "}
+                </strong>
               </h2>
             </div>
           </div>
@@ -379,6 +478,7 @@ function CreateYourOwn() {
                         setCountTwoToppingsArr={setCountTwoToppingsArr}
                         countTwoToppingsArr={countTwoToppingsArr}
                         reset={reset}
+                        payloadEdit={payloadEdit}
                       />
                     );
                   })}
@@ -395,6 +495,7 @@ function CreateYourOwn() {
                         data={data}
                         countOneToppingsArr={countOneToppingsArr}
                         setCountOneToppingsArr={setCountOneToppingsArr}
+                        payloadEdit={payloadEdit}
                         reset={reset}
                       />
                     );
@@ -412,6 +513,7 @@ function CreateYourOwn() {
                         data={data}
                         setFreeToppingsArr={setFreeToppingsArr}
                         freeToppingsArr={freeToppingsArr}
+                        payloadEdit={payloadEdit}
                         reset={reset}
                       />
                     );
@@ -436,6 +538,7 @@ function CreateYourOwn() {
                         setSidesArr={setSidesArr}
                         sidesArr={sidesArr}
                         reset={reset}
+                        payloadEdit={payloadEdit}
                       />
                     );
                   })}
@@ -455,6 +558,7 @@ function CreateYourOwn() {
                         data={data}
                         setDipsArr={setDipsArr}
                         dipsArr={dipsArr}
+                        payloadEdit={payloadEdit}
                         reset={reset}
                       />
                     );
@@ -476,6 +580,7 @@ function CreateYourOwn() {
                         setDrinksArr={setDrinksArr}
                         drinksArr={drinksArr}
                         reset={reset}
+                        payloadEdit={payloadEdit}
                       />
                     );
                   })}
@@ -499,7 +604,13 @@ function CreateYourOwn() {
                   className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
                   onClick={handleAddToCart}
                 >
-                  <b>Add to Cart</b>
+                  <b>
+                    {payloadEdit &&
+                    payloadEdit !== undefined &&
+                    payloadEdit?.productType === "customized"
+                      ? "Update Pizza"
+                      : "Add To Cart"}
+                  </b>
                 </button>
               </div>
 
@@ -507,7 +618,14 @@ function CreateYourOwn() {
               <div className="cartlist w-100 mt-5">
                 <h2 className="p-3 text-center orderTitle">Your Orders</h2>
                 {cart?.product.map((cData) => {
-                  return <CartList cData={cData} key={cData.productID} />;
+                  return (
+                    <CartList
+                      cData={cData}
+                      key={cData.productID}
+                      setPayloadEdit={setPayloadEdit}
+                      payloadEdit={payloadEdit}
+                    />
+                  );
                 })}
               </div>
               {/* Place Order */}

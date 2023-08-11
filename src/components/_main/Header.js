@@ -1,9 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import appLogo from "../../assets/images/logo.png";
 import GlobalContext from "../../context/GlobalContext";
 import { toast } from "react-toastify";
-const Header = () => {
+import { useDispatch } from "react-redux";
+import { LOGOUT } from "../../redux/authProvider/actionType";
+const Header = ({ onProductClick }) => {
   // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
@@ -11,6 +13,8 @@ const Header = () => {
   const [cart, setCart] = globalCtx.cart;
   //
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const [productType, setProductType] = useState();
 
   // Handle Logout
   const handleLogout = () => {
@@ -18,6 +22,7 @@ const Header = () => {
       localStorage.removeItem("user");
       localStorage.removeItem("token");
       toast.success("Logged Out successfully");
+      dispatch({ type: LOGOUT, payload: null });
       setTimeout(() => {
         setIsAuthenticated(false);
         setUser({});
@@ -26,6 +31,13 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    if (productType && productType !== null) {
+      onProductClick(productType);
+    }
+  }, [productType]);
+
+  useEffect(() => {}, []);
   return (
     <div className="position-sticky top-0">
       <header className="new-block main-header">
@@ -44,22 +56,50 @@ const Header = () => {
                 <nav className="nav">
                   <ul className="list-unstyled">
                     <li>
-                      <Link to="/">Home</Link>
+                      <Link
+                        to="/"
+                        onClick={() => {
+                          setProductType("customized");
+                        }}
+                      >
+                        Home
+                      </Link>
                     </li>
                     <li>
-                      <Link to="">Sides</Link>
+                      <Link
+                        to="/"
+                        onClick={() => {
+                          setProductType("sides");
+                        }}
+                      >
+                        Sides
+                      </Link>
                     </li>
                     <li>
-                      <Link to="">Dips</Link>
+                      <Link
+                        to="/"
+                        onClick={() => {
+                          setProductType("dips");
+                        }}
+                      >
+                        Dips
+                      </Link>
                     </li>
                     <li>
-                      <Link to="">Drinks</Link>
+                      <Link
+                        to="/"
+                        onClick={() => {
+                          setProductType("drinks");
+                        }}
+                      >
+                        Drinks
+                      </Link>
                     </li>
                     <li>
-                      <Link to="">About</Link>
+                      <Link to="/">About</Link>
                     </li>
                     <li>
-                      <Link to="">Contact Us</Link>
+                      <Link to="/">Contact Us</Link>
                     </li>
                     <li onClick={handleLogout}>
                       <Link to={isAuthenticated === false ? "/login" : "/"}>

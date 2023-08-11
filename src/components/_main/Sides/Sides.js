@@ -55,7 +55,7 @@ function Sides({ data, cartFn }) {
       let ct = JSON.parse(localStorage.getItem("cart"));
       ct.product.push(product);
       const cartProduct = ct.product;
-      cartFn.addCart(cartProduct, setCart);
+      cartFn.addCart(cartProduct, setCart, false);
     }
   }, [product]);
 

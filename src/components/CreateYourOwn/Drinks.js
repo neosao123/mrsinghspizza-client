@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Drinks({ data, setDrinksArr, drinksArr, reset }) {
+function Drinks({ data, setDrinksArr, drinksArr, reset, payloadEdit }) {
   const [drinksButtonColor, setDrinksButtonColor] = useState("#606060");
   const [drinksButton, setDrinksButton] = useState(false);
   const [qauntity, setQuantity] = useState(1);
@@ -64,6 +64,20 @@ function Drinks({ data, setDrinksArr, drinksArr, reset }) {
       setDrinksButtonColor("#606060");
     }
   }, [reset]);
+
+  // Populate - Edit
+  useEffect(() => {
+    if (payloadEdit) {
+      payloadEdit?.config?.drinks.map((items) => {
+        if (items?.drinksCode === data?.softdrinkCode) {
+          console.log(items?.dipsCode);
+          setDrinksButton(true);
+          setDrinksButtonColor("#e40000");
+          setQuantity(items?.qauntity);
+        }
+      });
+    }
+  }, [payloadEdit]);
 
   return (
     <div

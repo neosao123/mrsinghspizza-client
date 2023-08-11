@@ -32,11 +32,11 @@ function AddToCart() {
           <div className="row gx-4">
             <div className="col-lg-8 col-md-12 col-sm-12 p-4 mt-3">
               <div className="d-flex justify-content-between w-100 productList mb-1">
-                <h3 className="mx-2 mb-3">Product Details</h3>
-                <h3 className="mx-4 px-3 mb-3">Price</h3>
+                <h3 className="mx-2 mb-3">Your Cart</h3>
               </div>
               <ul className="list-group">
-                {cart?.product.map((cData) => {
+                {console.log("------", cart)}
+                {cart?.product?.map((cData) => {
                   return <MainCartList cData={cData} key={cData.productID} />;
                 })}
               </ul>

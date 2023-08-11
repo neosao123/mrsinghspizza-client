@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
 import Footer from "../components/_main/Footer";
@@ -17,6 +17,39 @@ const Home = () => {
   const [cart, setCart] = globalctx.cart;
   // Helper Function
   const cartFn = new CartFunction();
+  // useRef
+  const createYourOwnTabsRef = useRef(null);
+  const specialTabRef = useRef(null);
+  const sidesTabRef = useRef(null);
+  const dipsTabRef = useRef(null);
+  const drinksTabRef = useRef(null);
+
+  // Handle Product Click
+  const handleProductClick = (productType) => {
+    switch (productType) {
+      case "customized":
+        createYourOwnTabsRef.current.click();
+        break;
+      case "special":
+        specialTabRef.current.click();
+        specialTabRef.current.scrollIntoView({ behavior: "smooth" });
+        break;
+      case "sides":
+        sidesTabRef.current.click();
+        sidesTabRef.current.scrollIntoView({ behavior: "smooth" });
+        break;
+      case "dips":
+        dipsTabRef.current.click();
+        dipsTabRef.current.scrollIntoView({ behavior: "smooth" });
+        break;
+      case "drinks":
+        drinksTabRef.current.click();
+        drinksTabRef.current.scrollIntoView({ behavior: "smooth" });
+        break;
+      default:
+        break;
+    }
+  };
 
   useEffect(() => {
     cartFn.createCart(setCart);
@@ -24,44 +57,9 @@ const Home = () => {
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
-      <Header />
+      <Header onProductClick={handleProductClick} />
 
-      <HeroSlider />
-
-      <section className="cat-sec new-block d-none">
-        <div className="container-fluid pd0">
-          <div className="cat-block">
-            <div className="block-stl1 bg1">
-              <span className="flaticon-pizza"></span>
-              <h4>Create Your Own</h4>
-            </div>
-          </div>
-          <div className="cat-block">
-            <div className="block-stl1 bg2">
-              <span className="flaticon-burger"></span>
-              <h4>Specials</h4>
-            </div>
-          </div>
-          <div className="cat-block">
-            <div className="block-stl1 bg3">
-              <span className="flaticon-fried-chicken"></span>
-              <h4>Sides</h4>
-            </div>
-          </div>
-          <div className="cat-block">
-            <div className="block-stl1 bg6">
-              <span className="flaticon-drink"></span>
-              <h4>Drinks</h4>
-            </div>
-          </div>
-          <div className="cat-block">
-            <div className="block-stl1 bg7">
-              <span className="flaticon-taco"></span>
-              <h4>Dips</h4>
-            </div>
-          </div>
-        </div>
-      </section>
+      <HeroSlider onProductClick={handleProductClick} />
 
       <section className="special-offers-sec new-block">
         <div className="special-offer-inr-block new-block">
@@ -96,6 +94,7 @@ const Home = () => {
                       {/* Create Your Own - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
+                          ref={createYourOwnTabsRef}
                           aria-controls="home"
                           aria-selected="true"
                           data-bs-target="#createYourOwn"
@@ -112,6 +111,7 @@ const Home = () => {
                       {/* Special Pizza - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
+                          ref={specialTabRef}
                           className="block-stl1 p-4 bg1 nav-link btn"
                           id="special-tab"
                           data-bs-toggle="tab"
@@ -128,6 +128,7 @@ const Home = () => {
                       {/* Sides - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
+                          ref={sidesTabRef}
                           data-bs-target="#sides"
                           data-bs-toggle="tab"
                           className="block-stl1 p-4 bg1 nav-link btn"
@@ -144,6 +145,7 @@ const Home = () => {
                       {/* Dips - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
+                          ref={dipsTabRef}
                           data-bs-target="#dips"
                           data-bs-toggle="tab"
                           className="block-stl1 p-4 bg1 nav-link btn"
@@ -160,6 +162,7 @@ const Home = () => {
                       {/* Drinks - Tab */}
                       <li className="nav-item cat-block d-flex justify-content-center aling-items-center">
                         <button
+                          ref={drinksTabRef}
                           data-bs-target="#drinks"
                           data-bs-toggle="tab"
                           className="block-stl1 p-4 bg1 nav-link btn"

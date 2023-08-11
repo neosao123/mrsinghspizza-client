@@ -1,10 +1,4 @@
-import { LOGIN_FAILURE, LOGIN_REQUEST, LOGIN_SUCCESS } from "./actionType";
-
-// const initialState = {
-//   isAuth: localStorage.getItem("isAuth") || false,
-//   token: localStorage.getItem("token") || null,
-//   data: localStorage.getItem("user") || null,
-// };
+import { LOGIN_SUCCESS, LOGOUT } from "./actionType";
 
 export const authReducer = (state = null, { type, payload, token }) => {
   switch (type) {
@@ -14,11 +8,8 @@ export const authReducer = (state = null, { type, payload, token }) => {
         data: payload,
         token: token,
       };
-    case LOGIN_FAILURE:
-      return {
-        ...state,
-        isAuth: false,
-      };
+    case LOGOUT:
+      return payload;
     default:
       return state;
   }

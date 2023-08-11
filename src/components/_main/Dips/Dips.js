@@ -53,11 +53,11 @@ function Dips({ data, cartFn }) {
           }
         });
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart);
+        cartFn.addCart(cartProduct, setCart, true);
       } else {
         ct.product.push(product);
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart);
+        cartFn.addCart(cartProduct, setCart, false);
       }
     }
   }, [product]);

@@ -8,6 +8,9 @@ export const GlobalProvider = ({ children }) => {
   );
   const [user, setUser] = useState(JSON.parse(localStorage.getItem("user")));
   const [cart, setCart] = useState(JSON.parse(localStorage.getItem("cart")));
+  const [payloadEdit, setPayloadEdit] = useState();
+  const [url, setUrl] = useState(null);
+  const [productType, setProductType] = useState();
 
   return (
     <GlobalContext.Provider
@@ -15,6 +18,9 @@ export const GlobalProvider = ({ children }) => {
         auth: [isAuthenticated, setIsAuthenticated],
         user: [user, setUser],
         cart: [cart, setCart],
+        productEdit: [payloadEdit, setPayloadEdit],
+        urlPath: [url, setUrl],
+        productType: [productType, setProductType],
       }}
     >
       {children}

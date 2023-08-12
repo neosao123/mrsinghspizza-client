@@ -41,24 +41,11 @@ function Login() {
   const globalctx = useContext(GlobalContext);
   const [user, setUser] = globalctx.user;
   const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
+  const [url, setUrl] = globalctx.urlPath;
+
   const navigate = useNavigate();
   const location = useLocation();
   const dispatch = useDispatch();
-
-  useEffect(() => {
-    const user = localStorage.getItem("user") ?? null;
-
-    if (user != null) {
-      const userData = JSON.parse(user);
-      if (userData) {
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
-    } else {
-      navigate("/login");
-    }
-  }, [setIsAuthenticated, setUser, navigate]);
 
   const onSubmit = async (values) => {
     let payload = {
@@ -92,6 +79,24 @@ function Login() {
     onSubmit,
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    const user = localStorage.getItem("user") ?? null;
+    if (user != null) {
+      const userData = JSON.parse(user);
+      if (userData) {
+        navigate("/");
+      } else {
+        navigate("/login");
+      }
+    } else {
+      navigate("/login");
+    }
+  }, [setIsAuthenticated, setUser, navigate]);
+  // Set Url Location
+  useEffect(() => {
+    setUrl(location?.pathname);
+  }, [location]);
 
   return (
     <>

@@ -17,18 +17,21 @@ import CartList from "../components/_main/Cart/CartList";
 import OrderSummary from "../components/_main/Cart/OrderSummary";
 
 function SpecialMenu() {
+  // Global Context
+  const globalCtx = useContext(GlobalContext);
+  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const [cart, setCart] = globalCtx.cart;
+  const [url, setUrl] = globalCtx.urlPath;
+  //
   const { sid } = useParams();
   const [getSpecialData, setGetSpecialData] = useState();
   const [dipsData, setDipsData] = useState();
   const [toppingsData, setToppingsData] = useState();
   const [pizzaSize, setPizzaSize] = useState("Large");
   const [loading, setLoading] = useState(false);
-  const globalCtx = useContext(GlobalContext);
-  const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
-  const [cart, setCart] = globalCtx.cart;
+  //
   const navigate = useNavigate();
   const location = useLocation();
-  window.scrollTo(0, 0);
 
   const handlePrice = async (e) => {
     setPizzaSize(e.target.value);
@@ -92,6 +95,10 @@ function SpecialMenu() {
     dips();
     toppings();
   }, []);
+  // Set Url Location
+  useEffect(() => {
+    setUrl(location?.pathname);
+  }, [location]);
 
   return (
     <div>

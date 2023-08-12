@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
 import Footer from "../components/_main/Footer";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
 import DrinkMenu from "./DrinkMenu";
@@ -15,6 +15,9 @@ const Home = () => {
   // Global Context
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
+  const [url, setUrl] = globalctx.urlPath;
+  const [productType, setProductType] = globalctx.productType;
+  const location = useLocation();
   // Helper Function
   const cartFn = new CartFunction();
   // useRef
@@ -26,6 +29,7 @@ const Home = () => {
 
   // Handle Product Click
   const handleProductClick = (productType) => {
+    console.log("handle", productType);
     switch (productType) {
       case "customized":
         createYourOwnTabsRef.current.click();
@@ -54,10 +58,16 @@ const Home = () => {
   useEffect(() => {
     cartFn.createCart(setCart);
   }, [setCart]);
+  useEffect(() => {
+    setUrl(location?.pathname);
+  }, [location]);
+  useEffect(() => {
+    handleProductClick(productType);
+  }, [productType]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
-      <Header onProductClick={handleProductClick} />
+      <Header />
 
       <HeroSlider onProductClick={handleProductClick} />
 

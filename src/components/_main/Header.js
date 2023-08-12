@@ -1,20 +1,21 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import appLogo from "../../assets/images/logo.png";
 import GlobalContext from "../../context/GlobalContext";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { LOGOUT } from "../../redux/authProvider/actionType";
-const Header = ({ onProductClick }) => {
+const Header = () => {
   // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [user, setUser] = globalCtx.user;
   const [cart, setCart] = globalCtx.cart;
+  const [url, setUrl] = globalCtx.urlPath;
+  const [productType, setProductType] = globalCtx.productType;
   //
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const [productType, setProductType] = useState();
 
   // Handle Logout
   const handleLogout = () => {
@@ -30,14 +31,21 @@ const Header = ({ onProductClick }) => {
       }, 500);
     }
   };
-
-  useEffect(() => {
-    if (productType && productType !== null) {
-      onProductClick(productType);
+  // handle Menu
+  const handleMenu = (type) => {
+    if (url === "/") {
+      setProductType(type);
+    } else {
+      navigate("/");
+      setTimeout(() => {
+        setProductType(type);
+      }, 500);
     }
+  };
+  useEffect(() => {
+    handleMenu();
   }, [productType]);
 
-  useEffect(() => {}, []);
   return (
     <div className="position-sticky top-0">
       <header className="new-block main-header">
@@ -55,45 +63,33 @@ const Header = ({ onProductClick }) => {
                 </Link>
                 <nav className="nav">
                   <ul className="list-unstyled">
-                    <li>
-                      <Link
-                        to="/"
-                        onClick={() => {
-                          setProductType("customized");
-                        }}
-                      >
-                        Home
-                      </Link>
+                    <li
+                      onClick={() => {
+                        handleMenu("customized");
+                      }}
+                    >
+                      <Link to="/">Home</Link>
                     </li>
-                    <li>
-                      <Link
-                        to="/"
-                        onClick={() => {
-                          setProductType("sides");
-                        }}
-                      >
-                        Sides
-                      </Link>
+                    <li
+                      onClick={() => {
+                        handleMenu("sides");
+                      }}
+                    >
+                      <Link to="">Sides</Link>
                     </li>
-                    <li>
-                      <Link
-                        to="/"
-                        onClick={() => {
-                          setProductType("dips");
-                        }}
-                      >
-                        Dips
-                      </Link>
+                    <li
+                      onClick={() => {
+                        handleMenu("dips");
+                      }}
+                    >
+                      <Link to="">Dips</Link>
                     </li>
-                    <li>
-                      <Link
-                        to="/"
-                        onClick={() => {
-                          setProductType("drinks");
-                        }}
-                      >
-                        Drinks
-                      </Link>
+                    <li
+                      onClick={() => {
+                        handleMenu("drinks");
+                      }}
+                    >
+                      <Link to="">Drinks</Link>
                     </li>
                     <li>
                       <Link to="/">About</Link>

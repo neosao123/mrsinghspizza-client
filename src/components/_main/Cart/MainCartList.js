@@ -1,14 +1,34 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import GlobalContext from "../../../context/GlobalContext";
 import CartFunction from "../../cart";
+import { useNavigate } from "react-router-dom";
 
-function MainCartList({ cData }) {
+function MainCartList({ cData, setLoading }) {
+  // Global Context
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
-  const cartFn = new CartFunction();
+  const [payloadEdit, setPayloadEdit] = globalctx.productEdit;
 
+  // Helper Function
+  const cartFn = new CartFunction();
+  const navigate = useNavigate();
+  // Handle Delete Product
   const handleDelete = () => {
     cartFn.deleteCart(cData, cart, setCart);
+  };
+  // Handle Edit Product
+  const handleEdit = () => {
+    if (cData?.productType === "customized" && cData?.productID) {
+      setPayloadEdit(cData);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigate("/create-your-own");
+      }, 1200);
+    }
+    if (cData?.productType === "special") {
+      navigate("/special");
+    }
   };
   return (
     <li className="list-group-item cartlistitem d-flex justify-content-between align-items-center">
@@ -40,7 +60,11 @@ function MainCartList({ cData }) {
           ></i>
           {cData.productType === "special" ||
           cData.productType === "customized" ? (
-            <i className="fa fa-edit  editIcon" aria-hidden="true"></i>
+            <i
+              className="fa fa-edit  editIcon"
+              aria-hidden="true"
+              onClick={handleEdit}
+            ></i>
           ) : (
             <i className="fa fa-edit editIcon d-none" aria-hidden="true"></i>
           )}

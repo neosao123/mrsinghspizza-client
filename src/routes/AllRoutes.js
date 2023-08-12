@@ -36,7 +36,7 @@ const AllRoutes = () => {
       <Route exact index path="/" Component={Home} />
       <Route exact path="/login" Component={Login} />
       <Route exact path="/registration" Component={Registration} />
-      <Route exact path="/create-your-own" Component={CreateYourOwn} />
+      <Route exact path="/create-your-own/" Component={CreateYourOwn} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={AddToCart} />
     </Routes>

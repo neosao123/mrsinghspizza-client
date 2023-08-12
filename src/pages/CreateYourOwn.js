@@ -39,6 +39,8 @@ function CreateYourOwn() {
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [cart, setCart] = globalCtx.cart;
+  const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
+  const [url, setUrl] = globalCtx.urlPath;
   // API States
   const [allIngredients, setAllIngredients] = useState();
   const [sideData, setSideData] = useState();
@@ -63,7 +65,6 @@ function CreateYourOwn() {
   const [dipsArr, setDipsArr] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
   const [reset, setReset] = useState(false);
-  const [payloadEdit, setPayloadEdit] = useState();
   // Healper Function
   const cartFn = new CartFunction();
 
@@ -318,18 +319,20 @@ function CreateYourOwn() {
   }, [setCart]);
   // UseEffect For Set DefaultValue
   useEffect(() => {
-    setCrust({
-      crustCode: allIngredients?.crust[0].crustCode,
-      crustName: allIngredients?.crust[0].crustName,
-      price: allIngredients?.crust[0].price,
-    });
-    setCheese({
-      cheeseCode: allIngredients?.cheese[0].cheeseCode,
-      cheeseName: allIngredients?.cheese[0].cheeseName,
-      price: allIngredients?.cheese[0].price,
-    });
-    setPizzaSize(pizzaSizeArr[0].size);
-    setPizzaSizePrice(pizzaSizeArr[0].price);
+    if (!payloadEdit) {
+      setCrust({
+        crustCode: allIngredients?.crust[0].crustCode,
+        crustName: allIngredients?.crust[0].crustName,
+        price: allIngredients?.crust[0].price,
+      });
+      setCheese({
+        cheeseCode: allIngredients?.cheese[0].cheeseCode,
+        cheeseName: allIngredients?.cheese[0].cheeseName,
+        price: allIngredients?.cheese[0].price,
+      });
+      setPizzaSize(pizzaSizeArr[0].size);
+      setPizzaSizePrice(pizzaSizeArr[0].price);
+    }
   }, [allIngredients]);
   // UseEffect For Calculate Function
   useEffect(() => {
@@ -374,6 +377,10 @@ function CreateYourOwn() {
       setDrinksArr(payloadEdit?.config?.drinks);
     }
   }, [payloadEdit]);
+  // Set Url Location
+  useEffect(() => {
+    setUrl(location?.pathname);
+  }, [location]);
   return (
     <div>
       <Header />

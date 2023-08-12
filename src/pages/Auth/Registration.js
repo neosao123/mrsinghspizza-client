@@ -8,7 +8,7 @@ import Footer from "../../components/_main/Footer";
 import { toast } from "react-toastify";
 import { customerRegistration } from "../../services";
 import GlobalContext from "../../context/GlobalContext";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 // Validation Functions
@@ -37,9 +37,13 @@ const ValidateSchema = Yup.object({
 });
 
 function Registration() {
+  // Global Context
   const globalctx = useContext(GlobalContext);
   const [user, setUser] = globalctx.user;
+  const [url, setUrl] = globalctx.urlPath;
+
   const navigate = useNavigate();
+  const location = useLocation();
 
   const onSubmit = async (values) => {
     console.log(values);
@@ -83,7 +87,6 @@ function Registration() {
 
   useEffect(() => {
     const user = localStorage.getItem("user") ?? null;
-
     if (user != null) {
       const userData = JSON.parse(user);
       if (userData) {
@@ -93,6 +96,10 @@ function Registration() {
       }
     }
   }, [navigate]);
+  // Set Url Location
+  useEffect(() => {
+    setUrl(location?.pathname);
+  }, [location]);
   return (
     <>
       <Header />

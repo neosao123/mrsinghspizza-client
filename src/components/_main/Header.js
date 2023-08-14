@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Link, useLocation, useNavigate, useParams } from "react-router-dom";
 import appLogo from "../../assets/images/logo.png";
 import GlobalContext from "../../context/GlobalContext";
 import { toast } from "react-toastify";
@@ -31,20 +31,6 @@ const Header = () => {
       }, 500);
     }
   };
-  // handle Menu
-  const handleMenu = (type) => {
-    if (url === "/") {
-      setProductType(type);
-    } else {
-      navigate("/");
-      setTimeout(() => {
-        setProductType(type);
-      }, 500);
-    }
-  };
-  useEffect(() => {
-    handleMenu();
-  }, [productType]);
 
   return (
     <div className="position-sticky top-0">
@@ -63,33 +49,17 @@ const Header = () => {
                 </Link>
                 <nav className="nav">
                   <ul className="list-unstyled">
-                    <li
-                      onClick={() => {
-                        handleMenu("customized");
-                      }}
-                    >
+                    <li>
                       <Link to="/">Home</Link>
                     </li>
-                    <li
-                      onClick={() => {
-                        handleMenu("sides");
-                      }}
-                    >
-                      <Link to="">Sides</Link>
+                    <li>
+                      <Link to="/sides">Sides</Link>
                     </li>
-                    <li
-                      onClick={() => {
-                        handleMenu("dips");
-                      }}
-                    >
-                      <Link to="">Dips</Link>
+                    <li>
+                      <Link to="/dips">Dips</Link>
                     </li>
-                    <li
-                      onClick={() => {
-                        handleMenu("drinks");
-                      }}
-                    >
-                      <Link to="">Drinks</Link>
+                    <li>
+                      <Link to="/drinks">Drinks</Link>
                     </li>
                     <li>
                       <Link to="/">About</Link>

@@ -6,18 +6,11 @@ import "owl.carousel/dist/assets/owl.theme.default.css";
 import bgSlider from "../../../assets/images/slider-bg1.jpg";
 import pizzaImage from "../../../assets/images/pz.png";
 
-const HeroSlider = ({ onProductClick }) => {
+const HeroSlider = () => {
   const fixedBgUrl = bgSlider;
   const containerStyle = {
     background: `url(${fixedBgUrl}) no-repeat center center`,
   };
-
-  const [productType, setProductType] = useState();
-  useEffect(() => {
-    if (productType && productType !== null) {
-      onProductClick(productType);
-    }
-  }, [productType]);
 
   return (
     <div className="banner slider1 new-block">
@@ -99,10 +92,8 @@ const HeroSlider = ({ onProductClick }) => {
                     >
                       <div className="text-center">
                         <Link
+                          to="/special-list"
                           className="btn1 stl2 text-decoration-none"
-                          onClick={() => {
-                            setProductType("special");
-                          }}
                         >
                           View
                         </Link>

@@ -1,16 +1,14 @@
 import React, { useContext, useEffect } from "react";
-import logo from "../../assets/images/logo.png";
-import bgImage from "../../assets/images/bg-img.jpg";
+import bgImage from "../assets/images/bg-img.jpg";
 import * as Yup from "yup";
 import { useFormik } from "formik";
-import Header from "../../components/_main/Header";
-import Footer from "../../components/_main/Footer";
+import Header from "../components/_main/Header";
+import Footer from "../components/_main/Footer";
+import GlobalContext from "../context/GlobalContext";
+import { useSelector } from "react-redux";
+import { deliverable } from "../services";
 import { toast } from "react-toastify";
-import { customerRegistration } from "../../services";
-import GlobalContext from "../../context/GlobalContext";
-import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { LOGIN_SUCCESS } from "../../redux/authProvider/actionType";
+import { useNavigate } from "react-router-dom";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 
@@ -23,49 +21,27 @@ const ValidateSchema = Yup.object({
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
-  password: Yup.string()
-    .required("Required")
-    .min(8, "Password must have at least 8 characters"),
   city: Yup.string().required("Rquired"),
   postalcode: Yup.string().required("Rquired"),
   address: Yup.string().required("Required"),
-  passwordconfirmation: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Required"),
 });
 
-function Registration() {
-  // Global Context
-  const globalctx = useContext(GlobalContext);
-  const [user, setUser] = globalctx.user;
-  const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
-
+function AddressDetails() {
+  const { data } = useSelector((state) => state.user);
   const navigate = useNavigate();
-  const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
-    console.log(values);
-    let payload = {
-      firstName: values.firstname,
-      lastName: values.lastname,
-      mobileNumber: values.phoneno,
-      city: values.city,
+    const payload = {
       zipcode: values.postalcode,
-      password: values.password,
-      address: values.address,
     };
     console.log(payload);
-    await customerRegistration(payload)
+    await deliverable(payload)
       .then((res) => {
-        setIsAuthenticated(true);
-        setUser(res.data);
-        dispatch({ type: LOGIN_SUCCESS, payload: res.data, token: res.token });
-        localStorage.setItem("user", JSON.stringify(res.data));
-        localStorage.setItem("token", res.token);
-        const redirectTo = localStorage.getItem("redirectTo");
-        navigate(redirectTo !== null ? redirectTo : "/");
-        localStorage.removeItem("redirectTo");
-        toast.success("Account registered successfully...");
+        if (res?.deliverable === true) {
+          navigate("/card-payment");
+        } else {
+          toast.error("Not Deliverable for this Postal Code...");
+        }
       })
       .catch((err) => {
         if (err.response.status === 400 || err.response.status === 500) {
@@ -76,11 +52,9 @@ function Registration() {
   // Use Formik
   const formik = useFormik({
     initialValues: {
-      firstname: "",
-      lastname: "",
-      phoneno: "",
-      password: "",
-      passwordconfirmation: "",
+      firstname: data?.firstName,
+      lastname: data?.lastName,
+      phoneno: data?.mobileNumber,
       city: "",
       postalcode: "",
       address: "",
@@ -91,46 +65,22 @@ function Registration() {
     enableReinitialize: true,
   });
 
-  useEffect(() => {
-    const user = localStorage.getItem("user") ?? null;
-    if (user != null) {
-      const userData = JSON.parse(user);
-      if (userData) {
-        navigate("/");
-      } else {
-        navigate("/login");
-      }
-    }
-  }, [navigate]);
-
   return (
     <>
       <Header />
       <div
         className="container-fluid d-flex justify-content-center align-items-center"
-        style={{
-          backgroundImage: `url(${bgImage})`,
-          backgroundSize: "cover",
-          backgroundRepeat: "no-repeat",
-        }}
+        style={{ backgroundColor: "#f5f5f5" }}
       >
-        <div className="container row w-100">
-          <div className="col-auto py-5 p-4">
-            <div className="content d-flex flex-column align-items-center rounded bg-white p-5 w-100">
-              <h3 className="m-2 mb-3">
-                <strong>Create An Account</strong>
+        <div className="container row w-100 ">
+          <div className="col-auto py-5 p-4 ">
+            <div
+              className="content d-flex flex-column align-items-center rounded bg-white p-5 w-100"
+              style={{ boxShadow: "rgb(224 224 224 / 17%) 0px 0px 4px 2px" }}
+            >
+              <h3 className="m-2 mb-5">
+                <strong>Address Details For Checkout</strong>
               </h3>
-              <div
-                className="w-100 text-center mb-5"
-                style={{ fontSize: ".95rem" }}
-              >
-                <Link
-                  to="/login"
-                  className="text-decoration-none create-acc-txt"
-                >
-                  Already you have an account
-                </Link>
-              </div>
 
               <form onSubmit={formik.handleSubmit}>
                 {/* FirstName */}
@@ -252,53 +202,12 @@ function Registration() {
                   ) : null}
                 </div>
 
-                {/* Password */}
-                <div className="d-flex flex-row flex-wrap align-items-center mb-3">
-                  <label className="form-label">
-                    Password <small className="text-danger">*</small>
-                  </label>
-                  <input
-                    className="form-control"
-                    type="password"
-                    name="password"
-                    value={formik.values.password}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.password && formik.errors.password ? (
-                    <div className="text-danger mt-2 mb-2">
-                      {formik.errors.password}
-                    </div>
-                  ) : null}
-                </div>
-
-                {/* Confirm Password */}
-                <div className="d-flex flex-row flex-wrap align-items-center mb-3">
-                  <label className="form-label">
-                    Confirm Password <small className="text-danger">*</small>
-                  </label>
-                  <input
-                    className="form-control"
-                    type="password"
-                    name="passwordconfirmation"
-                    value={formik.values.passwordconfirmation}
-                    onChange={formik.handleChange}
-                    onBlur={formik.handleBlur}
-                  />
-                  {formik.touched.passwordconfirmation &&
-                  formik.errors.passwordconfirmation ? (
-                    <div className="text-danger mt-2 mb-2">
-                      {formik.errors.passwordconfirmation}
-                    </div>
-                  ) : null}
-                </div>
-
                 <div className="w-100 text-center mb-3 mt-4">
                   <button
                     className="w-100 py-2 fw-bold btn btn-md regBtn"
                     type="submit"
                   >
-                    Create An Account
+                    Checkout
                   </button>
                 </div>
               </form>
@@ -312,4 +221,4 @@ function Registration() {
   );
 }
 
-export default Registration;
+export default AddressDetails;

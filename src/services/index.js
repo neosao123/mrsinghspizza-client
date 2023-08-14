@@ -45,6 +45,14 @@ export const getStoreLocation = async (page, search, payload) => {
   return response;
 };
 
+export const deliverable = async (payload) => {
+  const { data: response } = await http.post(
+    "/zipcode/check/deliverable",
+    payload
+  );
+  return response;
+};
+
 // Get Special Pizza Requirements
 export const getSpecialDetails = async (payload) => {
   const { data: response } = await http.post(`/getSpecialDetails`, payload);

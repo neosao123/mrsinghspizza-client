@@ -8,29 +8,30 @@ import { toast } from "react-toastify";
 import { useLocation, useNavigate } from "react-router-dom";
 import MainCartList from "../components/_main/Cart/MainCartList";
 import LoadingLayout from "../layouts/LoadingLayout";
+import { useSelector } from "react-redux";
 
-function AddToCart() {
+function Cart() {
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [cart, setCart] = globalCtx.cart;
-  const [url, setUrl] = globalCtx.urlPath;
   const [loading, setLoading] = useState(false);
+  const { user } = useSelector((state) => state);
 
   const navigate = useNavigate();
   const location = useLocation();
 
   const handleCheckout = () => {
-    if (isAuthenticated) {
-      toast.success("Order Placed Successfully..");
+    if (cart?.product?.length > 0) {
+      if (isAuthenticated && user !== null) {
+        navigate("/address-details");
+      } else {
+        localStorage.setItem("redirectTo", location?.pathname);
+        navigate("/registration");
+      }
     } else {
-      localStorage.setItem("redirectTo", location?.pathname);
-      navigate("/login");
+      toast.error("Cart is Empty...");
     }
   };
-
-  useEffect(() => {
-    setUrl(location?.pathname);
-  }, [location]);
   return (
     <>
       <Header />
@@ -96,7 +97,7 @@ function AddToCart() {
                     className="px-5 rounded my-3 py-3 addtocart"
                     onClick={handleCheckout}
                   >
-                    Check out
+                    Place Order
                   </button>
                 </div>
               </div>
@@ -109,4 +110,4 @@ function AddToCart() {
   );
 }
 
-export default AddToCart;
+export default Cart;

@@ -4,11 +4,13 @@ import Home from "../pages/Home";
 import SpecialMenu from "../pages/SpecialMenu";
 import Login from "../pages/Auth/Login";
 import Registration from "../pages/Auth/Registration";
-import AddToCart from "../pages/AddToCart";
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../context/GlobalContext";
 import AuthLayout from "../layouts/AuthLayout";
 import DefaultLayout from "../layouts/DefaultLayout";
+import Cart from "../pages/Cart";
+import AddressDetails from "../pages/AddressDetails";
+import Payment from "../pages/Payment";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -34,11 +36,14 @@ const AllRoutes = () => {
   return (
     <Routes>
       <Route exact index path="/" Component={Home} />
+      <Route exact path="/:ptype" Component={Home} />
       <Route exact path="/login" Component={Login} />
       <Route exact path="/registration" Component={Registration} />
       <Route exact path="/create-your-own/" Component={CreateYourOwn} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
-      <Route exact path="/addtocart" Component={AddToCart} />
+      <Route exact path="/addtocart" Component={Cart} />
+      <Route exact path="/address-details" Component={AddressDetails} />
+      <Route exact path="/card-payment" Component={Payment} />
     </Routes>
   );
 };

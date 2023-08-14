@@ -23,6 +23,7 @@ import Dips from "../components/CreateYourOwn/Dips";
 import Sides from "../components/CreateYourOwn/Sides";
 import CartFunction from "../components/cart";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
 function CreateYourOwn() {
   const pizzaSizeArr = [
@@ -41,6 +42,8 @@ function CreateYourOwn() {
   const [cart, setCart] = globalCtx.cart;
   const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [url, setUrl] = globalCtx.urlPath;
+  // redux
+  const { user } = useSelector((state) => state);
   // API States
   const [allIngredients, setAllIngredients] = useState();
   const [sideData, setSideData] = useState();
@@ -265,11 +268,15 @@ function CreateYourOwn() {
   };
   // Handle Place Order
   const handlePlaceOrder = () => {
-    if (isAuthenticated) {
-      toast.success("Order Placed Successfully..");
+    if (cart?.product?.length > 0) {
+      if (isAuthenticated && user !== null) {
+        navigate("/address-details");
+      } else {
+        localStorage.setItem("redirectTo", location?.pathname);
+        navigate("/registration");
+      }
     } else {
-      localStorage.setItem("redirectTo", location?.pathname);
-      navigate("/login");
+      toast.error("Cart is Empty...");
     }
   };
   //API - All Ingredient

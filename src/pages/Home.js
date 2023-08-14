@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import HeroSlider from "../components/_main/Carousel/HeroSlider";
 import Footer from "../components/_main/Footer";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useParams } from "react-router-dom";
 import SpecialMenuList from "../components/_main/SpecialMenuList";
 import pizzaImage from "../assets/images/pz.png";
 import DrinkMenu from "./DrinkMenu";
@@ -16,7 +16,6 @@ const Home = () => {
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
   const [url, setUrl] = globalctx.urlPath;
-  const [productType, setProductType] = globalctx.productType;
   const location = useLocation();
   // Helper Function
   const cartFn = new CartFunction();
@@ -26,34 +25,38 @@ const Home = () => {
   const sidesTabRef = useRef(null);
   const dipsTabRef = useRef(null);
   const drinksTabRef = useRef(null);
+  const { ptype } = useParams();
 
-  // Handle Product Click
-  const handleProductClick = (productType) => {
-    console.log("handle", productType);
-    switch (productType) {
-      case "customized":
-        createYourOwnTabsRef.current.click();
-        break;
-      case "special":
-        specialTabRef.current.click();
-        specialTabRef.current.scrollIntoView({ behavior: "smooth" });
-        break;
-      case "sides":
-        sidesTabRef.current.click();
-        sidesTabRef.current.scrollIntoView({ behavior: "smooth" });
-        break;
-      case "dips":
-        dipsTabRef.current.click();
-        dipsTabRef.current.scrollIntoView({ behavior: "smooth" });
-        break;
-      case "drinks":
-        drinksTabRef.current.click();
-        drinksTabRef.current.scrollIntoView({ behavior: "smooth" });
-        break;
-      default:
-        break;
+  useEffect(() => {
+    if (ptype) {
+      switch (ptype) {
+        case "customized":
+          createYourOwnTabsRef.current.click();
+          createYourOwnTabsRef.current.scrollIntoView({ behavior: "smooth" });
+          break;
+        case "special-list":
+          specialTabRef.current.click();
+          specialTabRef.current.scrollIntoView({ behavior: "smooth" });
+          break;
+        case "sides":
+          sidesTabRef.current.click();
+          sidesTabRef.current.scrollIntoView({ behavior: "smooth" });
+          break;
+        case "dips":
+          dipsTabRef.current.click();
+          console.log("qwert");
+          dipsTabRef.current.scrollIntoView({ behavior: "smooth" });
+          break;
+        case "drinks":
+          drinksTabRef.current.click();
+          drinksTabRef.current.scrollIntoView({ behavior: "smooth" });
+          break;
+        default:
+          ptype = "/";
+          break;
+      }
     }
-  };
+  }, [ptype]);
 
   useEffect(() => {
     cartFn.createCart(setCart);
@@ -61,15 +64,12 @@ const Home = () => {
   useEffect(() => {
     setUrl(location?.pathname);
   }, [location]);
-  useEffect(() => {
-    handleProductClick(productType);
-  }, [productType]);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>
       <Header />
 
-      <HeroSlider onProductClick={handleProductClick} />
+      <HeroSlider />
 
       <section className="special-offers-sec new-block">
         <div className="special-offer-inr-block new-block">

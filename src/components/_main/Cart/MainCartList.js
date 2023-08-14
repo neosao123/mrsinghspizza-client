@@ -1,7 +1,8 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "../../../context/GlobalContext";
 import CartFunction from "../../cart";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
+import { isEditable } from "@testing-library/user-event/dist/utils";
 
 function MainCartList({ cData, setLoading }) {
   // Global Context

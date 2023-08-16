@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
 
-export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
+export const SpecialCrustDropdown = ({ getSpecialData, setCrust, crust }) => {
   // handle Crust On Change
   const handleCrust = (e) => {
     if (e.target.value !== null && e.target.value !== "") {
-      const selectedCrust = allIngredients?.crust?.find(
-        (data) => data.crustCode === e.target.value
+      const selectedCrust = getSpecialData?.crust?.find(
+        (data) => data.code === e.target.value
       );
       setCrust({
-        crustCode: selectedCrust.crustCode,
+        crustCode: selectedCrust.code,
         crustName: selectedCrust.crustName,
         price: selectedCrust.price,
       });
@@ -21,12 +21,12 @@ export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
     <>
       <select
         className="form-select form-drop mx-4"
-        value={crust?.crustCode}
+        value={crust?.code}
         onChange={handleCrust}
       >
-        {allIngredients?.crust?.map((data) => {
+        {getSpecialData?.crust?.map((data) => {
           return (
-            <option key={data.crustCode} value={data.crustCode}>
+            <option key={data.code} value={data.code}>
               {data.crustName} - $ {data.price}
             </option>
           );

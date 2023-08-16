@@ -384,10 +384,6 @@ function CreateYourOwn() {
       setDrinksArr(payloadEdit?.config?.drinks);
     }
   }, [payloadEdit]);
-  // Set Url Location
-  useEffect(() => {
-    setUrl(location?.pathname);
-  }, [location]);
   return (
     <div>
       <Header />

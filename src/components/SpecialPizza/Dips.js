@@ -1,9 +1,35 @@
 import React, { useEffect, useState } from "react";
 
-function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
+function Dips({
+  data,
+  setDipsArr,
+  dipsArr,
+  reset,
+  totalDipsPrice,
+  noofDips,
+  setTempDipsArr,
+  tempDipsArr,
+}) {
   const [dispButtonColor, setDispButtonColor] = useState("#606060");
   const [dipsButton, setDipsButton] = useState(false);
   const [qauntity, setQuantity] = useState(1);
+  const [tempQ, setTempQ] = useState();
+
+  let dipsQuantity = Number(0);
+  const handlePrice = () => {
+    let totalDips = Number(0);
+
+    // if (dipsArr && noofDips) {
+    //   dipsArr.map((dips) => (dipsQuantity += Number(dips.qauntity)));
+
+    //   if (noofDips < dipsQuantity) {
+    //     // totalDips += Number(data.qauntity - noofDips) * Number(disp.price);
+    //   }
+    // }
+
+    // console.log("totalDrinks :", totalDips);
+  };
+
   // Handle Drinks
   const handleDips = () => {
     if (dipsButton === false) {
@@ -15,6 +41,11 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
         qauntity: qauntity,
         totalPrice: totalPrice.toFixed(2),
       };
+      const priceObj = {
+        code: data.dipsCode,
+        price: data.price,
+      };
+      setTempDipsArr((prev) => [...prev, priceObj]);
       setDipsArr((prev) => [...prev, dipsObject]);
       setDipsButton(true);
       setDispButtonColor("#e40000");
@@ -53,6 +84,11 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
           return dips;
         });
         setDipsArr(updatedTotalPrice);
+        const priceObj = {
+          code: data.dipsCode,
+          price: data.price,
+        };
+        setTempDipsArr((prev) => [...prev, priceObj]);
       }
     }
   };
@@ -65,19 +101,12 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
     }
   }, [reset]);
 
-  // Populate - Edit
   useEffect(() => {
-    if (payloadEdit) {
-      payloadEdit?.config?.dips.map((items) => {
-        if (items?.dipsCode === data?.dipsCode) {
-          console.log(items?.dipsCode);
-          setDipsButton(true);
-          setDispButtonColor("#e40000");
-          setQuantity(items?.qauntity);
-        }
-      });
-    }
-  }, [payloadEdit]);
+    handlePrice();
+    console.log(tempDipsArr);
+    setTempQ(tempDipsArr.length);
+    console.log(tempQ);
+  }, [dipsArr, tempDipsArr, tempQ]);
 
   return (
     <div
@@ -96,7 +125,7 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
         <span className="mx-4">$ {data.price}</span>
         <button
           type="button"
-          className="addbtn btn btn-sm px-4 text-white text-center"
+          className="addbtn btn btn-sm px-4 text-white"
           onClick={(e) => handleDips(e, data.dipsCode)}
           style={{
             backgroundColor: dispButtonColor,

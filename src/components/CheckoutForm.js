@@ -35,7 +35,7 @@ function CheckoutForm() {
     } else {
       setMessage("Unexpected State");
     }
-    
+
     setIsProcessing(false);
   };
   return (

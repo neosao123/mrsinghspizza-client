@@ -1,6 +1,13 @@
 import React from "react";
+import { SpecialCrustDropdown } from "../SpecialPizza/SelectedDropDown";
 
-function SpecialPizzaSelection({ getSpecialData, count, toppingsData }) {
+function SpecialPizzaSelection({
+  getSpecialData,
+  count,
+  toppingsData,
+  setCrust,
+  crust,
+}) {
   return (
     <>
       <div className="text-center w-100">
@@ -13,15 +20,11 @@ function SpecialPizzaSelection({ getSpecialData, count, toppingsData }) {
         <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
           <div className="d-flex justify-content-start align-items-center w-100">
             <p className="mb-1 ">Crust :</p>
-            <select className="form-select form-drop mx-4">
-              {getSpecialData?.crust?.map((data) => {
-                return (
-                  <option key={data.code} value={data.code}>
-                    {data.crustName} - $ {data.price}
-                  </option>
-                );
-              })}
-            </select>
+            <SpecialCrustDropdown
+              getSpecialData={getSpecialData}
+              setCrust={setCrust}
+              crust={crust}
+            />
           </div>
         </div>
         <div className="col-lg-4 col-md-6 col-sm-12">

@@ -8,33 +8,61 @@ import React, {
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import SpecialPizzaSelection from "../components/_main/SpecialPizzaSelection";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import {
+  useFetcher,
+  useLocation,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { getDips, getSpecialDetails, getToppings } from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import { toast } from "react-toastify";
 import GlobalContext from "../context/GlobalContext";
 import CartList from "../components/_main/Cart/CartList";
 import OrderSummary from "../components/_main/Cart/OrderSummary";
+import Sides from "../components/SpecialPizza/Sides";
+import Dips from "../components/SpecialPizza/Dips";
+import Drinks from "../components/SpecialPizza/Drinks";
 
 function SpecialMenu() {
   // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [cart, setCart] = globalCtx.cart;
-  const [url, setUrl] = globalCtx.urlPath;
   //
   const { sid } = useParams();
   const [getSpecialData, setGetSpecialData] = useState();
   const [dipsData, setDipsData] = useState();
   const [toppingsData, setToppingsData] = useState();
   const [pizzaSize, setPizzaSize] = useState("Large");
+  const [pizzaSizePrice, setPizzaSizePrice] = useState();
+
   const [loading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
+  const [totalPrice, setTotalPrice] = useState();
+  const pizzaSizeRef = useRef(null);
   //
   const navigate = useNavigate();
   const location = useLocation();
+  //
+  const [crust, setCrust] = useState();
+  const [sidesArr, setSidesArr] = useState([]);
+  const [dipsArr, setDipsArr] = useState([]);
+  const [drinksArr, setDrinksArr] = useState([]);
+  const [totalDipsPrice, setTotalDipsPrice] = useState(0);
+  const [tempDipsArr, setTempDipsArr] = useState([]);
 
-  const handlePrice = async (e) => {
-    setPizzaSize(e.target.value);
+  const handlePizzaSize = () => {
+    if (pizzaSizeRef.current) {
+      if (pizzaSizeRef.current.value === "Large") {
+        setPizzaSize("Large");
+        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      }
+      if (pizzaSizeRef.current.value === "Extra Large") {
+        setPizzaSize("Extra Large");
+        setPizzaSizePrice(getSpecialData?.extraLargePizzaPrice);
+      }
+    }
   };
   const getSpecial = async () => {
     setLoading(true);
@@ -75,9 +103,12 @@ function SpecialMenu() {
         getSpecialData={getSpecialData}
         count={i}
         toppingsData={toppingsData}
+        crust={crust}
+        setCrust={setCrust}
       />
     );
   }
+
   const handlePlaceOrder = () => {
     if (isAuthenticated) {
       toast.success("Order Placed Successfully..");
@@ -87,6 +118,31 @@ function SpecialMenu() {
     }
   };
 
+  const calulatePrice = () => {
+    let calculatedPrice = Number(0);
+
+    calculatedPrice += Number(crust?.price) || 0;
+    calculatedPrice += Number(pizzaSizePrice) || 0;
+    setTotalPrice(calculatedPrice);
+  };
+
+  const handleAddToCart = () => {
+    console.log("Sides :", sidesArr);
+    console.log("Dips :", dipsArr);
+    console.log("Drinks : ", drinksArr);
+    setSidesArr([]);
+    setDipsArr([]);
+    setDrinksArr([]);
+    resetControls();
+  };
+
+  // Reset Controls
+  const resetControls = () => {
+    setReset(true);
+    setTimeout(() => {
+      setReset(false);
+    }, 1000);
+  };
   useEffect(() => {
     setLoading(false);
     window.scrollTo(0, 0);
@@ -95,10 +151,29 @@ function SpecialMenu() {
     dips();
     toppings();
   }, []);
-  // Set Url Location
+
   useEffect(() => {
-    setUrl(location?.pathname);
-  }, [location]);
+    calulatePrice();
+  }, [
+    sidesArr,
+    dipsArr,
+    drinksArr,
+    totalDipsPrice,
+    tempDipsArr,
+    pizzaSize,
+    pizzaSizePrice,
+    crust,
+  ]);
+
+  useEffect(() => {
+    setPizzaSize("Large");
+    setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+    setCrust({
+      crustCode: getSpecialData?.crust[0].crustCode,
+      crustName: getSpecialData?.crust[0].crustName,
+      price: getSpecialData?.crust[0].price,
+    });
+  }, [getSpecialData]);
 
   return (
     <div>
@@ -125,9 +200,9 @@ function SpecialMenu() {
                     <p className="mb-1">Size :</p>
                     <select
                       className="form-select form-drop mx-4"
-                      onChange={(e) => {
-                        handlePrice(e);
-                      }}
+                      onChange={handlePizzaSize}
+                      ref={pizzaSizeRef}
+                      value={pizzaSize}
                     >
                       <option value="Large">Large</option>
                       <option value="Extra Large">Extra Large</option>
@@ -160,32 +235,13 @@ function SpecialMenu() {
                     <div id="sides" className="mb-3">
                       {getSpecialData?.sides?.map((data) => {
                         return (
-                          <div
-                            className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                          <Sides
                             key={data.code}
-                          >
-                            <span className="mx-2">{data.sideName}</span>
-                            <div className="w-50 d-flex justify-content-end">
-                              <select className="form-select w-50 mx-4 d-inline-block">
-                                {data.lineEntries.map((combination) => {
-                                  return (
-                                    <option
-                                      value={combination.code}
-                                      key={combination.code}
-                                    >
-                                      {combination.size} - $ {combination.price}
-                                    </option>
-                                  );
-                                })}
-                              </select>
-                              <button
-                                type="button"
-                                className="addbtn btn btn-sm px-4 text-white"
-                              >
-                                Add
-                              </button>
-                            </div>
-                          </div>
+                            data={data}
+                            sidesArr={sidesArr}
+                            setSidesArr={setSidesArr}
+                            reset={reset}
+                          />
                         );
                       })}
                     </div>
@@ -205,27 +261,17 @@ function SpecialMenu() {
                     <div id="dips" className="mb-3">
                       {dipsData?.map((data) => {
                         return (
-                          <div
-                            className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                          <Dips
                             key={data.dipsCode}
-                          >
-                            <span className="mx-2">{data.dipsName}</span>
-                            <div className="w-50 d-flex justify-content-end align-items-center">
-                              <input
-                                type="number"
-                                className="form-control text-end w-25"
-                                step={0.0}
-                                defaultValue={0}
-                              />
-                              <span className="mx-4">$ {data.price}</span>
-                              <button
-                                type="button"
-                                className="addbtn btn btn-sm px-4 text-white"
-                              >
-                                Add
-                              </button>
-                            </div>
-                          </div>
+                            data={data}
+                            dipsArr={dipsArr}
+                            setDipsArr={setDipsArr}
+                            reset={reset}
+                            totalDipsPrice={totalDipsPrice}
+                            noofDips={getSpecialData?.noofDips}
+                            tempDipsArr={tempDipsArr}
+                            setTempDipsArr={setTempDipsArr}
+                          />
                         );
                       })}
                     </div>
@@ -246,52 +292,24 @@ function SpecialMenu() {
                     <div id="sides" className="mb-3">
                       {getSpecialData?.pops.map((data) => {
                         return (
-                          <div
-                            className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                          <Drinks
                             key={data.code}
-                          >
-                            <span className="mx-2">{data.softDrinkName}</span>
-                            <div className="w-50 d-flex justify-content-end align-items-center">
-                              <input
-                                type="number"
-                                className="form-control w-25"
-                                step={0.0}
-                                defaultValue={0}
-                              />
-                              <span className="mx-4">$ {data.price}</span>
-                              <button
-                                type="button"
-                                className="addbtn btn btn-sm px-4 text-white"
-                              >
-                                Add
-                              </button>
-                            </div>
-                          </div>
+                            data={data}
+                            drinksArr={drinksArr}
+                            setDrinksArr={setDrinksArr}
+                            reset={reset}
+                          />
                         );
                       })}
                       {getSpecialData?.bottle.map((data) => {
                         return (
-                          <div
-                            className="p-2 d-flex justify-content-between align-items-center border-bottom"
+                          <Drinks
                             key={data.code}
-                          >
-                            <span className="mx-2">{data.softDrinkName}</span>
-                            <div className="w-50 d-flex justify-content-end align-items-center">
-                              <input
-                                type="number"
-                                className="form-control w-25"
-                                step={0.0}
-                                defaultValue={0}
-                              />
-                              <span className="mx-4">$ {data.price}</span>
-                              <button
-                                type="button"
-                                className="addbtn btn btn-sm px-4 text-white"
-                              >
-                                Add
-                              </button>
-                            </div>
-                          </div>
+                            data={data}
+                            drinksArr={drinksArr}
+                            setDrinksArr={setDrinksArr}
+                            reset={reset}
+                          />
                         );
                       })}
                     </div>
@@ -303,16 +321,12 @@ function SpecialMenu() {
             <div className="w-25 m-3 p-3">
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
                 <p className="text-drak mb-3 mx-1">
-                  <strong>
-                    ${" "}
-                    {pizzaSize === "Large"
-                      ? getSpecialData?.largePizzaPrice || 0
-                      : getSpecialData?.extraLargePizzaPrice || 0}
-                  </strong>
+                  <strong>$ {totalPrice}</strong>
                 </p>
                 <button
                   type="button"
                   className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
+                  onClick={handleAddToCart}
                 >
                   <b>Add to Cart</b>
                 </button>

@@ -1,12 +1,21 @@
-import React from "react";
-import { SpecialCrustDropdown } from "../SpecialPizza/SelectedDropDown";
+import React, { useEffect, useRef, useState } from "react";
+import {
+  SpecialCheeseDropdown,
+  SpecialCrustDropdown,
+  SpecialbasesDropDown,
+} from "../SpecialPizza/SelectedDropDown";
+import CountAsOne from "../SpecialPizza/Toppings/CountAsOne";
 
 function SpecialPizzaSelection({
   getSpecialData,
   count,
   toppingsData,
-  setCrust,
-  crust,
+  pizzaState,
+  setPizzaState,
+  handleCrust,
+  handleCheese,
+  handleSpecialbases,
+  reset,
 }) {
   return (
     <>
@@ -22,37 +31,32 @@ function SpecialPizzaSelection({
             <p className="mb-1 ">Crust :</p>
             <SpecialCrustDropdown
               getSpecialData={getSpecialData}
-              setCrust={setCrust}
-              crust={crust}
+              count={count}
+              pizzaState={pizzaState}
+              handleCrust={handleCrust}
             />
           </div>
         </div>
         <div className="col-lg-4 col-md-6 col-sm-12">
           <div className="d-flex justify-content-start align-items-center w-100">
             <p className="mb-1 ">Cheese :</p>
-            <select className="form-select form-drop mx-4">
-              {getSpecialData?.cheese?.map((data) => {
-                return (
-                  <option key={data.code} value={data.code}>
-                    {data.cheeseName} - $ {data.price}
-                  </option>
-                );
-              })}
-            </select>
+            <SpecialCheeseDropdown
+              getSpecialData={getSpecialData}
+              count={count}
+              pizzaState={pizzaState}
+              handleCheese={handleCheese}
+            />
           </div>
         </div>
         <div className="col-lg-4 col-md-6 col-sm-12">
           <div className="d-flex justify-content-start align-items-center w-100">
             <p className="mb-1">Specialbases :</p>
-            <select className="form-select form-drop mx-4">
-              {getSpecialData?.specialbases?.map((data) => {
-                return (
-                  <option key={data.code} value={data.code}>
-                    {data.specialbaseName} - $ {data.price}
-                  </option>
-                );
-              })}
-            </select>
+            <SpecialbasesDropDown
+              getSpecialData={getSpecialData}
+              count={count}
+              pizzaState={pizzaState}
+              handleSpecialbases={handleSpecialbases}
+            />
           </div>
         </div>
       </div>
@@ -60,7 +64,10 @@ function SpecialPizzaSelection({
       <div className="p-2 pizza-heading text-center">
         <h4 className="my-1">Toppings</h4>
       </div>
-      <div className="row gx-4 mb-3 mt-4">
+      <div
+        className="row gx-4 mb-3 mt-4"
+        style={{ maxHeight: "450px", overflowY: "scroll" }}
+      >
         {/* count 2 toppings */}
         <div className="col-lg-4 col-md-6 col-sm-12">
           <p className="text-center tps-title pb-3 border-bottom border-3">
@@ -102,30 +109,14 @@ function SpecialPizzaSelection({
           </p>
           {toppingsData?.toppings?.countAsOne.map((data) => {
             return (
-              <div
-                className="d-flex justify-content-between align-items-center py-3 border-bottom"
+              <CountAsOne
                 key={data.toppingsCode}
-              >
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-left mx-1">
-                    {data.toppingsName}
-                  </span>
-                  <select className="form-select w-100">
-                    <option value="Whole">Whole</option>
-                    <option value="Left Half">Left Half</option>
-                    <option value="Left Half">Right Half</option>
-                  </select>
-                </div>
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-end mx-1">$ {data.price}</span>
-                  <button
-                    type="button"
-                    className="addbtn btn btn-sm px-4 text-white"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
+                pizzaState={pizzaState}
+                setPizzaState={setPizzaState}
+                count={count}
+                data={data}
+                reset={reset}
+              />
             );
           })}
         </div>

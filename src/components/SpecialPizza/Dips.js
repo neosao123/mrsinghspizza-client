@@ -103,9 +103,7 @@ function Dips({
 
   useEffect(() => {
     handlePrice();
-    console.log(tempDipsArr);
     setTempQ(tempDipsArr.length);
-    console.log(tempQ);
   }, [dipsArr, tempDipsArr, tempQ]);
 
   return (

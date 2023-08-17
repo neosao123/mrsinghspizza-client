@@ -1,19 +1,8 @@
-import React, {
-  useContext,
-  useEffect,
-  useLayoutEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import SpecialPizzaSelection from "../components/_main/SpecialPizzaSelection";
-import {
-  useFetcher,
-  useLocation,
-  useNavigate,
-  useParams,
-} from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { getDips, getSpecialDetails, getToppings } from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import { toast } from "react-toastify";
@@ -23,6 +12,7 @@ import OrderSummary from "../components/_main/Cart/OrderSummary";
 import Sides from "../components/SpecialPizza/Sides";
 import Dips from "../components/SpecialPizza/Dips";
 import Drinks from "../components/SpecialPizza/Drinks";
+import { v4 as uuidv4 } from "uuid";
 
 function SpecialMenu() {
   // Global Context
@@ -44,8 +34,9 @@ function SpecialMenu() {
   //
   const navigate = useNavigate();
   const location = useLocation();
+
   //
-  const [crust, setCrust] = useState();
+  const [pizzaState, setPizzaState] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
   const [dipsArr, setDipsArr] = useState([]);
   const [drinksArr, setDrinksArr] = useState([]);
@@ -94,6 +85,58 @@ function SpecialMenu() {
       });
   };
 
+  // Handle Crust
+  const handleCrust = (e, count) => {
+    const selectedCrust = getSpecialData?.crust?.find(
+      (data) => data.code === e.target.value
+    );
+    let crustObject = {
+      crustCode: selectedCrust.code,
+      crustName: selectedCrust.crustName,
+      price: selectedCrust.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      crust: crustObject,
+    };
+    setPizzaState(arr);
+  };
+  // Handle Cheese
+  const handleCheese = (e, count) => {
+    const selectedCheese = getSpecialData?.cheese?.find(
+      (data) => data.code === e.target.value
+    );
+    let cheeseObject = {
+      cheeseCode: selectedCheese.code,
+      cheeseName: selectedCheese.cheeseName,
+      price: selectedCheese.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      cheese: cheeseObject,
+    };
+    setPizzaState(arr);
+  };
+  // Handle SpecialBases
+  const handleSpecialbases = (e, count) => {
+    const selectedSpecialbases = getSpecialData?.specialbases?.find(
+      (data) => data.code === e.target.value
+    );
+    let specialbasesObject = {
+      specialbasesCode: selectedSpecialbases?.code,
+      cheeseName: selectedSpecialbases?.specialbaseName,
+      price: selectedSpecialbases?.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      specialbases: specialbasesObject,
+    };
+    setPizzaState(arr);
+  };
+
   //Component - Special Pizza Selection
   const spSelection = [];
   for (let i = 1; i <= getSpecialData?.noofPizzas; i++) {
@@ -102,9 +145,13 @@ function SpecialMenu() {
         key={i}
         getSpecialData={getSpecialData}
         count={i}
+        reset={reset}
         toppingsData={toppingsData}
-        crust={crust}
-        setCrust={setCrust}
+        pizzaState={pizzaState}
+        setPizzaState={setPizzaState}
+        handleCrust={handleCrust}
+        handleCheese={handleCheese}
+        handleSpecialbases={handleSpecialbases}
       />
     );
   }
@@ -120,19 +167,43 @@ function SpecialMenu() {
 
   const calulatePrice = () => {
     let calculatedPrice = Number(0);
-
-    calculatedPrice += Number(crust?.price) || 0;
     calculatedPrice += Number(pizzaSizePrice) || 0;
+    pizzaState.forEach((items) => {
+      calculatedPrice += items?.crust?.price ? Number(items?.crust?.price) : 0;
+      calculatedPrice += items?.cheese?.price
+        ? Number(items?.cheese?.price)
+        : 0;
+      calculatedPrice += items?.specialbases?.price
+        ? Number(items?.specialbases?.price)
+        : 0;
+      items.toppings.countAsOneToppings.map((data) => {
+        calculatedPrice += data.toppingsPrice ? Number(data.toppingsPrice) : 0;
+      });
+    });
     setTotalPrice(calculatedPrice);
   };
 
   const handleAddToCart = () => {
-    console.log("Sides :", sidesArr);
-    console.log("Dips :", dipsArr);
-    console.log("Drinks : ", drinksArr);
+    const payload = {
+      productID: uuidv4(),
+      productCode: "#NA",
+      productName: "Customized Pizza",
+      productType: "customized",
+      config: {
+        pizza: pizzaState,
+        sides: sidesArr,
+        dips: dipsArr,
+        drinks: drinksArr,
+      },
+      pizzaSize: pizzaSize,
+      quantity: "1",
+      totalPrice: totalPrice.toFixed(2),
+    };
+    console.log("Payload :", payload);
     setSidesArr([]);
     setDipsArr([]);
     setDrinksArr([]);
+    createEmptyObjects(Number(getSpecialData?.noofPizzas));
     resetControls();
   };
 
@@ -154,6 +225,7 @@ function SpecialMenu() {
 
   useEffect(() => {
     calulatePrice();
+    console.log(pizzaState);
   }, [
     sidesArr,
     dipsArr,
@@ -162,17 +234,38 @@ function SpecialMenu() {
     tempDipsArr,
     pizzaSize,
     pizzaSizePrice,
-    crust,
+    pizzaState,
   ]);
+
+  // Create Empty Object of Pizza States
+  const createEmptyObjects = (count) => {
+    let crustObject = {
+      crustCode: getSpecialData?.crust[0].code,
+      crustName: getSpecialData?.crust[0].crustName,
+      price: getSpecialData?.crust[0].price,
+    };
+    let cheeseObject = {
+      cheeseCode: getSpecialData?.cheese[0].code,
+      cheeseName: getSpecialData?.cheese[0].cheeseName,
+      price: getSpecialData?.cheese[0].price,
+    };
+    const emptyObjectsArray = Array.from({ length: count }, () => ({
+      crust: crustObject,
+      cheese: cheeseObject,
+      specialbases: {},
+      toppings: {
+        countAsTwoToppings: [],
+        countAsOneToppings: [],
+        freeToppings: [],
+      },
+    }));
+    setPizzaState(emptyObjectsArray);
+  };
 
   useEffect(() => {
     setPizzaSize("Large");
     setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-    setCrust({
-      crustCode: getSpecialData?.crust[0].crustCode,
-      crustName: getSpecialData?.crust[0].crustName,
-      price: getSpecialData?.crust[0].price,
-    });
+    createEmptyObjects(Number(getSpecialData?.noofPizzas));
   }, [getSpecialData]);
 
   return (
@@ -231,7 +324,10 @@ function SpecialMenu() {
                   <div className="p-2 pizza-heading text-center">
                     <h4 className="my-1">Sides</h4>
                   </div>
-                  <div className="row mb-3">
+                  <div
+                    className="row mb-3"
+                    style={{ maxHeight: "450px", overflowY: "scroll" }}
+                  >
                     <div id="sides" className="mb-3">
                       {getSpecialData?.sides?.map((data) => {
                         return (

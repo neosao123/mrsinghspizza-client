@@ -1,77 +1,52 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function CountAsOne({
-  count,
-  data,
-  pizzaState,
-  setPizzaState,
-  reset,
-  setFreeTpsCount,
-  freeTpsCount,
-  getSpecialData,
-  additionalTps,
-  setAdditionalTps,
-}) {
-  const oneTpsRef = useRef(null);
+function FreeToppings({ data, count, pizzaState, setPizzaState, reset }) {
+  const freeTpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
   const [tpsButtonColor, setTpsButttonColor] = useState("#606060");
 
-  const handleOneToppings = () => {
+  const handleFreeToppings = () => {
     if (tpsButton === false) {
-      if (oneTpsRef.current) {
+      if (freeTpsRef.current) {
         const tpsObject = {
           toppingsCode: data?.toppingsCode,
           toppingsName: data?.toppingsName,
-          toppingsPrice: data?.price ? data?.price : 0,
-          toppingsPlacement: oneTpsRef.current.value,
+          toppingsPrice: data?.price ? data?.price : "0",
+          toppingsPlacement: freeTpsRef.current.value,
         };
         let arr = [...pizzaState];
-        arr[count - 1].toppings.countAsOneToppings = [
-          ...arr[count - 1].toppings.countAsOneToppings,
+        arr[count - 1].toppings.freeToppings = [
+          ...arr[count - 1].toppings.freeToppings,
           tpsObject,
         ];
         setPizzaState(arr);
         setTpsButton(true);
         setTpsButttonColor("#e40000");
-        // For Calculation
-        if (freeTpsCount > 0 && additionalTps === 0) {
-          setFreeTpsCount(freeTpsCount - 1);
-        } else {
-          setAdditionalTps(additionalTps + 1);
-        }
       }
     } else {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      oneTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[
-        count - 1
-      ].toppings.countAsOneToppings.filter(
+      freeTpsRef.current.value = "Whole";
+      const updatedArr = pizzaState[count - 1].toppings.freeToppings.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOneToppings: updatedArr,
+        freeToppings: updatedArr,
       };
       setPizzaState(arr);
-      // For Calculation
-      if (additionalTps > 0) {
-        setAdditionalTps(additionalTps - 1);
-      } else {
-        setFreeTpsCount(freeTpsCount + 1);
-      }
     }
   };
 
-  const handleOneTpsPlacement = () => {
-    if (oneTpsRef.current) {
-      const filteredArr = pizzaState[count - 1].toppings.countAsOneToppings.map(
+  const handleFreeTpsPlacement = () => {
+    if (freeTpsRef.current) {
+      const filteredArr = pizzaState[count - 1].toppings.freeToppings.map(
         (items) => {
           if (items.toppingsCode === data.toppingsCode) {
             return {
               ...items,
-              toppingsPlacement: oneTpsRef.current.value,
+              toppingsPlacement: freeTpsRef.current.value,
             };
           }
           return items;
@@ -80,7 +55,7 @@ function CountAsOne({
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOneToppings: filteredArr,
+        freeToppings: filteredArr,
       };
       setPizzaState(arr);
     }
@@ -90,7 +65,7 @@ function CountAsOne({
     if (reset) {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      oneTpsRef.current.value = "Whole";
+      freeTpsRef.current.value = "Whole";
     }
   }, [reset]);
 
@@ -103,8 +78,8 @@ function CountAsOne({
         <span className="mb-3 text-left mx-1">{data.toppingsName}</span>
         <select
           className="form-select w-100"
-          ref={oneTpsRef}
-          onChange={handleOneTpsPlacement}
+          ref={freeTpsRef}
+          onChange={handleFreeTpsPlacement}
         >
           <option value="Whole">Whole</option>
           <option value="Left Half">Left Half</option>
@@ -116,7 +91,7 @@ function CountAsOne({
         <button
           type="button"
           className="addbtn btn btn-sm px-4 text-white"
-          onClick={handleOneToppings}
+          onClick={handleFreeToppings}
           style={{
             backgroundColor: tpsButtonColor,
             transition: ".3s",
@@ -130,4 +105,4 @@ function CountAsOne({
   );
 }
 
-export default CountAsOne;
+export default FreeToppings;

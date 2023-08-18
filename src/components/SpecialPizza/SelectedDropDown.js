@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 
 export const SpecialCrustDropdown = ({
   getSpecialData,
@@ -58,19 +58,16 @@ export const SpecialbasesDropDown = ({
     <>
       <select
         className="form-select form-drop mx-4"
-        onClick={(e) => {
+        onChange={(e) => {
           handleSpecialbases(e, count);
         }}
-        value={pizzaState[count - 1]?.specialbases?.specialbasesCode}
+        value={
+          pizzaState[count - 1]?.specialbases?.specialbasesCode
+            ? pizzaState[count - 1]?.specialbases?.specialbasesCode
+            : ""
+        }
       >
-        <option
-          value={""}
-          selected={
-            pizzaState[count - 1]?.specialbases?.specialbasesCode ? false : true
-          }
-        >
-          ---- Choose Specialbases ----
-        </option>
+        <option value={""}>---- Choose Specialbases ----</option>
         {getSpecialData?.specialbases?.map((data) => {
           return (
             <option key={data.code} value={data.code}>

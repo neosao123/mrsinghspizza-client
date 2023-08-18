@@ -100,7 +100,7 @@ export const SelectedSpecialbasesDropDown = ({
     <select
       className="form-select form-drop mx-4"
       onChange={handleSpecialBases}
-      value={specialbases?.length === 0 ? "" : specialbases?.specialbaseCode}
+      value={!specialbases ? "" : specialbases?.specialbaseCode}
     >
       <option value={""}>---- Choose Specialbases ----</option>
       {allIngredients?.specialbases?.map((data) => {

@@ -9,10 +9,12 @@ function Dips({
   noofDips,
   setTempDipsArr,
   tempDipsArr,
+  freeDipsCount,
+  setFreeDipsCount,
 }) {
   const [dispButtonColor, setDispButtonColor] = useState("#606060");
   const [dipsButton, setDipsButton] = useState(false);
-  const [qauntity, setQuantity] = useState(1);
+  const [qauntity, setQuantity] = useState(0);
   const [tempQ, setTempQ] = useState();
 
   let dipsQuantity = Number(0);
@@ -62,6 +64,7 @@ function Dips({
   const handleQuantity = (e) => {
     if (e.target.value >= 1) {
       setQuantity(e.target.value);
+
       const updatedQuantity = dipsArr.map((dips) => {
         if (dips.dipsCode === data.dipsCode) {
           return {
@@ -84,11 +87,11 @@ function Dips({
           return dips;
         });
         setDipsArr(updatedTotalPrice);
-        const priceObj = {
-          code: data.dipsCode,
-          price: data.price,
-        };
-        setTempDipsArr((prev) => [...prev, priceObj]);
+        // const priceObj = {
+        //   code: data.dipsCode,
+        //   price: data.price,
+        // };
+        // setTempDipsArr((prev) => [...prev, priceObj]);
       }
     }
   };

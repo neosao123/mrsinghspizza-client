@@ -1,10 +1,12 @@
-import React, { useEffect, useRef, useState } from "react";
+import React from "react";
 import {
   SpecialCheeseDropdown,
   SpecialCrustDropdown,
   SpecialbasesDropDown,
 } from "../SpecialPizza/SelectedDropDown";
 import CountAsOne from "../SpecialPizza/Toppings/CountAsOne";
+import CountAsTwo from "../SpecialPizza/Toppings/CountAsTwo";
+import FreeToppings from "../SpecialPizza/Toppings/FreeToppings";
 
 function SpecialPizzaSelection({
   getSpecialData,
@@ -16,6 +18,10 @@ function SpecialPizzaSelection({
   handleCheese,
   handleSpecialbases,
   reset,
+  setFreeTpsCount,
+  freeTpsCount,
+  additionalTps,
+  setAdditionalTps,
 }) {
   return (
     <>
@@ -75,30 +81,14 @@ function SpecialPizzaSelection({
           </p>
           {toppingsData?.toppings?.countAsTwo.map((data) => {
             return (
-              <div
-                className="d-flex justify-content-between align-items-center py-3 border-bottom"
+              <CountAsTwo
                 key={data.toppingsCode}
-              >
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-left mx-1">
-                    {data.toppingsName}
-                  </span>
-                  <select className="form-select w-100">
-                    <option value="Whole">Whole</option>
-                    <option value="Left Half">Left Half</option>
-                    <option value="Left Half">Right Half</option>
-                  </select>
-                </div>
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-end mx-1">$ {data.price}</span>
-                  <button
-                    type="button"
-                    className="addbtn btn btn-sm px-4 text-white"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
+                pizzaState={pizzaState}
+                setPizzaState={setPizzaState}
+                count={count}
+                data={data}
+                reset={reset}
+              />
             );
           })}
         </div>
@@ -116,6 +106,11 @@ function SpecialPizzaSelection({
                 count={count}
                 data={data}
                 reset={reset}
+                setFreeTpsCount={setFreeTpsCount}
+                freeTpsCount={freeTpsCount}
+                getSpecialData={getSpecialData}
+                additionalTps={additionalTps}
+                setAdditionalTps={setAdditionalTps}
               />
             );
           })}
@@ -127,30 +122,14 @@ function SpecialPizzaSelection({
           </p>
           {toppingsData?.toppings?.freeToppings.map((data) => {
             return (
-              <div
-                className="d-flex justify-content-between align-items-center py-3 border-bottom"
+              <FreeToppings
                 key={data.toppingsCode}
-              >
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-left mx-1">
-                    {data.toppingsName}
-                  </span>
-                  <select className="form-select w-100">
-                    <option value="Whole">Whole</option>
-                    <option value="Left Half">Left Half</option>
-                    <option value="Left Half">Right Half</option>
-                  </select>
-                </div>
-                <div className="d-flex flex-column">
-                  <span className="mb-3 text-end mx-1">$ {data.price}</span>
-                  <button
-                    type="button"
-                    className="addbtn btn btn-sm px-4 text-white"
-                  >
-                    Add
-                  </button>
-                </div>
-              </div>
+                pizzaState={pizzaState}
+                setPizzaState={setPizzaState}
+                count={count}
+                data={data}
+                reset={reset}
+              />
             );
           })}
         </div>

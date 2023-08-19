@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function FreeToppings({ data, count, pizzaState, setPizzaState, reset }) {
+function FreeToppings({
+  data,
+  count,
+  pizzaState,
+  setPizzaState,
+  reset,
+  payloadEdit,
+}) {
   const freeTpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
   const [tpsButtonColor, setTpsButttonColor] = useState("#606060");
@@ -61,6 +68,8 @@ function FreeToppings({ data, count, pizzaState, setPizzaState, reset }) {
     }
   };
 
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setTpsButton(false);
@@ -68,6 +77,24 @@ function FreeToppings({ data, count, pizzaState, setPizzaState, reset }) {
       freeTpsRef.current.value = "Whole";
     }
   }, [reset]);
+  // Populate - Edit
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.pizza[count - 1]?.toppings?.freeToppings.map(
+        (items) => {
+          if (items?.toppingsCode === data?.toppingsCode) {
+            setTpsButton(true);
+            setTpsButttonColor("#e40000");
+            freeTpsRef.current.value = items?.toppingsPlacement;
+          }
+        }
+      );
+    }
+  }, [payloadEdit]);
 
   return (
     <div

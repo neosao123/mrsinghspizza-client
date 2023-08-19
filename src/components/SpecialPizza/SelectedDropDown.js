@@ -9,7 +9,7 @@ export const SpecialCrustDropdown = ({
   return (
     <>
       <select
-        className="form-select form-drop mx-4"
+        className="form-select form-drop mx-2"
         value={pizzaState[count - 1]?.crust?.crustCode}
         onChange={(e) => handleCrust(e, count)}
       >
@@ -33,7 +33,7 @@ export const SpecialCheeseDropdown = ({
 }) => {
   return (
     <select
-      className="form-select form-drop mx-4"
+      className="form-select form-drop mx-2"
       onChange={(e) => handleCheese(e, count)}
       value={pizzaState[count - 1]?.cheese?.cheeseCode}
     >
@@ -57,7 +57,7 @@ export const SpecialbasesDropDown = ({
   return (
     <>
       <select
-        className="form-select form-drop mx-4"
+        className="form-select form-drop mx-2"
         onChange={(e) => {
           handleSpecialbases(e, count);
         }}

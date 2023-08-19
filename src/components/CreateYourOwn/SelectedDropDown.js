@@ -20,7 +20,7 @@ export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
   return (
     <>
       <select
-        className="form-select form-drop mx-4"
+        className="form-select form-drop mx-2"
         value={crust?.crustCode}
         onChange={handleCrust}
       >
@@ -57,7 +57,7 @@ export const SelectedCheeseDropDown = ({
   useEffect(() => {}, []);
   return (
     <select
-      className="form-select form-drop mx-4"
+      className="form-select form-drop mx-2"
       onChange={handleCheese}
       value={cheese?.cheeseCode}
     >
@@ -98,7 +98,7 @@ export const SelectedSpecialbasesDropDown = ({
   }, [reset]);
   return (
     <select
-      className="form-select form-drop mx-4"
+      className="form-select form-drop mx-2"
       onChange={handleSpecialBases}
       value={!specialbases ? "" : specialbases?.specialbaseCode}
     >

@@ -1,6 +1,13 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
+function CountAsTwo({
+  data,
+  count,
+  pizzaState,
+  setPizzaState,
+  reset,
+  payloadEdit,
+}) {
   const twoTpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
   const [tpsButtonColor, setTpsButttonColor] = useState("#606060");
@@ -15,8 +22,8 @@ function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
           toppingsPlacement: twoTpsRef.current.value,
         };
         let arr = [...pizzaState];
-        arr[count - 1].toppings.countAsTwoToppings = [
-          ...arr[count - 1].toppings.countAsTwoToppings,
+        arr[count - 1].toppings.countAsTwo = [
+          ...arr[count - 1].toppings.countAsTwo,
           tpsObject,
         ];
         setPizzaState(arr);
@@ -27,15 +34,13 @@ function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
       setTpsButton(false);
       setTpsButttonColor("#606060");
       twoTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[
-        count - 1
-      ].toppings.countAsTwoToppings.filter(
+      const updatedArr = pizzaState[count - 1].toppings.countAsTwo.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsTwoToppings: updatedArr,
+        countAsTwo: updatedArr,
       };
       setPizzaState(arr);
     }
@@ -43,7 +48,7 @@ function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
 
   const handleTwoTpsPlacement = () => {
     if (twoTpsRef.current) {
-      const filteredArr = pizzaState[count - 1].toppings.countAsTwoToppings.map(
+      const filteredArr = pizzaState[count - 1].toppings.countAsTwo.map(
         (items) => {
           if (items.toppingsCode === data.toppingsCode) {
             return {
@@ -57,12 +62,14 @@ function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsTwoToppings: filteredArr,
+        countAsTwo: filteredArr,
       };
       setPizzaState(arr);
     }
   };
 
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setTpsButton(false);
@@ -70,6 +77,24 @@ function CountAsTwo({ data, count, pizzaState, setPizzaState, reset }) {
       twoTpsRef.current.value = "Whole";
     }
   }, [reset]);
+  // Populate - Edit
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsTwo.map(
+        (items) => {
+          if (items?.toppingsCode === data?.toppingsCode) {
+            setTpsButton(true);
+            setTpsButttonColor("#e40000");
+            twoTpsRef.current.value = items?.toppingsPlacement;
+          }
+        }
+      );
+    }
+  }, [payloadEdit]);
 
   return (
     <div

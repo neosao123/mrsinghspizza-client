@@ -22,6 +22,7 @@ function SpecialPizzaSelection({
   freeTpsCount,
   additionalTps,
   setAdditionalTps,
+  payloadEdit,
 }) {
   return (
     <>
@@ -88,6 +89,7 @@ function SpecialPizzaSelection({
                 count={count}
                 data={data}
                 reset={reset}
+                payloadEdit={payloadEdit}
               />
             );
           })}
@@ -111,6 +113,7 @@ function SpecialPizzaSelection({
                 getSpecialData={getSpecialData}
                 additionalTps={additionalTps}
                 setAdditionalTps={setAdditionalTps}
+                payloadEdit={payloadEdit}
               />
             );
           })}
@@ -129,6 +132,7 @@ function SpecialPizzaSelection({
                 count={count}
                 data={data}
                 reset={reset}
+                payloadEdit={payloadEdit}
               />
             );
           })}

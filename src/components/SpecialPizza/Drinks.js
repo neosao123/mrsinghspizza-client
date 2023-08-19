@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 
-function Drinks({ data, drinksArr, setDrinksArr, reset }) {
+function Drinks({ data, drinksArr, setDrinksArr, reset, payloadEdit }) {
   const [drinksButtonColor, setDrinksButtonColor] = useState("#606060");
   const [drinksButton, setDrinksButton] = useState(false);
   const [qauntity, setQuantity] = useState(1);
@@ -57,6 +57,8 @@ function Drinks({ data, drinksArr, setDrinksArr, reset }) {
     }
   };
 
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setQuantity(1);
@@ -64,6 +66,22 @@ function Drinks({ data, drinksArr, setDrinksArr, reset }) {
       setDrinksButtonColor("#606060");
     }
   }, [reset]);
+  // Populate - Edit
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.drinks.map((items) => {
+        if (items?.drinksCode === data?.code) {
+          setDrinksButton(true);
+          setDrinksButtonColor("#e40000");
+          setQuantity(items?.qauntity);
+        }
+      });
+    }
+  }, [payloadEdit]);
 
   return (
     <div

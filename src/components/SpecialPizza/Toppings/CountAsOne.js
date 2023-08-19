@@ -11,6 +11,7 @@ function CountAsOne({
   getSpecialData,
   additionalTps,
   setAdditionalTps,
+  payloadEdit,
 }) {
   const oneTpsRef = useRef(null);
   const [tpsButton, setTpsButton] = useState(false);
@@ -26,47 +27,45 @@ function CountAsOne({
           toppingsPlacement: oneTpsRef.current.value,
         };
         let arr = [...pizzaState];
-        arr[count - 1].toppings.countAsOneToppings = [
-          ...arr[count - 1].toppings.countAsOneToppings,
+        arr[count - 1].toppings.countAsOne = [
+          ...arr[count - 1].toppings.countAsOne,
           tpsObject,
         ];
         setPizzaState(arr);
         setTpsButton(true);
         setTpsButttonColor("#e40000");
-        // For Calculation
-        if (freeTpsCount > 0 && additionalTps === 0) {
-          setFreeTpsCount(freeTpsCount - 1);
-        } else {
-          setAdditionalTps(additionalTps + 1);
-        }
+        // // For Calculation
+        // if (freeTpsCount > 0 && additionalTps === 0) {
+        //   setFreeTpsCount(freeTpsCount - 1);
+        // } else {
+        //   setAdditionalTps(additionalTps + 1);
+        // }
       }
     } else {
       setTpsButton(false);
       setTpsButttonColor("#606060");
       oneTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[
-        count - 1
-      ].toppings.countAsOneToppings.filter(
+      const updatedArr = pizzaState[count - 1].toppings.countAsOne.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOneToppings: updatedArr,
+        countAsOne: updatedArr,
       };
       setPizzaState(arr);
-      // For Calculation
-      if (additionalTps > 0) {
-        setAdditionalTps(additionalTps - 1);
-      } else {
-        setFreeTpsCount(freeTpsCount + 1);
-      }
+      // // For Calculation
+      // if (additionalTps > 0) {
+      //   setAdditionalTps(additionalTps - 1);
+      // } else {
+      //   setFreeTpsCount(freeTpsCount + 1);
+      // }
     }
   };
 
   const handleOneTpsPlacement = () => {
     if (oneTpsRef.current) {
-      const filteredArr = pizzaState[count - 1].toppings.countAsOneToppings.map(
+      const filteredArr = pizzaState[count - 1].toppings.countAsOne.map(
         (items) => {
           if (items.toppingsCode === data.toppingsCode) {
             return {
@@ -80,12 +79,14 @@ function CountAsOne({
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOneToppings: filteredArr,
+        countAsOne: filteredArr,
       };
       setPizzaState(arr);
     }
   };
 
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setTpsButton(false);
@@ -93,6 +94,24 @@ function CountAsOne({
       oneTpsRef.current.value = "Whole";
     }
   }, [reset]);
+  // Populate - Edit
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsOne.map(
+        (items) => {
+          if (items?.toppingsCode === data?.toppingsCode) {
+            setTpsButton(true);
+            setTpsButttonColor("#e40000");
+            oneTpsRef.current.value = items?.toppingsPlacement;
+          }
+        }
+      );
+    }
+  }, [payloadEdit]);
 
   return (
     <div

@@ -5,6 +5,7 @@ import GlobalContext from "../../context/GlobalContext";
 import { toast } from "react-toastify";
 import { useDispatch } from "react-redux";
 import { LOGOUT } from "../../redux/authProvider/actionType";
+import swal from "sweetalert";
 const Header = () => {
   // Global Context
   const globalCtx = useContext(GlobalContext);
@@ -20,15 +21,25 @@ const Header = () => {
   // Handle Logout
   const handleLogout = () => {
     if (isAuthenticated !== false) {
-      localStorage.removeItem("user");
-      localStorage.removeItem("token");
-      toast.success("Logged Out successfully");
-      dispatch({ type: LOGOUT, payload: null });
-      setTimeout(() => {
-        setIsAuthenticated(false);
-        setUser({});
-        navigate("/");
-      }, 500);
+      swal({
+        title: "Logout Confirmation",
+        text: "Do you really want to logout?",
+        icon: "warning",
+        buttons: ["Cancel", "Logut"],
+        dangerMode: true,
+      }).then(async (willDelete) => {
+        if (willDelete) {
+          localStorage.removeItem("user");
+          localStorage.removeItem("token");
+          toast.success("Logged Out successfully");
+          dispatch({ type: LOGOUT, payload: null });
+          setTimeout(() => {
+            setIsAuthenticated(false);
+            setUser({});
+            navigate("/");
+          }, 500);
+        }
+      });
     }
   };
 

@@ -43,9 +43,13 @@
 .pizza-heading {
   background-color: #ffead7;
 }
-.pizzaSelection > p {
-  font-size: 1rem;
+.pizzaSelection p {
+  font-size: 1.1rem !important;
   font-weight: 600;
+}
+.pizzaSelection .form-select {
+  font-size: 0.9rem;
+  width: 55%;
 }
 .block {
   width: 33%;

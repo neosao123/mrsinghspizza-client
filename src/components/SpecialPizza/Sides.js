@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-function Sides({ data, sidesArr, setSidesArr, reset }) {
+function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
   const sidesRef = useRef(null);
   const [sidesButton, setSidesButton] = useState(false);
   const [sidesButtonColor, setSidesButtonColor] = useState("#606060");
@@ -50,6 +50,9 @@ function Sides({ data, sidesArr, setSidesArr, reset }) {
       setSidesArr(updatedCombination);
     }
   };
+
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setSidesButton(false);
@@ -57,6 +60,22 @@ function Sides({ data, sidesArr, setSidesArr, reset }) {
       sidesRef.current.value = data?.lineEntries[0]?.code;
     }
   }, [reset]);
+  // Populate - Edit
+  useEffect(() => {
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.sides.map((items) => {
+        if (items?.sideCode === data?.code) {
+          setSidesButton(true);
+          setSidesButtonColor("#e40000");
+          sidesRef.current.value = items?.lineCode;
+        }
+      });
+    }
+  }, [payloadEdit]);
   return (
     <div
       className="p-2 d-flex justify-content-between align-items-center border-bottom"

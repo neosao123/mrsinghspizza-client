@@ -131,139 +131,123 @@ function CreateYourOwn() {
   // Handle Add To Cart
   const handleAddToCart = () => {
     if (
-      crust &&
-      cheese &&
-      specialbases &&
-      (countOneToppingsArr.length > 0 ||
-        countTwoToppingsArr.length > 0 ||
-        freeToppingsArr.length > 0)
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "customized"
     ) {
-      if (
-        payloadEdit &&
-        payloadEdit !== undefined &&
-        payloadEdit.productType === "customized"
-      ) {
-        const editedPayload = {
-          productID: payloadEdit?.productID,
-          productCode: "#NA",
-          productName: "Customized Pizza",
-          productType: "customized",
-          config: {
-            pizza: [
-              {
-                crust: crust,
-                cheese: cheese,
-                specialbases: specialbases,
-                toppings: {
-                  countAsTwo: countTwoToppingsArr,
-                  countAsOne: countOneToppingsArr,
-                  freeToppings: freeToppingsArr,
-                },
+      const editedPayload = {
+        productID: payloadEdit?.productID,
+        productCode: "#NA",
+        productName: "Customized Pizza",
+        productType: "customized",
+        config: {
+          pizza: [
+            {
+              crust: crust,
+              cheese: cheese,
+              specialbases: specialbases,
+              toppings: {
+                countAsTwo: countTwoToppingsArr,
+                countAsOne: countOneToppingsArr,
+                freeToppings: freeToppingsArr,
               },
-            ],
-            sides: sidesArr,
-            dips: dipsArr,
-            drinks: drinksArr,
-          },
-          pizzaSize: pizzaSize,
-          quantity: "1",
-          totalPrice: totalPrice.toFixed(2),
-        };
+            },
+          ],
+          sides: sidesArr,
+          dips: dipsArr,
+          drinks: drinksArr,
+        },
+        pizzaSize: pizzaSize,
+        quantity: "1",
+        totalPrice: Number(totalPrice).toFixed(2),
+      };
+      if (editedPayload) {
+        let ct = JSON.parse(localStorage.getItem("cart"));
+        const filteredCart = ct?.product?.filter(
+          (items) => items?.productID !== editedPayload?.productID
+        );
+        filteredCart.push(editedPayload);
+        const cartProduct = filteredCart;
+        cartFn.addCart(cartProduct, setCart, true);
 
-        if (editedPayload) {
-          let ct = JSON.parse(localStorage.getItem("cart"));
-
-          console.log("ct :", ct);
-          const filteredCart = ct?.product?.filter(
-            (items) => items?.productID !== editedPayload?.productID
-          );
-          filteredCart.push(editedPayload);
-          const cartProduct = filteredCart;
-          cartFn.addCart(cartProduct, setCart, true);
-
-          // Reset All Fields
-          setPizzaSize(pizzaSizeArr[0]?.size);
-          setPizzaSizePrice(pizzaSizeArr[0]?.price);
-          setCrust({
-            crustCode: allIngredients?.crust[0].crustCode,
-            crustName: allIngredients?.crust[0].crustName,
-            price: allIngredients?.crust[0].price,
-          });
-          setCheese({
-            cheeseCode: allIngredients?.cheese[0].cheeseCode,
-            cheeseName: allIngredients?.cheese[0].cheeseName,
-            price: allIngredients?.cheese[0].price,
-          });
-          setSpecialbases({});
-          setCountTwoToppingsArr([]);
-          setCountOneToppingsArr([]);
-          setFreeToppingsArr([]);
-          setDrinksArr([]);
-          setDipsArr([]);
-          setSidesArr([]);
-          resetControls();
-          setPayloadEdit();
-        }
-      } else {
-        const payload = {
-          productID: uuidv4(),
-          productCode: "#NA",
-          productName: "Customized Pizza",
-          productType: "customized",
-          config: {
-            pizza: [
-              {
-                crust: crust,
-                cheese: cheese,
-                specialbases: specialbases,
-                toppings: {
-                  countAsTwo: countTwoToppingsArr,
-                  countAsOne: countOneToppingsArr,
-                  freeToppings: freeToppingsArr,
-                },
-              },
-            ],
-            sides: sidesArr,
-            dips: dipsArr,
-            drinks: drinksArr,
-          },
-          pizzaSize: pizzaSize,
-          quantity: "1",
-          totalPrice: totalPrice.toFixed(2),
-        };
-        if (payload) {
-          let ct = JSON.parse(localStorage.getItem("cart"));
-          ct.product.push(payload);
-          const cartProduct = ct.product;
-          cartFn.addCart(cartProduct, setCart, false);
-
-          // Reset All Fields
-          setPizzaSize(pizzaSizeArr[0]?.size);
-          setPizzaSizePrice(pizzaSizeArr[0]?.price);
-          setCrust({
-            crustCode: allIngredients?.crust[0].crustCode,
-            crustName: allIngredients?.crust[0].crustName,
-            price: allIngredients?.crust[0].price,
-          });
-          setCheese({
-            cheeseCode: allIngredients?.cheese[0].cheeseCode,
-            cheeseName: allIngredients?.cheese[0].cheeseName,
-            price: allIngredients?.cheese[0].price,
-          });
-          setSpecialbases({});
-          setCountTwoToppingsArr([]);
-          setCountOneToppingsArr([]);
-          setFreeToppingsArr([]);
-          setDrinksArr([]);
-          setDipsArr([]);
-          setSidesArr([]);
-          resetControls();
-        }
+        // Reset All Fields
+        setPizzaSize(pizzaSizeArr[0]?.size);
+        setPizzaSizePrice(pizzaSizeArr[0]?.price);
+        setCrust({
+          crustCode: allIngredients?.crust[0].crustCode,
+          crustName: allIngredients?.crust[0].crustName,
+          price: allIngredients?.crust[0].price,
+        });
+        setCheese({
+          cheeseCode: allIngredients?.cheese[0].cheeseCode,
+          cheeseName: allIngredients?.cheese[0].cheeseName,
+          price: allIngredients?.cheese[0].price,
+        });
+        setSpecialbases({});
+        setCountTwoToppingsArr([]);
+        setCountOneToppingsArr([]);
+        setFreeToppingsArr([]);
+        setDrinksArr([]);
+        setDipsArr([]);
+        setSidesArr([]);
+        resetControls();
+        setPayloadEdit();
       }
     } else {
-      toast.error(
-        "Crust, Cheese, Specialbases and Atleast One Toppings Must Be Selected"
-      );
+      const payload = {
+        productID: uuidv4(),
+        productCode: "#NA",
+        productName: "Customized Pizza",
+        productType: "customized",
+        config: {
+          pizza: [
+            {
+              crust: crust,
+              cheese: cheese,
+              specialbases: specialbases,
+              toppings: {
+                countAsTwo: countTwoToppingsArr,
+                countAsOne: countOneToppingsArr,
+                freeToppings: freeToppingsArr,
+              },
+            },
+          ],
+          sides: sidesArr,
+          dips: dipsArr,
+          drinks: drinksArr,
+        },
+        pizzaSize: pizzaSize,
+        quantity: "1",
+        totalPrice: Number(totalPrice).toFixed(2),
+      };
+      if (payload) {
+        let ct = JSON.parse(localStorage.getItem("cart"));
+        ct.product.push(payload);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart, false);
+
+        // Reset All Fields
+        setPizzaSize(pizzaSizeArr[0]?.size);
+        setPizzaSizePrice(pizzaSizeArr[0]?.price);
+        setCrust({
+          crustCode: allIngredients?.crust[0].crustCode,
+          crustName: allIngredients?.crust[0].crustName,
+          price: allIngredients?.crust[0].price,
+        });
+        setCheese({
+          cheeseCode: allIngredients?.cheese[0].cheeseCode,
+          cheeseName: allIngredients?.cheese[0].cheeseName,
+          price: allIngredients?.cheese[0].price,
+        });
+        setSpecialbases({});
+        setCountTwoToppingsArr([]);
+        setCountOneToppingsArr([]);
+        setFreeToppingsArr([]);
+        setDrinksArr([]);
+        setDipsArr([]);
+        setSidesArr([]);
+        resetControls();
+      }
     }
   };
   // Handle Place Order
@@ -279,6 +263,35 @@ function CreateYourOwn() {
       toast.error("Cart is Empty...");
     }
   };
+  // Reset Controls
+  const resetControls = () => {
+    // Reset All Fields
+    setPizzaSize(pizzaSizeArr[0]?.size);
+    setPizzaSizePrice(pizzaSizeArr[0]?.price);
+    setCrust({
+      crustCode: allIngredients?.crust[0].crustCode,
+      crustName: allIngredients?.crust[0].crustName,
+      price: allIngredients?.crust[0].price,
+    });
+    setCheese({
+      cheeseCode: allIngredients?.cheese[0].cheeseCode,
+      cheeseName: allIngredients?.cheese[0].cheeseName,
+      price: allIngredients?.cheese[0].price,
+    });
+    setSpecialbases({});
+    setCountTwoToppingsArr([]);
+    setCountOneToppingsArr([]);
+    setFreeToppingsArr([]);
+    setDrinksArr([]);
+    setDipsArr([]);
+    setSidesArr([]);
+    setReset(true);
+    setTimeout(() => {
+      setReset(false);
+    }, 1000);
+  };
+
+  // ----- API -----
   //API - All Ingredient
   const allIngredinant = async () => {
     setLoading(true);
@@ -303,14 +316,8 @@ function CreateYourOwn() {
         console.log("Error From Sides ", err);
       });
   };
-  // Reset Controls
-  const resetControls = () => {
-    setReset(true);
-    setTimeout(() => {
-      setReset(false);
-    }, 1000);
-  };
 
+  // ----- UseEffects ----
   useEffect(() => {
     // Screen Always Set To Top after UseEffect Called
     setLoading(false);
@@ -436,7 +443,7 @@ function CreateYourOwn() {
               <div className="row mb-3 border-bottom">
                 <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
                   <div className="d-flex justify-content-start align-items-center w-100">
-                    <p className="mb-1 ">Crust :</p>
+                    <p className="mb-1">Crust :</p>
                     <SelectedCrustDropDown
                       allIngredients={allIngredients}
                       setCrust={setCrust}
@@ -634,6 +641,8 @@ function CreateYourOwn() {
                       key={cData.productID}
                       setPayloadEdit={setPayloadEdit}
                       payloadEdit={payloadEdit}
+                      resetControls={resetControls}
+                      setLoading={setLoading}
                     />
                   );
                 })}

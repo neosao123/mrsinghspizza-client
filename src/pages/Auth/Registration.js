@@ -13,25 +13,31 @@ import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../redux/authProvider/actionType";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
+const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
 
 const ValidateSchema = Yup.object({
-  firstname: Yup.string().required("Required"),
-  lastname: Yup.string().required("Required"),
+  firstname: Yup.string().required("First name is required"),
+  lastname: Yup.string().required("Last name is required"),
   phoneno: Yup.string()
-    .required("Required")
+    .required("Phone number is required")
     .matches(
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
   password: Yup.string()
-    .required("Required")
+    .required("Password is required")
     .min(8, "Password must have at least 8 characters"),
-  city: Yup.string().required("Rquired"),
-  postalcode: Yup.string().required("Rquired"),
-  address: Yup.string().required("Required"),
+  city: Yup.string().required("City is required"),
+  postalcode: Yup.string()
+    .required("Postal Code is required")
+    .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),
+  address: Yup.string().required("Address is required"),
   passwordconfirmation: Yup.string()
-    .oneOf([Yup.ref("password"), null], "Passwords must match")
-    .required("Required"),
+    .oneOf(
+      [Yup.ref("password"), null],
+      "Passwords and Confirm Password must be same"
+    )
+    .required("Confirm Password is required"),
 });
 
 function Registration() {

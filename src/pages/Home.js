@@ -52,7 +52,6 @@ const Home = () => {
           drinksTabRef.current.scrollIntoView({ behavior: "smooth" });
           break;
         default:
-          ptype = "/";
           break;
       }
     }

@@ -1,16 +1,15 @@
-import React, { useContext, useEffect } from "react";
-import bgImage from "../assets/images/bg-img.jpg";
+import React from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
-import GlobalContext from "../context/GlobalContext";
 import { useSelector } from "react-redux";
 import { deliverable } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
+const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
 
 const ValidateSchema = Yup.object({
   firstname: Yup.string().required("Required"),
@@ -21,8 +20,10 @@ const ValidateSchema = Yup.object({
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
-  city: Yup.string().required("Rquired"),
-  postalcode: Yup.string().required("Rquired"),
+  city: Yup.string().required("Required"),
+  postalcode: Yup.string()
+    .required("Required")
+    .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),
   address: Yup.string().required("Required"),
 });
 

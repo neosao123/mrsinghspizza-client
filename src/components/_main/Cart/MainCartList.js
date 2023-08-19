@@ -15,7 +15,14 @@ function MainCartList({ cData, setLoading }) {
   const navigate = useNavigate();
   // Handle Delete Product
   const handleDelete = () => {
-    cartFn.deleteCart(cData, cart, setCart);
+    if (payloadEdit) {
+      if (payloadEdit?.productID === cData?.productID) {
+        setPayloadEdit();
+        cartFn.deleteCart(cData, cart, setCart);
+      }
+    } else {
+      cartFn.deleteCart(cData, cart, setCart);
+    }
   };
   // Handle Edit Product
   const handleEdit = () => {
@@ -27,8 +34,13 @@ function MainCartList({ cData, setLoading }) {
         navigate("/create-your-own");
       }, 1200);
     }
-    if (cData?.productType === "special") {
-      navigate("/special");
+    if (cData?.productType === "special" && cData?.productID) {
+      setPayloadEdit(cData);
+      setLoading(true);
+      setTimeout(() => {
+        setLoading(false);
+        navigate(`/special-pizza/${cData?.productCode}`);
+      }, 1200);
     }
   };
   return (

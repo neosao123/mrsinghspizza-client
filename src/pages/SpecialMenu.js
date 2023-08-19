@@ -19,24 +19,23 @@ function SpecialMenu() {
   // Global Context
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
+  const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [cart, setCart] = globalCtx.cart;
-  // API States
+  // API Response - States
   const [getSpecialData, setGetSpecialData] = useState();
   const [dipsData, setDipsData] = useState();
   const [toppingsData, setToppingsData] = useState();
-  //
-  const [loading, setLoading] = useState(false);
-  const [reset, setReset] = useState(false);
-  const [totalPrice, setTotalPrice] = useState();
+  // Helper Function
+  const cartFn = new CartFunction();
   // UseRef
   const pizzaSizeRef = useRef(null);
   //
   const navigate = useNavigate();
   const location = useLocation();
   const { sid } = useParams();
-  // Helper Function
-  const cartFn = new CartFunction();
-  //
+  // All States
+  const [loading, setLoading] = useState(false);
+  const [reset, setReset] = useState(false);
   const [pizzaSize, setPizzaSize] = useState("Large");
   const [pizzaSizePrice, setPizzaSizePrice] = useState();
   const [pizzaState, setPizzaState] = useState([]);
@@ -45,11 +44,15 @@ function SpecialMenu() {
   const [drinksArr, setDrinksArr] = useState([]);
   const [totalDipsPrice, setTotalDipsPrice] = useState(0);
   const [tempDipsArr, setTempDipsArr] = useState([]);
+  const [totalPrice, setTotalPrice] = useState();
   // Free Toppings, Sides, Dips, Drinks
-  const [freeTpsCount, setFreeTpsCount] = useState();
+  const [freeTpsCount, setFreeTpsCount] = useState(
+    Number(getSpecialData?.noofToppings)
+  );
   const [additionalTps, setAdditionalTps] = useState(0);
   const [freeDipsCount, setFreeDipsCount] = useState();
 
+  // Handle Pizza Size and Price
   const handlePizzaSize = () => {
     if (pizzaSizeRef.current) {
       if (pizzaSizeRef.current.value === "Large") {
@@ -62,36 +65,6 @@ function SpecialMenu() {
       }
     }
   };
-  const getSpecial = async () => {
-    setLoading(true);
-    await getSpecialDetails({ code: sid }).then((res) => {
-      setGetSpecialData(res.data);
-      setLoading(false);
-    });
-  };
-  const dips = async () => {
-    setLoading(true);
-    await getDips()
-      .then((res) => {
-        setDipsData(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log("ERROR From Special Dips: ", err);
-      });
-  };
-  const toppings = async () => {
-    setLoading(true);
-    await getToppings()
-      .then((res) => {
-        setToppingsData(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log("Error From toppings Data :", err);
-      });
-  };
-
   // Handle Crust
   const handleCrust = (e, count) => {
     console.log(e.target.value);
@@ -166,6 +139,7 @@ function SpecialMenu() {
         freeTpsCount={freeTpsCount}
         additionalTps={additionalTps}
         setAdditionalTps={setAdditionalTps}
+        payloadEdit={payloadEdit}
       />
     );
   }
@@ -190,7 +164,7 @@ function SpecialMenu() {
         ? Number(items?.specialbases?.price)
         : 0;
       // OnChange One Toppings Price
-      items.toppings.countAsOneToppings.map((data) => {
+      items.toppings.countAsOne.map((data) => {
         totalOneTpsPrice += Number(data?.toppingsPrice);
       });
     });
@@ -245,7 +219,7 @@ function SpecialMenu() {
         setFreeDipsCount(freeDipsCount - 1);
       }
     }
-    console.log(dipsArr);
+    // console.log(dipsArr);
 
     // dipsArr?.map((data) => {
     //   totalQauntity += Number(data.qauntity);
@@ -265,35 +239,78 @@ function SpecialMenu() {
   };
   // Handle Cart
   const handleAddToCart = () => {
-    const payload = {
-      productID: uuidv4(),
-      productCode: "#NA",
-      productName: getSpecialData?.name,
-      productType: "special",
-      config: {
-        pizza: pizzaState,
-        sides: sidesArr,
-        dips: dipsArr,
-        drinks: drinksArr,
-      },
-      pizzaSize: pizzaSize,
-      quantity: "1",
-      totalPrice: totalPrice.toFixed(2),
-    };
-    if (payload) {
-      let ct = JSON.parse(localStorage.getItem("cart"));
-      ct.product.push(payload);
-      const cartProduct = ct.product;
-      cartFn.addCart(cartProduct, setCart, false);
-      setPizzaSize("Large");
-      setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-      setSidesArr([]);
-      setDipsArr([]);
-      setDrinksArr([]);
-      createEmptyObjects(Number(getSpecialData?.noofPizzas));
-      resetControls();
-      setFreeTpsCount(getSpecialData?.noofToppings);
-      setAdditionalTps(0);
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      const editedPayload = {
+        productID: payloadEdit?.productID,
+        productCode: payloadEdit?.productCode,
+        productName: getSpecialData?.name,
+        productType: "special",
+        config: {
+          pizza: pizzaState,
+          sides: sidesArr,
+          dips: dipsArr,
+          drinks: drinksArr,
+        },
+        pizzaSize: pizzaSize,
+        quantity: "1",
+        totalPrice: Number(totalPrice).toFixed(2),
+      };
+      if (editedPayload) {
+        let ct = JSON.parse(localStorage.getItem("cart"));
+        const filteredCart = ct?.product?.filter(
+          (items) => items?.productID !== editedPayload?.productID
+        );
+        filteredCart.push(editedPayload);
+        const cartProduct = filteredCart;
+        cartFn.addCart(cartProduct, setCart, true);
+
+        // Reset All Fields
+        setPizzaSize("Large");
+        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+        setSidesArr([]);
+        setDipsArr([]);
+        setDrinksArr([]);
+        createEmptyObjects(Number(getSpecialData?.noofPizzas));
+        resetControls();
+        setFreeTpsCount(getSpecialData?.noofToppings);
+        setAdditionalTps(0);
+        setPayloadEdit();
+      }
+    } else {
+      const payload = {
+        productID: uuidv4(),
+        productCode: getSpecialData?.code,
+        productName: getSpecialData?.name,
+        productType: "special",
+        config: {
+          pizza: pizzaState,
+          sides: sidesArr,
+          dips: dipsArr,
+          drinks: drinksArr,
+        },
+        pizzaSize: pizzaSize,
+        quantity: "1",
+        totalPrice: Number(totalPrice).toFixed(2),
+      };
+      if (payload) {
+        let ct = JSON.parse(localStorage.getItem("cart"));
+        ct.product.push(payload);
+        const cartProduct = ct.product;
+        cartFn.addCart(cartProduct, setCart, false);
+        setPizzaSize("Large");
+        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+        setSidesArr([]);
+        setDipsArr([]);
+        setDrinksArr([]);
+        createEmptyObjects(Number(getSpecialData?.noofPizzas));
+        resetControls();
+        setFreeTpsCount(getSpecialData?.noofToppings);
+        setAdditionalTps(0);
+      }
     }
   };
   // Handle Place Order
@@ -307,34 +324,18 @@ function SpecialMenu() {
   };
   // Reset Controls
   const resetControls = () => {
+    setPizzaSize("Large");
+    setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+    setTotalPrice(getSpecialData?.largePizzaPrice);
+    setFreeTpsCount(Number(getSpecialData?.noofToppings));
+    setFreeDipsCount(Number(getSpecialData?.noofDips));
+    createEmptyObjects(Number(getSpecialData?.noofPizzas));
+    setAdditionalTps(0);
     setReset(true);
     setTimeout(() => {
       setReset(false);
     }, 1000);
   };
-  // UseEffect For API
-  useEffect(() => {
-    setLoading(false);
-    window.scrollTo(0, 0);
-    setLoading(true);
-    getSpecial();
-    dips();
-    toppings();
-  }, []);
-  // Calculate Function
-  useEffect(() => {
-    calulatePrice();
-    // console.log("pizzaState :", sidesArr);
-  }, [
-    sidesArr,
-    dipsArr,
-    drinksArr,
-    totalDipsPrice,
-    tempDipsArr,
-    pizzaSize,
-    pizzaSizePrice,
-    pizzaState,
-  ]);
   // Create Empty Object of Pizza States
   const createEmptyObjects = (count) => {
     let crustObject = {
@@ -352,22 +353,101 @@ function SpecialMenu() {
       cheese: cheeseObject,
       specialbases: "",
       toppings: {
-        countAsTwoToppings: [],
-        countAsOneToppings: [],
+        countAsTwo: [],
+        countAsOne: [],
         freeToppings: [],
       },
     }));
     setPizzaState(emptyObjectsArray);
   };
+
+  // ----- API Endpoints -----
+  const getSpecial = async () => {
+    setLoading(true);
+    await getSpecialDetails({ code: sid }).then((res) => {
+      setGetSpecialData(res.data);
+      setLoading(false);
+    });
+  };
+  const dips = async () => {
+    setLoading(true);
+    await getDips()
+      .then((res) => {
+        setDipsData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("ERROR From Special Dips: ", err);
+      });
+  };
+  const toppings = async () => {
+    setLoading(true);
+    await getToppings()
+      .then((res) => {
+        setToppingsData(res.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log("Error From toppings Data :", err);
+      });
+  };
+
+  // ----- UseEffect -----
+  // UseEffect For API
+  useEffect(() => {
+    setLoading(false);
+    window.scrollTo(0, 0);
+    setLoading(true);
+    getSpecial();
+    dips();
+    toppings();
+  }, []);
+  // Calculate Function
+  useEffect(() => {
+    calulatePrice();
+  }, [
+    sidesArr,
+    dipsArr,
+    drinksArr,
+    totalDipsPrice,
+    tempDipsArr,
+    pizzaSize,
+    pizzaSizePrice,
+    pizzaState,
+  ]);
   // UseEffect For Set Default Values
   useEffect(() => {
-    setPizzaSize("Large");
-    setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-    createEmptyObjects(Number(getSpecialData?.noofPizzas));
-    setFreeTpsCount(Number(getSpecialData?.noofToppings));
-    setFreeDipsCount(Number(getSpecialData?.noofDips));
-    setAdditionalTps(0);
+    if (!payloadEdit) {
+      setPizzaSize("Large");
+      setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      createEmptyObjects(Number(getSpecialData?.noofPizzas));
+      setFreeTpsCount(Number(getSpecialData?.noofToppings));
+      setFreeDipsCount(Number(getSpecialData?.noofDips));
+      setAdditionalTps(0);
+      setTotalPrice(getSpecialData?.largePizzaPrice);
+    }
   }, [getSpecialData]);
+  // Populate All Fields - Edit Pizza
+  useEffect(() => {
+    console.log(payloadEdit);
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      setPizzaSize(payloadEdit?.pizzaSize);
+      if (payloadEdit?.pizzaSize === "Large") {
+        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      }
+      if (payloadEdit?.pizzaSize === "Extra Large") {
+        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      }
+      setPizzaState(payloadEdit?.config?.pizza);
+      setSidesArr(payloadEdit?.config?.sides);
+      setDipsArr(payloadEdit?.config?.dips);
+      setDrinksArr(payloadEdit?.config?.drinks);
+    }
+  }, [payloadEdit]);
 
   return (
     <div>
@@ -380,14 +460,20 @@ function SpecialMenu() {
           <div className="custmized-main">
             <div className="d-flex justify-content-center align-items-center bg-dark p-3 custmized">
               <h2 className="m-3 text-white">
-                <strong>{getSpecialData?.name}</strong>
+                <strong>
+                  {payloadEdit &&
+                  payloadEdit !== undefined &&
+                  payloadEdit.productType === "special"
+                    ? `${getSpecialData?.name} [ Edit ]`
+                    : getSpecialData?.name}
+                </strong>
               </h2>
             </div>
           </div>
           <div className="d-flex justify-content-between w-100">
             {/* Pizza Selection */}
             <div className="pizzaSelection w-75 m-3 p-3">
-              {/* Pizza Size */}
+              {/* Pizza Size, noofToppings, additional-Toppings */}
               <div className="row mb-3 border-bottom">
                 <div className="col-lg-4 col-md-6 col-md-6 mb-3">
                   <div className="d-flex flex-row flex-wrap justify-content-start align-items-center w-100">
@@ -443,6 +529,7 @@ function SpecialMenu() {
                             sidesArr={sidesArr}
                             setSidesArr={setSidesArr}
                             reset={reset}
+                            payloadEdit={payloadEdit}
                           />
                         );
                       })}
@@ -475,6 +562,7 @@ function SpecialMenu() {
                             setTempDipsArr={setTempDipsArr}
                             freeDipsCount={freeDipsCount}
                             setFreeDipsCount={setFreeDipsCount}
+                            payloadEdit={payloadEdit}
                           />
                         );
                       })}
@@ -502,6 +590,7 @@ function SpecialMenu() {
                             drinksArr={drinksArr}
                             setDrinksArr={setDrinksArr}
                             reset={reset}
+                            payloadEdit={payloadEdit}
                           />
                         );
                       })}
@@ -513,6 +602,7 @@ function SpecialMenu() {
                             drinksArr={drinksArr}
                             setDrinksArr={setDrinksArr}
                             reset={reset}
+                            payloadEdit={payloadEdit}
                           />
                         );
                       })}
@@ -525,14 +615,25 @@ function SpecialMenu() {
             <div className="w-25 m-3 p-3">
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
                 <p className="text-drak mb-3 mx-1">
-                  <strong>$ {totalPrice}</strong>
+                  <strong>
+                    ${" "}
+                    {totalPrice
+                      ? Number(totalPrice).toFixed(2)
+                      : (0.0).toFixed(2)}
+                  </strong>
                 </p>
                 <button
                   type="button"
                   className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
                   onClick={handleAddToCart}
                 >
-                  <b>Add to Cart</b>
+                  <b>
+                    {payloadEdit &&
+                    payloadEdit !== undefined &&
+                    payloadEdit?.productType === "special"
+                      ? "Update Pizza"
+                      : "Add To Cart"}
+                  </b>
                 </button>
               </div>
 
@@ -540,7 +641,16 @@ function SpecialMenu() {
               <div className="cartlist w-100 mt-5">
                 <h2 className="p-3 text-center orderTitle">Your Orders</h2>
                 {cart?.product.map((cData) => {
-                  return <CartList cData={cData} key={cData.productID} />;
+                  return (
+                    <CartList
+                      cData={cData}
+                      key={cData.productID}
+                      setPayloadEdit={setPayloadEdit}
+                      payloadEdit={payloadEdit}
+                      resetControls={resetControls}
+                      setLoading={setLoading}
+                    />
+                  );
                 })}
               </div>
               {/* Place Order */}

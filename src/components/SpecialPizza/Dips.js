@@ -11,10 +11,11 @@ function Dips({
   tempDipsArr,
   freeDipsCount,
   setFreeDipsCount,
+  payloadEdit,
 }) {
   const [dispButtonColor, setDispButtonColor] = useState("#606060");
   const [dipsButton, setDipsButton] = useState(false);
-  const [qauntity, setQuantity] = useState(0);
+  const [qauntity, setQuantity] = useState(1);
   const [tempQ, setTempQ] = useState();
 
   let dipsQuantity = Number(0);
@@ -96,6 +97,8 @@ function Dips({
     }
   };
 
+  // ---- UseEffect ----
+  // UseEffect For Reset
   useEffect(() => {
     if (reset) {
       setQuantity(1);
@@ -103,11 +106,27 @@ function Dips({
       setDispButtonColor("#606060");
     }
   }, [reset]);
-
+  // Populate - Edit
   useEffect(() => {
-    handlePrice();
-    setTempQ(tempDipsArr.length);
-  }, [dipsArr, tempDipsArr, tempQ]);
+    if (
+      payloadEdit &&
+      payloadEdit !== undefined &&
+      payloadEdit.productType === "special"
+    ) {
+      payloadEdit?.config?.dips.map((items) => {
+        if (items?.dipsCode === data?.dipsCode) {
+          setDipsButton(true);
+          setDispButtonColor("#e40000");
+          setQuantity(items?.qauntity);
+        }
+      });
+    }
+  }, [payloadEdit]);
+
+  // useEffect(() => {
+  //   handlePrice();
+  //   setTempQ(tempDipsArr.length);
+  // }, [dipsArr, tempDipsArr, tempQ]);
 
   return (
     <div

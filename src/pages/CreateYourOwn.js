@@ -442,8 +442,8 @@ function CreateYourOwn() {
               {/* Crust, Cheese, Specialbases */}
               <div className="row mb-3 border-bottom">
                 <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
-                  <div className="d-flex justify-content-start align-items-center w-100">
-                    <p className="mb-1">Crust :</p>
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Crust :</p>
                     <SelectedCrustDropDown
                       allIngredients={allIngredients}
                       setCrust={setCrust}
@@ -451,9 +451,9 @@ function CreateYourOwn() {
                     />
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="d-flex justify-content-start align-items-center w-100">
-                    <p className="mb-1 ">Cheese :</p>
+                <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Cheese :</p>
                     <SelectedCheeseDropDown
                       allIngredients={allIngredients}
                       setCheese={setCheese}
@@ -461,9 +461,9 @@ function CreateYourOwn() {
                     />
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12">
-                  <div className="d-flex justify-content-start align-items-center w-100">
-                    <p className="mb-1">Specialbases :</p>
+                <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Specialbases :</p>
                     <SelectedSpecialbasesDropDown
                       allIngredients={allIngredients}
                       setSpecialbases={setSpecialbases}

@@ -14,6 +14,7 @@ import Dips from "../components/SpecialPizza/Dips";
 import Drinks from "../components/SpecialPizza/Drinks";
 import { v4 as uuidv4 } from "uuid";
 import CartFunction from "../components/cart";
+import NewDrinks from "../components/SpecialPizza/NewDrinks";
 
 function SpecialMenu() {
   // Global Context
@@ -45,12 +46,15 @@ function SpecialMenu() {
   const [totalDipsPrice, setTotalDipsPrice] = useState(0);
   const [tempDipsArr, setTempDipsArr] = useState([]);
   const [totalPrice, setTotalPrice] = useState();
+  let calcDipsArr = [];
+  let calcDrinksArr = [];
+
   // Free Toppings, Sides, Dips, Drinks
   const [freeTpsCount, setFreeTpsCount] = useState(
     Number(getSpecialData?.noofToppings)
   );
   const [additionalTps, setAdditionalTps] = useState(0);
-  const [freeDipsCount, setFreeDipsCount] = useState();
+  // const [freeDipsCount, setFreeDipsCount] = useState(Number(0));
 
   // Handle Pizza Size and Price
   const handlePizzaSize = () => {
@@ -149,6 +153,7 @@ function SpecialMenu() {
     let totalOneTpsPrice = Number(0);
     let totalSidesPrice = Number(0);
     let totalDipsPrice = Number(0);
+    let totalDrinksPrice = Number(0);
 
     // OnChange Pizza Size Price
     calculatedPrice += Number(pizzaSizePrice) || 0;
@@ -163,10 +168,11 @@ function SpecialMenu() {
       calculatedPrice += items?.specialbases?.price
         ? Number(items?.specialbases?.price)
         : 0;
-      // OnChange One Toppings Price
-      items.toppings.countAsOne.map((data) => {
-        totalOneTpsPrice += Number(data?.toppingsPrice);
-      });
+      // // OnChange One Toppings Price
+      // items.toppings.countAsOne.map((data) => {
+      //   console.log(items);
+      // });
+      // console.log(items.toppings.countAsOne);
     });
     // if (additionalTps > 0 && freeTpsCount === 0) {
     //   let totalFreeAmount = Number(2.0) * Number(getSpecialData.noofToppings);
@@ -194,46 +200,52 @@ function SpecialMenu() {
     calculatedPrice += Number(totalSidesPrice);
 
     // Handle Dips Price
-    let totalQauntity = Number(0);
-    let perDipsPrice = Number(0);
+    let noOfFreeDips = Number(getSpecialData?.noofDips);
     let dipsPrice = Number(0);
-    let totalFreeDipsPrice = Number(0);
-
-    if (freeDipsCount > 0) {
-      const updatedArr = dipsArr.map((dips) => {
-        let updatedQauntity = dips.qauntity - freeDipsCount;
-        console.log(updatedQauntity, dips.qauntity, freeDipsCount);
-
-        console.log("Free Count :", freeDipsCount);
-        // if (freeDipsCount !== 0) {
-        //   setFreeDipsCount(freeDipsCount - 1);
-        // }
-        return {
-          ...dips,
-          qauntity: updatedQauntity,
-          totalPrice: dips?.price * updatedQauntity,
-        };
+    if (dipsArr.length >= 0) {
+      dipsArr?.map((items) => {
+        if (noOfFreeDips > 0) {
+          let amount = 0;
+          let obj = {
+            ...items,
+            amount: amount,
+          };
+          calcDipsArr.push(obj);
+          noOfFreeDips--;
+        } else {
+          calcDipsArr.push(items);
+        }
       });
-      setDipsArr(updatedArr);
-      if (freeDipsCount !== 0) {
-        setFreeDipsCount(freeDipsCount - 1);
-      }
     }
-    // console.log(dipsArr);
+    calcDipsArr?.map((dips) => {
+      dipsPrice = Number(dips?.qauntity) * Number(dips?.amount);
+      totalDipsPrice += Number(dipsPrice);
+    });
+    calculatedPrice += Number(totalDipsPrice);
 
-    // dipsArr?.map((data) => {
-    //   totalQauntity += Number(data.qauntity);
-    //   perDipsPrice = Number(data.price);
-    // });
-    // totalFreeDipsPrice =
-    //   Number(perDipsPrice) * Number(getSpecialData?.noofDips);
-    // if (totalQauntity > getSpecialData?.noofDips) {
-    //   dipsArr?.map((data) => {
-    //     dipsPrice += Number(data?.totalPrice);
-    //   });
-    //   totalDipsPrice = Number(dipsPrice) - Number(totalFreeDipsPrice);
-    // }
-    // calculatedPrice += Number(totalDipsPrice);
+    // handle Drinks
+    let noOfFreeDrinks = Number(getSpecialData?.noofDrinks);
+    let drinksPrice = Number(0);
+    if (drinksArr.length >= 0) {
+      drinksArr?.map((items) => {
+        if (noOfFreeDrinks > 0) {
+          let amount = 0;
+          let obj = {
+            ...items,
+            amount: amount,
+          };
+          calcDrinksArr.push(obj);
+          noOfFreeDrinks--;
+        } else {
+          calcDrinksArr.push(items);
+        }
+      });
+    }
+    calcDrinksArr?.map((drinks) => {
+      drinksPrice = Number(drinks?.qauntity) * Number(drinks?.amount);
+      totalDrinksPrice += Number(drinksPrice);
+    });
+    calculatedPrice += Number(totalDrinksPrice);
 
     setTotalPrice(Number(calculatedPrice).toFixed(2));
   };
@@ -252,7 +264,7 @@ function SpecialMenu() {
         config: {
           pizza: pizzaState,
           sides: sidesArr,
-          dips: dipsArr,
+          dips: calcDipsArr,
           drinks: drinksArr,
         },
         pizzaSize: pizzaSize,
@@ -289,7 +301,7 @@ function SpecialMenu() {
         config: {
           pizza: pizzaState,
           sides: sidesArr,
-          dips: dipsArr,
+          dips: calcDipsArr,
           drinks: drinksArr,
         },
         pizzaSize: pizzaSize,
@@ -305,6 +317,7 @@ function SpecialMenu() {
         setPizzaSizePrice(getSpecialData?.largePizzaPrice);
         setSidesArr([]);
         setDipsArr([]);
+        calcDipsArr = [];
         setDrinksArr([]);
         createEmptyObjects(Number(getSpecialData?.noofPizzas));
         resetControls();
@@ -328,8 +341,10 @@ function SpecialMenu() {
     setPizzaSizePrice(getSpecialData?.largePizzaPrice);
     setTotalPrice(getSpecialData?.largePizzaPrice);
     setFreeTpsCount(Number(getSpecialData?.noofToppings));
-    setFreeDipsCount(Number(getSpecialData?.noofDips));
     createEmptyObjects(Number(getSpecialData?.noofPizzas));
+    setSidesArr([]);
+    setDipsArr([]);
+    calcDipsArr = [];
     setAdditionalTps(0);
     setReset(true);
     setTimeout(() => {
@@ -402,6 +417,10 @@ function SpecialMenu() {
     dips();
     toppings();
   }, []);
+  // UseEffect For CreateCart When Cart is Null
+  useEffect(() => {
+    cartFn.createCart(setCart);
+  }, [setCart]);
   // Calculate Function
   useEffect(() => {
     calulatePrice();
@@ -414,22 +433,24 @@ function SpecialMenu() {
     pizzaSize,
     pizzaSizePrice,
     pizzaState,
+    calcDipsArr,
+    calcDrinksArr,
   ]);
   // UseEffect For Set Default Values
   useEffect(() => {
     if (!payloadEdit) {
       setPizzaSize("Large");
-      setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      setPizzaSizePrice(Number(getSpecialData?.largePizzaPrice));
       createEmptyObjects(Number(getSpecialData?.noofPizzas));
-      setFreeTpsCount(Number(getSpecialData?.noofToppings));
-      setFreeDipsCount(Number(getSpecialData?.noofDips));
-      setAdditionalTps(0);
+      if (getSpecialData?.noofToppings !== undefined) {
+        setFreeTpsCount(Number(getSpecialData?.noofToppings));
+        setAdditionalTps(0);
+      }
       setTotalPrice(getSpecialData?.largePizzaPrice);
     }
   }, [getSpecialData]);
   // Populate All Fields - Edit Pizza
   useEffect(() => {
-    console.log(payloadEdit);
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
@@ -556,12 +577,6 @@ function SpecialMenu() {
                             dipsArr={dipsArr}
                             setDipsArr={setDipsArr}
                             reset={reset}
-                            totalDipsPrice={totalDipsPrice}
-                            noofDips={getSpecialData?.noofDips}
-                            tempDipsArr={tempDipsArr}
-                            setTempDipsArr={setTempDipsArr}
-                            freeDipsCount={freeDipsCount}
-                            setFreeDipsCount={setFreeDipsCount}
                             payloadEdit={payloadEdit}
                           />
                         );
@@ -581,31 +596,15 @@ function SpecialMenu() {
                     </div>
                   )}
                   <div className="row mb-3">
-                    <div id="sides" className="mb-3">
-                      {getSpecialData?.pops.map((data) => {
-                        return (
-                          <Drinks
-                            key={data.code}
-                            data={data}
-                            drinksArr={drinksArr}
-                            setDrinksArr={setDrinksArr}
-                            reset={reset}
-                            payloadEdit={payloadEdit}
-                          />
-                        );
-                      })}
-                      {getSpecialData?.bottle.map((data) => {
-                        return (
-                          <Drinks
-                            key={data.code}
-                            data={data}
-                            drinksArr={drinksArr}
-                            setDrinksArr={setDrinksArr}
-                            reset={reset}
-                            payloadEdit={payloadEdit}
-                          />
-                        );
-                      })}
+                    <div
+                      id="sides"
+                      className="mb-3 d-flex justify-content-center"
+                    >
+                      <NewDrinks
+                        reset={reset}
+                        payloadEdit={payloadEdit}
+                        getSpecialData={getSpecialData}
+                      />
                     </div>
                   </div>
                 </>

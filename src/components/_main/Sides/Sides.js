@@ -72,7 +72,12 @@ function Sides({ data, cartFn }) {
           </div>
         </div>
         <div className="sidesTitle mb-3">
-          <h3>{data.sideName}</h3>
+          <h3
+            className="text-truncate"
+            style={{ overflow: "hidden", whiteSpace: "nowrap" }}
+          >
+            {data.sideName}
+          </h3>
         </div>
         <div className="d-flex justify-content-center flex-column align-items-center">
           <select

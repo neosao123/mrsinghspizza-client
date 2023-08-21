@@ -1,109 +1,50 @@
 import React, { useEffect, useState } from "react";
 
-function Dips({
-  data,
-  setDipsArr,
-  dipsArr,
-  reset,
-  totalDipsPrice,
-  noofDips,
-  setTempDipsArr,
-  tempDipsArr,
-  freeDipsCount,
-  setFreeDipsCount,
-  payloadEdit,
-}) {
-  const [dispButtonColor, setDispButtonColor] = useState("#606060");
-  const [dipsButton, setDipsButton] = useState(false);
-  const [qauntity, setQuantity] = useState(1);
-  const [tempQ, setTempQ] = useState();
+function Dips({ data, dipsArr, setDipsArr, reset, payloadEdit }) {
+  const [count, setCount] = useState(0);
 
-  let dipsQuantity = Number(0);
-  const handlePrice = () => {
-    let totalDips = Number(0);
-
-    // if (dipsArr && noofDips) {
-    //   dipsArr.map((dips) => (dipsQuantity += Number(dips.qauntity)));
-
-    //   if (noofDips < dipsQuantity) {
-    //     // totalDips += Number(data.qauntity - noofDips) * Number(disp.price);
-    //   }
-    // }
-
-    // console.log("totalDrinks :", totalDips);
-  };
-
-  // Handle Drinks
-  const handleDips = () => {
-    if (dipsButton === false) {
-      let totalPrice = Number(qauntity) * Number(data.price);
-      const dipsObject = {
-        dipsCode: data.dipsCode,
-        dipsName: data.dipsName,
-        price: data.price,
-        qauntity: qauntity,
-        totalPrice: totalPrice.toFixed(2),
-      };
-      const priceObj = {
-        code: data.dipsCode,
-        price: data.price,
-      };
-      setTempDipsArr((prev) => [...prev, priceObj]);
+  const handleDips = (isAdd) => {
+    const dipsObject = {
+      dipsCode: data.dipsCode,
+      dipsName: data.dipsName,
+      price: data?.price,
+      qauntity: "1",
+      amount: data?.price,
+    };
+    if (isAdd === true) {
       setDipsArr((prev) => [...prev, dipsObject]);
-      setDipsButton(true);
-      setDispButtonColor("#e40000");
     } else {
-      setDipsButton(false);
-      setDispButtonColor("#606060");
-      setQuantity(1);
-      setDipsArr((prev) =>
-        prev.filter((item) => item.dipsCode !== data.dipsCode)
+      const removedArr = dipsArr.filter((items) => {
+        if (items?.dipsCode === data?.dipsCode) {
+          return items;
+        }
+      });
+      const filteredArr = dipsArr?.filter(
+        (items) => items.dipsCode !== data?.dipsCode
       );
+      const mergedArr = removedArr.slice(0, -1).concat(filteredArr);
+      setDipsArr(mergedArr);
     }
   };
-  // handle Quantity and TotalPrice
-  const handleQuantity = (e) => {
-    if (e.target.value >= 1) {
-      setQuantity(e.target.value);
 
-      const updatedQuantity = dipsArr.map((dips) => {
-        if (dips.dipsCode === data.dipsCode) {
-          return {
-            ...dips,
-            qauntity: e.target.value,
-          };
-        }
-        return dips;
-      });
-      if (updatedQuantity) {
-        const updatedTotalPrice = updatedQuantity.map((dips) => {
-          if (dips.dipsCode === data.dipsCode) {
-            return {
-              ...dips,
-              totalPrice: (Number(dips.qauntity) * Number(dips.price)).toFixed(
-                2
-              ),
-            };
-          }
-          return dips;
-        });
-        setDipsArr(updatedTotalPrice);
-        // const priceObj = {
-        //   code: data.dipsCode,
-        //   price: data.price,
-        // };
-        // setTempDipsArr((prev) => [...prev, priceObj]);
-      }
+  // Count Decrease
+  const countDec = () => {
+    if (count > 0) {
+      setCount((count) => count - 1);
+      handleDips(false);
     }
+  };
+  // Count Increase
+  const countInc = () => {
+    setCount((count) => count + 1);
+    handleDips(true);
   };
 
   // ---- UseEffect ----
-  // UseEffect For Reset
+  // UseEffect - Reset
   useEffect(() => {
     if (reset) {
-      setQuantity(1);
-      setDipsButton(false);
-      setDispButtonColor("#606060");
+      setCount(0);
     }
   }, [reset]);
   // Populate - Edit
@@ -113,50 +54,35 @@ function Dips({
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
+      let qty = 0;
       payloadEdit?.config?.dips.map((items) => {
         if (items?.dipsCode === data?.dipsCode) {
-          setDipsButton(true);
-          setDispButtonColor("#e40000");
-          setQuantity(items?.qauntity);
+          qty += Number(items.qauntity);
+          setCount(qty);
         }
       });
     }
   }, [payloadEdit]);
 
-  // useEffect(() => {
-  //   handlePrice();
-  //   setTempQ(tempDipsArr.length);
-  // }, [dipsArr, tempDipsArr, tempQ]);
-
   return (
-    <div
-      className="p-2 d-flex justify-content-between align-items-center border-bottom"
-      key={data.dipsCode}
-    >
-      <span className="mx-2">{data.dipsName}</span>
-      <div className="w-50 d-flex justify-content-end align-items-center">
-        <input
-          type="number"
-          className="form-control text-end w-25"
-          step={0.0}
-          value={qauntity}
-          onChange={handleQuantity}
-        />
-        <span className="mx-4">$ {data.price}</span>
-        <button
-          type="button"
-          className="addbtn btn btn-sm px-4 text-white"
-          onClick={(e) => handleDips(e, data.dipsCode)}
-          style={{
-            backgroundColor: dispButtonColor,
-            transition: ".3s",
-            width: "100px",
-          }}
-        >
-          {dipsButton === false ? "Add" : "Remove"}
-        </button>
+    <>
+      <div
+        className="p-2 my-2 d-flex justify-content-between align-items-center border-bottom"
+        key={data.dipsCode}
+      >
+        <span className="mx-2">{data.dipsName}</span>
+        <div className="mx-1 d-flex align-items-center">
+          <button className="quantityBtn mx-2" onClick={countDec}>
+            <i className="fa fa-minus" aria-hidden="true"></i>
+          </button>
+          <span className="mx-1">{count}</span>
+          <button className="quantityBtn mx-2" onClick={countInc}>
+            <i className="fa fa-plus" aria-hidden="true"></i>
+          </button>
+          <span className="mx-3"> $ {data?.price}</span>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

@@ -29,11 +29,11 @@ function CreateYourOwn() {
   const pizzaSizeArr = [
     {
       size: "Large",
-      price: "3.00",
+      price: "11.49",
     },
     {
       size: "Extra Large",
-      price: "6.00",
+      price: "16.49",
     },
   ];
   // Global Context
@@ -521,7 +521,7 @@ function CreateYourOwn() {
                 {/* indians toppings (free) */}
                 <div className="col-lg-4 col-md-6 col-sm-12">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
-                    Indians Toppings (Free)
+                    Indians Style Toppings
                   </p>
                   {allIngredients?.toppings?.freeToppings?.map((data) => {
                     return (
@@ -605,8 +605,8 @@ function CreateYourOwn() {
               </div>
             </div>
 
-            {/* Total Price and Add To Cart - Button */}
             <div className="w-25 m-3 p-3">
+              {/* Total Price and Add To Cart - Button */}
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
                 <p className="text-drak mb-3 mx-1">
                   <strong>

@@ -6,11 +6,6 @@ function CountAsOne({
   pizzaState,
   setPizzaState,
   reset,
-  setFreeTpsCount,
-  freeTpsCount,
-  getSpecialData,
-  additionalTps,
-  setAdditionalTps,
   payloadEdit,
 }) {
   const oneTpsRef = useRef(null);
@@ -25,6 +20,8 @@ function CountAsOne({
           toppingsName: data?.toppingsName,
           toppingsPrice: data?.price ? data?.price : 0,
           toppingsPlacement: oneTpsRef.current.value,
+          amount: data?.price,
+          pizzaIndex: count - 1,
         };
         let arr = [...pizzaState];
         arr[count - 1].toppings.countAsOne = [
@@ -34,12 +31,6 @@ function CountAsOne({
         setPizzaState(arr);
         setTpsButton(true);
         setTpsButttonColor("#e40000");
-        // // For Calculation
-        // if (freeTpsCount > 0 && additionalTps === 0) {
-        //   setFreeTpsCount(freeTpsCount - 1);
-        // } else {
-        //   setAdditionalTps(additionalTps + 1);
-        // }
       }
     } else {
       setTpsButton(false);
@@ -54,12 +45,6 @@ function CountAsOne({
         countAsOne: updatedArr,
       };
       setPizzaState(arr);
-      // // For Calculation
-      // if (additionalTps > 0) {
-      //   setAdditionalTps(additionalTps - 1);
-      // } else {
-      //   setFreeTpsCount(freeTpsCount + 1);
-      // }
     }
   };
 

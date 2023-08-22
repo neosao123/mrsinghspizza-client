@@ -121,7 +121,7 @@ function SpecialPizzaSelection({
         {/* indians toppings (free) */}
         <div className="col-lg-4 col-md-6 col-sm-12">
           <p className="text-center tps-title pb-3 border-bottom border-3">
-            Indians Toppings (Free)
+            Indians Style Toppings
           </p>
           {toppingsData?.toppings?.freeToppings.map((data) => {
             return (

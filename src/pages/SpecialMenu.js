@@ -14,7 +14,6 @@ import Dips from "../components/SpecialPizza/Dips";
 import Drinks from "../components/SpecialPizza/Drinks";
 import { v4 as uuidv4 } from "uuid";
 import CartFunction from "../components/cart";
-import NewDrinks from "../components/SpecialPizza/NewDrinks";
 
 function SpecialMenu() {
   // Global Context
@@ -42,19 +41,16 @@ function SpecialMenu() {
   const [pizzaState, setPizzaState] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
   const [dipsArr, setDipsArr] = useState([]);
-  const [drinksArr, setDrinksArr] = useState([]);
-  const [totalDipsPrice, setTotalDipsPrice] = useState(0);
-  const [tempDipsArr, setTempDipsArr] = useState([]);
+  const [drinksObj, setDrinksObj] = useState();
   const [totalPrice, setTotalPrice] = useState();
   let calcDipsArr = [];
-  let calcDrinksArr = [];
-
+  let calcOneTpsArr = [];
+  let calcTwoTpsArr = [];
+  let noOfFreeToppings = Number(getSpecialData?.noofToppings);
+  let noOfAdditionalTps = Number(0);
   // Free Toppings, Sides, Dips, Drinks
-  const [freeTpsCount, setFreeTpsCount] = useState(
-    Number(getSpecialData?.noofToppings)
-  );
+  const [freeTpsCount, setFreeTpsCount] = useState();
   const [additionalTps, setAdditionalTps] = useState(0);
-  // const [freeDipsCount, setFreeDipsCount] = useState(Number(0));
 
   // Handle Pizza Size and Price
   const handlePizzaSize = () => {
@@ -113,7 +109,7 @@ function SpecialMenu() {
     );
     let specialbasesObject = {
       specialbasesCode: selectedSpecialbases?.code,
-      cheeseName: selectedSpecialbases?.specialbaseName,
+      specialbaseName: selectedSpecialbases?.specialbaseName,
       price: selectedSpecialbases?.price,
     };
     let arr = [...pizzaState];
@@ -151,12 +147,14 @@ function SpecialMenu() {
   const calulatePrice = () => {
     let calculatedPrice = Number(0);
     let totalOneTpsPrice = Number(0);
+    let totalTwoTpsPrice = Number(0);
     let totalSidesPrice = Number(0);
     let totalDipsPrice = Number(0);
-    let totalDrinksPrice = Number(0);
 
-    // OnChange Pizza Size Price
+    // OnChange Pizza Size - Price
     calculatedPrice += Number(pizzaSizePrice) || 0;
+
+    // Crust, Cheese & Specialbases - Price
     pizzaState.forEach((items) => {
       // OnChange Crust Price
       calculatedPrice += items?.crust?.price ? Number(items?.crust?.price) : 0;
@@ -168,17 +166,58 @@ function SpecialMenu() {
       calculatedPrice += items?.specialbases?.price
         ? Number(items?.specialbases?.price)
         : 0;
-      // // OnChange One Toppings Price
-      // items.toppings.countAsOne.map((data) => {
-      //   console.log(items);
-      // });
-      // console.log(items.toppings.countAsOne);
     });
-    // if (additionalTps > 0 && freeTpsCount === 0) {
-    //   let totalFreeAmount = Number(2.0) * Number(getSpecialData.noofToppings);
-    //   let calcPrice = Number(totalOneTpsPrice) - Number(totalFreeAmount);
-    //   calculatedPrice += Number(calcPrice);
-    // }
+
+    // Handle CountAsOne & CountAsTwo Toppings - Price
+    pizzaState?.map((data) => {
+      let amount = 0;
+      if (data?.toppings?.countAsTwo.length > 0) {
+        data?.toppings?.countAsTwo?.map((items) => {
+          if (noOfFreeToppings > 1) {
+            let tpsObj = {
+              ...items,
+              amount: 0,
+            };
+            calcTwoTpsArr.push(tpsObj);
+            noOfFreeToppings -= Number(2);
+          } else if (noOfFreeToppings === 1) {
+            let tpsObj = {
+              ...items,
+              amount: Number(items?.toppingsPrice) / 2,
+            };
+            calcTwoTpsArr.push(tpsObj);
+            noOfFreeToppings -= Number(1);
+            noOfAdditionalTps++;
+          } else {
+            calcTwoTpsArr.push(items);
+            noOfAdditionalTps += Number(2);
+          }
+        });
+      }
+      if (data?.toppings?.countAsOne.length > 0) {
+        data?.toppings?.countAsOne?.map((items) => {
+          if (noOfFreeToppings > 0) {
+            let tpsObj = {
+              ...items,
+              amount: amount,
+            };
+            calcOneTpsArr.push(tpsObj);
+            noOfFreeToppings--;
+          } else {
+            calcOneTpsArr.push(items);
+            noOfAdditionalTps++;
+          }
+        });
+      }
+    });
+    calcOneTpsArr?.map((tps) => {
+      totalOneTpsPrice += Number(tps?.amount);
+    });
+    calculatedPrice += totalOneTpsPrice;
+    calcTwoTpsArr?.map((tps) => {
+      totalTwoTpsPrice += Number(tps?.amount);
+    });
+    calculatedPrice += totalTwoTpsPrice;
 
     // Handle Sides Price
     sidesArr?.map((data) => {
@@ -223,30 +262,7 @@ function SpecialMenu() {
     });
     calculatedPrice += Number(totalDipsPrice);
 
-    // handle Drinks
-    let noOfFreeDrinks = Number(getSpecialData?.noofDrinks);
-    let drinksPrice = Number(0);
-    if (drinksArr.length >= 0) {
-      drinksArr?.map((items) => {
-        if (noOfFreeDrinks > 0) {
-          let amount = 0;
-          let obj = {
-            ...items,
-            amount: amount,
-          };
-          calcDrinksArr.push(obj);
-          noOfFreeDrinks--;
-        } else {
-          calcDrinksArr.push(items);
-        }
-      });
-    }
-    calcDrinksArr?.map((drinks) => {
-      drinksPrice = Number(drinks?.qauntity) * Number(drinks?.amount);
-      totalDrinksPrice += Number(drinksPrice);
-    });
-    calculatedPrice += Number(totalDrinksPrice);
-
+    // Set Total Price
     setTotalPrice(Number(calculatedPrice).toFixed(2));
   };
   // Handle Cart
@@ -256,6 +272,30 @@ function SpecialMenu() {
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
+      if (calcOneTpsArr?.length > 0) {
+        let arr = [...pizzaState];
+        calcOneTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsOne = [];
+        });
+        calcOneTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsOne = [
+            ...arr[tpsObj?.pizzaIndex].toppings.countAsOne,
+            tpsObj,
+          ];
+        });
+      }
+      if (calcTwoTpsArr?.length > 0) {
+        let arr = [...pizzaState];
+        calcTwoTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsTwo = [];
+        });
+        calcTwoTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsTwo = [
+            ...arr[tpsObj?.pizzaIndex].toppings.countAsTwo,
+            tpsObj,
+          ];
+        });
+      }
       const editedPayload = {
         productID: payloadEdit?.productID,
         productCode: payloadEdit?.productCode,
@@ -265,7 +305,7 @@ function SpecialMenu() {
           pizza: pizzaState,
           sides: sidesArr,
           dips: calcDipsArr,
-          drinks: drinksArr,
+          drinks: drinksObj,
         },
         pizzaSize: pizzaSize,
         quantity: "1",
@@ -279,20 +319,36 @@ function SpecialMenu() {
         filteredCart.push(editedPayload);
         const cartProduct = filteredCart;
         cartFn.addCart(cartProduct, setCart, true);
-
         // Reset All Fields
-        setPizzaSize("Large");
-        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-        setSidesArr([]);
-        setDipsArr([]);
-        setDrinksArr([]);
-        createEmptyObjects(Number(getSpecialData?.noofPizzas));
         resetControls();
-        setFreeTpsCount(getSpecialData?.noofToppings);
-        setAdditionalTps(0);
         setPayloadEdit();
       }
     } else {
+      if (calcOneTpsArr?.length > 0) {
+        let arr = [...pizzaState];
+        calcOneTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsOne = [];
+        });
+        calcOneTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsOne = [
+            ...arr[tpsObj?.pizzaIndex].toppings.countAsOne,
+            tpsObj,
+          ];
+        });
+      }
+      if (calcTwoTpsArr?.length > 0) {
+        let arr = [...pizzaState];
+        calcTwoTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsTwo = [];
+        });
+        calcTwoTpsArr?.map((tpsObj) => {
+          arr[tpsObj?.pizzaIndex].toppings.countAsTwo = [
+            ...arr[tpsObj?.pizzaIndex].toppings.countAsTwo,
+            tpsObj,
+          ];
+        });
+      }
+
       const payload = {
         productID: uuidv4(),
         productCode: getSpecialData?.code,
@@ -302,7 +358,7 @@ function SpecialMenu() {
           pizza: pizzaState,
           sides: sidesArr,
           dips: calcDipsArr,
-          drinks: drinksArr,
+          drinks: drinksObj,
         },
         pizzaSize: pizzaSize,
         quantity: "1",
@@ -313,16 +369,7 @@ function SpecialMenu() {
         ct.product.push(payload);
         const cartProduct = ct.product;
         cartFn.addCart(cartProduct, setCart, false);
-        setPizzaSize("Large");
-        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-        setSidesArr([]);
-        setDipsArr([]);
-        calcDipsArr = [];
-        setDrinksArr([]);
-        createEmptyObjects(Number(getSpecialData?.noofPizzas));
         resetControls();
-        setFreeTpsCount(getSpecialData?.noofToppings);
-        setAdditionalTps(0);
       }
     }
   };
@@ -342,6 +389,12 @@ function SpecialMenu() {
     setTotalPrice(getSpecialData?.largePizzaPrice);
     setFreeTpsCount(Number(getSpecialData?.noofToppings));
     createEmptyObjects(Number(getSpecialData?.noofPizzas));
+    setDrinksObj({
+      drinksCode: getSpecialData?.pops[0]?.code,
+      drinksName: getSpecialData?.pops[0]?.softDrinkName,
+      price: getSpecialData?.pops[0]?.price,
+      amount: Number(0).toFixed(2),
+    });
     setSidesArr([]);
     setDipsArr([]);
     calcDipsArr = [];
@@ -424,17 +477,19 @@ function SpecialMenu() {
   // Calculate Function
   useEffect(() => {
     calulatePrice();
+    setFreeTpsCount(noOfFreeToppings);
+    setAdditionalTps(noOfAdditionalTps);
   }, [
     sidesArr,
     dipsArr,
-    drinksArr,
-    totalDipsPrice,
-    tempDipsArr,
+    drinksObj,
     pizzaSize,
     pizzaSizePrice,
     pizzaState,
     calcDipsArr,
-    calcDrinksArr,
+    calcOneTpsArr,
+    calcTwoTpsArr,
+    noOfFreeToppings,
   ]);
   // UseEffect For Set Default Values
   useEffect(() => {
@@ -466,7 +521,7 @@ function SpecialMenu() {
       setPizzaState(payloadEdit?.config?.pizza);
       setSidesArr(payloadEdit?.config?.sides);
       setDipsArr(payloadEdit?.config?.dips);
-      setDrinksArr(payloadEdit?.config?.drinks);
+      setDrinksObj(payloadEdit?.config?.drinks);
     }
   }, [payloadEdit]);
 
@@ -559,56 +614,63 @@ function SpecialMenu() {
                 </>
               )}
 
-              {/* Dips */}
-              {getSpecialData?.noofDips === 0 ? (
-                ""
-              ) : (
-                <>
-                  <div className="p-2 pizza-heading text-center">
-                    <h4 className="my-1">Dips</h4>
-                  </div>
-                  <div className="row mb-3">
-                    <div id="dips" className="mb-3">
-                      {dipsData?.map((data) => {
-                        return (
-                          <Dips
-                            key={data.dipsCode}
-                            data={data}
-                            dipsArr={dipsArr}
-                            setDipsArr={setDipsArr}
-                            reset={reset}
-                            payloadEdit={payloadEdit}
-                          />
-                        );
-                      })}
-                    </div>
-                  </div>
-                </>
-              )}
-
-              {/* Drinks */}
-              {getSpecialData?.pops && getSpecialData?.bottle && (
-                <>
-                  {(getSpecialData?.pops.length > 0 ||
-                    getSpecialData?.bottle.length > 0) && (
+              <div className="row gx-3">
+                {/* Dips */}
+                {getSpecialData?.noofDips === 0 ? (
+                  ""
+                ) : (
+                  <div className="col-lg-6 col-md-6 col-sm-12">
                     <div className="p-2 pizza-heading text-center">
-                      <h4 className="my-1">Drinks</h4>
+                      <h4 className="my-1">Dips</h4>
                     </div>
-                  )}
-                  <div className="row mb-3">
-                    <div
-                      id="sides"
-                      className="mb-3 d-flex justify-content-center"
-                    >
-                      <NewDrinks
-                        reset={reset}
-                        payloadEdit={payloadEdit}
-                        getSpecialData={getSpecialData}
-                      />
+                    <div className="row gx-3 mb-3">
+                      <div id="dips" className="mb-3">
+                        {dipsData?.map((data) => {
+                          return (
+                            <Dips
+                              key={data.dipsCode}
+                              data={data}
+                              dipsArr={dipsArr}
+                              setDipsArr={setDipsArr}
+                              reset={reset}
+                              payloadEdit={payloadEdit}
+                            />
+                          );
+                        })}
+                      </div>
                     </div>
                   </div>
-                </>
-              )}
+                )}
+
+                {/* Drinks */}
+                {getSpecialData?.pops && getSpecialData?.bottle && (
+                  <div className="col-lg-6 col-md-6 col-sm-12">
+                    {(getSpecialData?.pops.length > 0 ||
+                      getSpecialData?.bottle.length > 0) && (
+                      <div className="p-2 pizza-heading text-center">
+                        <h4 className="my-1">Drinks</h4>
+                      </div>
+                    )}
+                    <div className="row gx-3 mb-3">
+                      <div
+                        id="sides"
+                        className="mb-3 d-flex justify-content-center align-items-center"
+                      >
+                        {getSpecialData?.pops.length > 0 &&
+                          getSpecialData?.bottle.length > 0 && (
+                            <Drinks
+                              reset={reset}
+                              payloadEdit={payloadEdit}
+                              getSpecialData={getSpecialData}
+                              drinksObj={drinksObj}
+                              setDrinksObj={setDrinksObj}
+                            />
+                          )}
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             {/* Total Price and Add To Cart - Button */}
             <div className="w-25 m-3 p-3">

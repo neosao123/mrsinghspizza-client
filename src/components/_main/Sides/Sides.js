@@ -62,6 +62,18 @@ function Sides({ data, cartFn }) {
   return (
     <div className="col-lg-3 col-md-4 col-sm-12 mb-3" key={data.sideCode}>
       <div className="d-flex justify-content-center flex-column p-3 box">
+        <div className="text-end text-black">
+          <span
+            class="badge bg-secondary px-2"
+            style={{
+              letterSpacing: ".05rem",
+              fontSize: ".8rem",
+              textTransform: "capitalize",
+            }}
+          >
+            {data?.type}
+          </span>
+        </div>
         <div className="d-flex justify-content-center mb-3">
           <div className="image-div d-flex justify-content-center">
             <img

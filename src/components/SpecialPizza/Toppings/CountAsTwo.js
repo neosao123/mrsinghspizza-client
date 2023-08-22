@@ -20,6 +20,8 @@ function CountAsTwo({
           toppingsName: data?.toppingsName,
           toppingsPrice: data?.price ? data?.price : "0",
           toppingsPlacement: twoTpsRef.current.value,
+          amount: data?.price,
+          pizzaIndex: count - 1,
         };
         let arr = [...pizzaState];
         arr[count - 1].toppings.countAsTwo = [

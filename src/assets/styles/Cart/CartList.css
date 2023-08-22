@@ -1,0 +1,24 @@
+.selectedPizza p,
+.qty p,
+.pSize p {
+  font-size: 0.9rem;
+  display: inline;
+  font-weight: 600;
+}
+.selectedPizza h4 {
+  font-size: 0.8rem !important;
+  font-weight: 800;
+}
+.selectedPizza span,
+.qty span,
+.pSize span {
+  font-size: 0.8rem;
+  font-weight: 400;
+  margin-left: 2%;
+  line-height: 1.1rem;
+}
+.productTitle span {
+  font-size: 0.9rem !important;
+  font-weight: 700;
+  line-height: 1.1rem;
+}

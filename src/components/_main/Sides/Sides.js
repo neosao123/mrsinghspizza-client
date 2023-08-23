@@ -6,6 +6,7 @@ import { v4 as uuidv4 } from "uuid";
 function Sides({ data, cartFn }) {
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
+  const [settings, setSettings] = globalctx.settings;
 
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
@@ -32,15 +33,19 @@ function Sides({ data, cartFn }) {
     }
     const totalPrice = combinationData?.price * count;
     const obj = {
-      productID: uuidv4(),
+      id: uuidv4(),
       productCode: data.sideCode,
       productName: data.sideName,
       productType: "sides",
-      lineCode: combinationData?.lineCode,
-      size: combinationData?.size,
+      config: {
+        lineCode: combinationData?.lineCode,
+        size: combinationData?.size,
+      },
       price: combinationData?.price,
       quantity: count,
-      totalPrice: totalPrice,
+      amount: totalPrice,
+      pizzaSize: "",
+      comments: "",
     };
     setProduct(obj);
     setCount(1);
@@ -55,7 +60,7 @@ function Sides({ data, cartFn }) {
       let ct = JSON.parse(localStorage.getItem("cart"));
       ct.product.push(product);
       const cartProduct = ct.product;
-      cartFn.addCart(cartProduct, setCart, false);
+      cartFn.addCart(cartProduct, setCart, false, settings);
     }
   }, [product]);
 
@@ -64,7 +69,7 @@ function Sides({ data, cartFn }) {
       <div className="d-flex justify-content-center flex-column p-3 box">
         <div className="text-end text-black">
           <span
-            class="badge bg-secondary px-2"
+            className="badge bg-secondary px-2"
             style={{
               letterSpacing: ".05rem",
               fontSize: ".8rem",

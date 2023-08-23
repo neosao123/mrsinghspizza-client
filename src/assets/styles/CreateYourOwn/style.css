@@ -11,17 +11,6 @@
   border-bottom: 0.2rem solid #ef831b;
   font-size: 1.1rem;
 }
-.deleteIcon {
-  color: rgb(255, 69, 69);
-}
-.editIcon {
-  color: #d96900;
-}
-.editIcon,
-.deleteIcon {
-  font-size: 1.1rem;
-  cursor: pointer;
-}
 .placeOrderBtn button {
   background-color: #ef831b;
   color: #ffffff !important;

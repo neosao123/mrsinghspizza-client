@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 const Drink = ({ data, cartFn }) => {
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
+  const [settings, setSettings] = globalctx.settings;
 
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
@@ -25,13 +26,16 @@ const Drink = ({ data, cartFn }) => {
   const handleDrinks = () => {
     const totalPrice = data?.price * count;
     const obj = {
-      productID: uuidv4(),
+      id: uuidv4(),
       productCode: data.softdrinkCode,
       productName: data.softDrinksName,
       productType: "drinks",
-      quantity: count,
+      config: {},
       price: data.price,
-      totalPrice: totalPrice,
+      quantity: count,
+      amount: totalPrice,
+      pizzaSize: "",
+      comments: "",
     };
     setProduct(obj);
     setCount(1); // count set to 1
@@ -55,11 +59,11 @@ const Drink = ({ data, cartFn }) => {
           }
         });
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, true);
+        cartFn.addCart(cartProduct, setCart, true, settings);
       } else {
         ct.product.push(product);
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, false);
+        cartFn.addCart(cartProduct, setCart, false, settings);
       }
     }
   }, [product]);

@@ -42,6 +42,7 @@ function CreateYourOwn() {
   const [cart, setCart] = globalCtx.cart;
   const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [url, setUrl] = globalCtx.urlPath;
+  const [settings, setSettings] = globalCtx.settings;
   // redux
   const { user } = useSelector((state) => state);
   // API States
@@ -136,7 +137,7 @@ function CreateYourOwn() {
       payloadEdit.productType === "customized"
     ) {
       const editedPayload = {
-        productID: payloadEdit?.productID,
+        id: payloadEdit?.id,
         productCode: "#NA",
         productName: "Customized Pizza",
         productType: "customized",
@@ -157,45 +158,26 @@ function CreateYourOwn() {
           dips: dipsArr,
           drinks: drinksArr,
         },
+        quantity: Number(1),
+        price: Number(totalPrice).toFixed(2),
+        amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
-        quantity: "1",
-        totalPrice: Number(totalPrice).toFixed(2),
+        comments: "",
       };
       if (editedPayload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         const filteredCart = ct?.product?.filter(
-          (items) => items?.productID !== editedPayload?.productID
+          (items) => items?.id !== editedPayload?.id
         );
         filteredCart.push(editedPayload);
         const cartProduct = filteredCart;
-        cartFn.addCart(cartProduct, setCart, true);
-
-        // Reset All Fields
-        setPizzaSize(pizzaSizeArr[0]?.size);
-        setPizzaSizePrice(pizzaSizeArr[0]?.price);
-        setCrust({
-          crustCode: allIngredients?.crust[0].crustCode,
-          crustName: allIngredients?.crust[0].crustName,
-          price: allIngredients?.crust[0].price,
-        });
-        setCheese({
-          cheeseCode: allIngredients?.cheese[0].cheeseCode,
-          cheeseName: allIngredients?.cheese[0].cheeseName,
-          price: allIngredients?.cheese[0].price,
-        });
-        setSpecialbases({});
-        setCountTwoToppingsArr([]);
-        setCountOneToppingsArr([]);
-        setFreeToppingsArr([]);
-        setDrinksArr([]);
-        setDipsArr([]);
-        setSidesArr([]);
+        cartFn.addCart(cartProduct, setCart, true, settings);
         resetControls();
         setPayloadEdit();
       }
     } else {
       const payload = {
-        productID: uuidv4(),
+        id: uuidv4(),
         productCode: "#NA",
         productName: "Customized Pizza",
         productType: "customized",
@@ -216,36 +198,17 @@ function CreateYourOwn() {
           dips: dipsArr,
           drinks: drinksArr,
         },
+        quantity: Number(1),
+        price: Number(totalPrice).toFixed(2),
+        amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
-        quantity: "1",
-        totalPrice: Number(totalPrice).toFixed(2),
+        comments: "",
       };
       if (payload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         ct.product.push(payload);
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, false);
-
-        // Reset All Fields
-        setPizzaSize(pizzaSizeArr[0]?.size);
-        setPizzaSizePrice(pizzaSizeArr[0]?.price);
-        setCrust({
-          crustCode: allIngredients?.crust[0].crustCode,
-          crustName: allIngredients?.crust[0].crustName,
-          price: allIngredients?.crust[0].price,
-        });
-        setCheese({
-          cheeseCode: allIngredients?.cheese[0].cheeseCode,
-          cheeseName: allIngredients?.cheese[0].cheeseName,
-          price: allIngredients?.cheese[0].price,
-        });
-        setSpecialbases({});
-        setCountTwoToppingsArr([]);
-        setCountOneToppingsArr([]);
-        setFreeToppingsArr([]);
-        setDrinksArr([]);
-        setDipsArr([]);
-        setSidesArr([]);
+        cartFn.addCart(cartProduct, setCart, false, settings);
         resetControls();
       }
     }
@@ -638,7 +601,7 @@ function CreateYourOwn() {
                   return (
                     <CartList
                       cData={cData}
-                      key={cData.productID}
+                      key={cData.id}
                       setPayloadEdit={setPayloadEdit}
                       payloadEdit={payloadEdit}
                       resetControls={resetControls}

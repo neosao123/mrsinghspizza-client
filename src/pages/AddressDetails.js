@@ -1,12 +1,15 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import { useFormik } from "formik";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import { useSelector } from "react-redux";
-import { deliverable } from "../services";
+import { deliverable, orderPlace, settingApi } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+import swal from "sweetalert";
+import Payment from "./Payment";
+import GlobalContext from "../context/GlobalContext";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
@@ -28,20 +31,64 @@ const ValidateSchema = Yup.object({
 });
 
 function AddressDetails() {
-  const { data } = useSelector((state) => state.user);
+  const { user } = useSelector((state) => state);
+  const globalctx = useContext(GlobalContext);
+  const [cart, setCart] = globalctx.cart;
+
   const navigate = useNavigate();
 
+  const paymentGateway = (values) => {
+    let custFullName = values.firstname + " " + values?.lastname;
+    const payload = {
+      customerCode: user?.data?.customerCode,
+      customerName: custFullName,
+      mobileNumber: values?.phoneno,
+      address: values?.address,
+      zipCode: values?.postalcode,
+      products: cart?.product,
+      subTotal: cart?.subtotal,
+      discountAmount: cart?.discountAmount,
+      taxPer: cart?.taxPer,
+      taxAmount: cart?.taxAmount,
+      deliveryCharges: cart?.deliveryCharges,
+      extraDeliveryCharges: cart?.extraDeliveryCharges,
+      grandTotal: cart?.grandtotal,
+    };
+    orderPlace(payload)
+      .then((response) => {
+        localStorage.setItem("OrderID", response.orderCode);
+        localStorage.setItem("sessionId", response.sessionId);
+        localStorage.setItem("callBackUrl", response.callBackUrl);
+        window.open(response?.paymentUrl, "_blank");
+      })
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
   const onSubmit = async (values) => {
     const payload = {
       zipcode: values.postalcode,
     };
-    console.log(payload);
     await deliverable(payload)
       .then((res) => {
+        console.log(res);
         if (res?.deliverable === true) {
-          navigate("/card-payment");
+          paymentGateway(values);
         } else {
-          toast.error("Not Deliverable for this Postal Code...");
+          swal({
+            title: "Postal Code is not deliverable",
+            text: "Update Your Postal Code",
+            icon: "warning",
+            buttons: ["Cancel", "Ok"],
+            dangerMode: true,
+          }).then(async (willOk) => {
+            if (willOk) {
+            } else {
+              navigate("/");
+            }
+          });
         }
       })
       .catch((err) => {
@@ -53,9 +100,9 @@ function AddressDetails() {
   // Use Formik
   const formik = useFormik({
     initialValues: {
-      firstname: data?.firstName,
-      lastname: data?.lastName,
-      phoneno: data?.mobileNumber,
+      firstname: user?.data?.firstName,
+      lastname: user?.data?.lastName,
+      phoneno: user?.data?.mobileNumber,
       city: "",
       postalcode: "",
       address: "",

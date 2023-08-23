@@ -50,7 +50,7 @@ function Cart() {
                     return (
                       <MainCartList
                         cData={cData}
-                        key={cData.productID}
+                        key={cData.id}
                         setLoading={setLoading}
                       />
                     );

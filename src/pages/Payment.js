@@ -3,29 +3,45 @@ import { loadStripe } from "@stripe/stripe-js";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import CheckoutForm from "../components/CheckoutForm";
+import { orderPlace } from "../services";
+import { useSelector } from "react-redux";
 
-const stripePromises = loadStripe(
-  "pk_test_51L1pYuSCkVwYsB1d6QJQG9CZ3z8IdebGflVdOU3SoYS9WuIvFeVt3N7LUfmPqFJdAmayhBLjvitVyHDwlfl8OYIu00qtmTFtbs"
-);
+function Payment({ values }) {
+  // const [clientSecret, setClientSecrete] = useState("");
 
-function Payment() {
-  const [clientSecret, setClientSecrete] = useState("");
-  useEffect(() => {
-    axios
-      .post("/creat-payment-intent", {})
-      .then(async (res) => {
-        const { clientSecret } = await res?.data;
-        setClientSecrete(clientSecret);
+  const { user } = useSelector((state) => state);
+  console.log(user?.data?.customerCode, values);
+  const paymentGateway = () => {
+    const payload = {
+      customerCode: user?.data?.customerCode,
+      customerName: values,
+      // mobileNumber: ,
+    };
+    orderPlace()
+      .then((res) => {
+        console.log(res);
       })
-      .catch((err) => console.log(err));
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  useEffect(() => {
+    paymentGateway();
+    // axios
+    //   .post("/creat-payment-intent", {})
+    //   .then(async (res) => {
+    //     const { clientSecret } = await res?.data;
+    //     setClientSecrete(clientSecret);
+    //   })
+    //   .catch((err) => console.log(err));
   }, []);
   return (
     <>
-      {stripePromises && clientSecret && (
+      {/* {stripePromises && clientSecret && (
         <Elements stripe={stripePromises} options={{ clientSecret }}>
           <CheckoutForm />
         </Elements>
-      )}
+      )} */}
     </>
   );
 }

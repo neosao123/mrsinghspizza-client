@@ -9,6 +9,7 @@ function MainCartList({ cData, setLoading }) {
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
   const [payloadEdit, setPayloadEdit] = globalctx.productEdit;
+  const [settings, setSettings] = globalctx.settings;
 
   // Helper Function
   const cartFn = new CartFunction();
@@ -16,17 +17,17 @@ function MainCartList({ cData, setLoading }) {
   // Handle Delete Product
   const handleDelete = () => {
     if (payloadEdit) {
-      if (payloadEdit?.productID === cData?.productID) {
+      if (payloadEdit?.id === cData?.id) {
         setPayloadEdit();
-        cartFn.deleteCart(cData, cart, setCart);
+        cartFn.deleteCart(cData, cart, setCart, settings);
       }
     } else {
-      cartFn.deleteCart(cData, cart, setCart);
+      cartFn.deleteCart(cData, cart, setCart, settings);
     }
   };
   // Handle Edit Product
   const handleEdit = () => {
-    if (cData?.productType === "customized" && cData?.productID) {
+    if (cData?.productType === "customized" && cData?.id) {
       setPayloadEdit(cData);
       setLoading(true);
       setTimeout(() => {
@@ -34,7 +35,7 @@ function MainCartList({ cData, setLoading }) {
         navigate("/create-your-own");
       }, 1200);
     }
-    if (cData?.productType === "special" && cData?.productID) {
+    if (cData?.productType === "special" && cData?.id) {
       setPayloadEdit(cData);
       setLoading(true);
       setTimeout(() => {
@@ -64,7 +65,7 @@ function MainCartList({ cData, setLoading }) {
         </div>
       </div>
       <div className="mx-4">
-        <h5 className="d-inline text-start mx-4">$ {cData.totalPrice}</h5>
+        <h5 className="d-inline text-start mx-4">$ {cData.amount}</h5>
         <div className="d-inline">
           <i
             className="fa fa-trash deleteIcon mx-3"

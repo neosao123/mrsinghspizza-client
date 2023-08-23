@@ -4,39 +4,76 @@ export default class CartFunction {
   createCart(setCart) {
     if (localStorage.getItem("cart") === null) {
       let sub = 0.0;
-      let discount = 0.0;
-      let taxPer = 0.0;
+      let discountAmount = 0.0;
+      let taxPer = 0;
+      let taxAmount = 0.0;
+      let convinenceCharges = 0.0;
+      let deliveryCharges = 0.0;
+      let extraDeliveryCharges = 0.0;
       let gTotal = 0.0;
       const currentCart = {
         product: [],
         subtotal: sub.toFixed(2),
-        discount: Number(discount).toFixed(2),
-        taxPer: taxPer,
+        discountAmount: Number(discountAmount).toFixed(2),
+        taxPer: Number(taxPer).toFixed(2),
+        taxAmount: Number(taxAmount).toFixed(2),
+        convinenceCharges: Number(convinenceCharges).toFixed(2),
+        deliveryCharges: Number(deliveryCharges).toFixed(2),
+        extraDeliveryCharges: Number(extraDeliveryCharges).toFixed(2),
         grandtotal: gTotal.toFixed(2),
       };
       localStorage.setItem("cart", JSON.stringify(currentCart));
       setCart(currentCart);
     }
   }
-  addCart(cartProduct, setCart, isEdit) {
+  addCart(cartProduct, setCart, isEdit, settings) {
     if (localStorage.getItem("cart") && localStorage.getItem("cart") !== null) {
       if (cartProduct.length > 0) {
         let sub = 0.0;
-        let discount = 0.0;
-        let taxPer = 2.2;
+        let discountAmount = 0.0;
+        let taxPer = 0;
+        let taxAmount = 0.0;
+        let convinenceCharges = 0.0;
+        let deliveryCharges = 0.0;
+        let extraDeliveryCharges = 0.0;
+        let gTotal = 0.0;
         cartProduct.map((data) => {
-          sub = Number(sub) + Number(data?.totalPrice);
+          sub = Number(sub) + Number(data?.amount);
         });
+        if (settings !== undefined) {
+          settings?.map((data) => {
+            console.log(data);
+            if (data?.settingCode === "STG_4" && data?.type === "percent") {
+              convinenceCharges = data?.settingValue;
+            }
+            if (data?.settingCode === "STG_2" && data?.type === "percent") {
+              taxPer = data?.settingValue;
+            }
+            if (data?.settingCode === "STG_1" && data?.type === "amount") {
+              deliveryCharges = data?.settingValue;
+            }
+          });
+        }
+        let discountedAmount = Number(sub) - Number(discountAmount);
+        taxAmount = (discountedAmount * taxPer) / 100;
+        let taxableTotal = discountedAmount + taxAmount;
+        let convinenceAmount = (taxableTotal * convinenceCharges) / 100;
+        let convinencedTotal = taxableTotal + convinenceAmount;
 
-        let disAmount = Number(sub) - Number(discount);
-        let taxAmount = (disAmount * taxPer) / 100;
-        let gTotal = Number(disAmount) + Number(taxAmount);
+        gTotal =
+          Number(convinencedTotal) +
+          Number(deliveryCharges) +
+          Number(extraDeliveryCharges);
 
         const currentCart = {
           product: cartProduct,
           subtotal: sub.toFixed(2),
-          discount: Number(discount).toFixed(2),
-          taxPer: taxPer,
+          discountAmount: Number(discountAmount).toFixed(2),
+          taxPer: Number(taxPer).toFixed(2),
+          taxAmount: Number(taxAmount).toFixed(2),
+          convinenceCharges: Number(convinenceCharges).toFixed(2),
+          deliveryCharges: Number(deliveryCharges).toFixed(2),
+          extraDeliveryCharges: Number(extraDeliveryCharges).toFixed(2),
           grandtotal: gTotal.toFixed(2),
         };
 
@@ -50,26 +87,57 @@ export default class CartFunction {
       }
     }
   }
-  deleteCart(cartProduct, cart, setCart) {
+  deleteCart(cartProduct, cart, setCart, settings) {
     if (localStorage.getItem("cart") && localStorage.getItem("cart") !== null) {
       if (cartProduct) {
         let sub = 0.0;
-        let discount = 0.0;
-        let taxPer = 2.2;
+        let discountAmount = 0.0;
+        let taxPer = 0;
+        let taxAmount = 0.0;
+        let convinenceCharges = 0.0;
+        let deliveryCharges = 0.0;
+        let extraDeliveryCharges = 0.0;
+        let gTotal = 0.0;
         const filteredProduct = cart?.product?.filter(
-          (items) => items?.productID !== cartProduct.productID
+          (items) => items?.id !== cartProduct.id
         );
         filteredProduct.map((data) => {
-          sub = Number(sub) + Number(data?.totalPrice);
+          sub = Number(sub) + Number(data?.amount);
         });
-        let disAmount = Number(sub) - Number(discount);
-        let taxAmount = (disAmount * taxPer) / 100;
-        let gTotal = Number(disAmount) + Number(taxAmount);
+        if (settings !== undefined) {
+          settings?.map((data) => {
+            console.log(data);
+            if (data?.settingCode === "STG_4" && data?.type === "percent") {
+              convinenceCharges = data?.settingValue;
+            }
+            if (data?.settingCode === "STG_2" && data?.type === "percent") {
+              taxPer = data?.settingValue;
+            }
+            if (data?.settingCode === "STG_1" && data?.type === "amount") {
+              deliveryCharges = data?.settingValue;
+            }
+          });
+        }
+        let discountedAmount = Number(sub) - Number(discountAmount);
+        taxAmount = (discountedAmount * taxPer) / 100;
+        let taxableTotal = discountedAmount + taxAmount;
+        let convinenceAmount = (taxableTotal * convinenceCharges) / 100;
+        let convinencedTotal = taxableTotal + convinenceAmount;
+
+        gTotal =
+          Number(convinencedTotal) +
+          Number(deliveryCharges) +
+          Number(extraDeliveryCharges);
+
         const currentCart = {
           product: filteredProduct,
           subtotal: sub.toFixed(2),
-          discount: Number(discount).toFixed(2),
-          taxPer: taxPer,
+          discountAmount: Number(discountAmount).toFixed(2),
+          taxPer: Number(taxPer).toFixed(2),
+          taxAmount: Number(taxAmount).toFixed(2),
+          convinenceCharges: Number(convinenceCharges).toFixed(2),
+          deliveryCharges: Number(deliveryCharges).toFixed(2),
+          extraDeliveryCharges: Number(extraDeliveryCharges).toFixed(2),
           grandtotal: gTotal.toFixed(2),
         };
         localStorage.setItem("cart", JSON.stringify(currentCart));

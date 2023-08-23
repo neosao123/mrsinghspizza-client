@@ -11,6 +11,7 @@ export const GlobalProvider = ({ children }) => {
   const [payloadEdit, setPayloadEdit] = useState();
   const [url, setUrl] = useState(null);
   const [productType, setProductType] = useState();
+  const [settings, setSettings] = useState();
 
   return (
     <GlobalContext.Provider
@@ -21,6 +22,7 @@ export const GlobalProvider = ({ children }) => {
         productEdit: [payloadEdit, setPayloadEdit],
         urlPath: [url, setUrl],
         productType: [productType, setProductType],
+        settings: [settings, setSettings],
       }}
     >
       {children}

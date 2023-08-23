@@ -10,12 +10,16 @@ import DipsMenu from "./DipsMenu";
 import SidesMenu from "./SidesMenu";
 import GlobalContext from "../context/GlobalContext";
 import CartFunction from "../components/cart";
+import { settingApi } from "../services";
+import { toast } from "react-toastify";
 
 const Home = () => {
   // Global Context
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
   const [url, setUrl] = globalctx.urlPath;
+  const [settings, setSettings] = globalctx.settings;
+
   const location = useLocation();
   // Helper Function
   const cartFn = new CartFunction();
@@ -63,6 +67,17 @@ const Home = () => {
   useEffect(() => {
     setUrl(location?.pathname);
   }, [location]);
+  useEffect(() => {
+    settingApi()
+      .then((res) => {
+        setSettings(res.data);
+      })
+      .catch((err) => {
+        if (err.response.status === 400 || err.response.status === 500) {
+          toast.error(err.response.data.message);
+        }
+      });
+  }, []);
 
   return (
     <div style={{ position: "relative", overflow: "initial" }}>

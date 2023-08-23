@@ -5,6 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 function Dips({ data, cartFn }) {
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
+  const [settings, setSettings] = globalctx.settings;
 
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
@@ -23,13 +24,16 @@ function Dips({ data, cartFn }) {
   const handleDips = () => {
     const totalPrice = data?.price * count;
     const obj = {
-      productID: uuidv4(),
+      id: uuidv4(),
       productCode: data.dipsCode,
       productName: data.dipsName,
       productType: "dips",
-      quantity: count,
+      config: {},
       price: data.price,
-      totalPrice: totalPrice,
+      quantity: count,
+      amount: totalPrice,
+      pizzaSize: "",
+      comments: "",
     };
     setProduct(obj);
     setCount(1);
@@ -53,11 +57,11 @@ function Dips({ data, cartFn }) {
           }
         });
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, true);
+        cartFn.addCart(cartProduct, setCart, true, settings);
       } else {
         ct.product.push(product);
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, false);
+        cartFn.addCart(cartProduct, setCart, false, settings);
       }
     }
   }, [product]);

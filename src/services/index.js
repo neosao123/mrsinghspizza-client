@@ -110,3 +110,13 @@ export const getCustomerDetails = async (page, search, authToken) => {
   );
   return response;
 };
+
+export const orderPlace = async (payload, page, search, authToken) => {
+  const { data: response } = await http.post("customer/order/place", payload);
+  return response;
+};
+
+export const settingApi = async () => {
+  const { data: response } = await http.get("settings");
+  return response;
+};

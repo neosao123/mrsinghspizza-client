@@ -20,5 +20,16 @@
 .productTitle span {
   font-size: 0.9rem !important;
   font-weight: 700;
-  line-height: 1.1rem;
+  line-height: 1.2rem;
+}
+.deleteIcon {
+  color: rgb(255, 69, 69);
+}
+.editIcon {
+  color: #d96900;
+}
+.editIcon,
+.deleteIcon {
+  font-size: 0.9rem;
+  cursor: pointer;
 }

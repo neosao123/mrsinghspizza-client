@@ -21,6 +21,7 @@ function SpecialMenu() {
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [cart, setCart] = globalCtx.cart;
+  const [settings, setSettings] = globalCtx.settings;
   // API Response - States
   const [getSpecialData, setGetSpecialData] = useState();
   const [dipsData, setDipsData] = useState();
@@ -272,6 +273,7 @@ function SpecialMenu() {
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
+      // Updated Arr of CountAsOne After Calculation
       if (calcOneTpsArr?.length > 0) {
         let arr = [...pizzaState];
         calcOneTpsArr?.map((tpsObj) => {
@@ -284,6 +286,7 @@ function SpecialMenu() {
           ];
         });
       }
+      // Updated Arr of CountAsTwo After Calculation
       if (calcTwoTpsArr?.length > 0) {
         let arr = [...pizzaState];
         calcTwoTpsArr?.map((tpsObj) => {
@@ -297,7 +300,7 @@ function SpecialMenu() {
         });
       }
       const editedPayload = {
-        productID: payloadEdit?.productID,
+        id: payloadEdit?.id,
         productCode: payloadEdit?.productCode,
         productName: getSpecialData?.name,
         productType: "special",
@@ -307,23 +310,26 @@ function SpecialMenu() {
           dips: calcDipsArr,
           drinks: drinksObj,
         },
+        quantity: Number(1),
+        price: Number(totalPrice).toFixed(2),
+        amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
-        quantity: "1",
-        totalPrice: Number(totalPrice).toFixed(2),
+        comments: "",
       };
       if (editedPayload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         const filteredCart = ct?.product?.filter(
-          (items) => items?.productID !== editedPayload?.productID
+          (items) => items?.id !== editedPayload?.id
         );
         filteredCart.push(editedPayload);
         const cartProduct = filteredCart;
-        cartFn.addCart(cartProduct, setCart, true);
+        cartFn.addCart(cartProduct, setCart, true, settings);
         // Reset All Fields
         resetControls();
         setPayloadEdit();
       }
     } else {
+      // Updated Arr of CountAsOne After Calculation
       if (calcOneTpsArr?.length > 0) {
         let arr = [...pizzaState];
         calcOneTpsArr?.map((tpsObj) => {
@@ -336,6 +342,7 @@ function SpecialMenu() {
           ];
         });
       }
+      // Updated Arr of CountAsTwo After Calculation
       if (calcTwoTpsArr?.length > 0) {
         let arr = [...pizzaState];
         calcTwoTpsArr?.map((tpsObj) => {
@@ -348,9 +355,8 @@ function SpecialMenu() {
           ];
         });
       }
-
       const payload = {
-        productID: uuidv4(),
+        id: uuidv4(),
         productCode: getSpecialData?.code,
         productName: getSpecialData?.name,
         productType: "special",
@@ -360,15 +366,17 @@ function SpecialMenu() {
           dips: calcDipsArr,
           drinks: drinksObj,
         },
+        quantity: Number(1),
+        price: Number(totalPrice).toFixed(2),
+        amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
-        quantity: "1",
-        totalPrice: Number(totalPrice).toFixed(2),
+        comments: "",
       };
       if (payload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         ct.product.push(payload);
         const cartProduct = ct.product;
-        cartFn.addCart(cartProduct, setCart, false);
+        cartFn.addCart(cartProduct, setCart, false, settings);
         resetControls();
       }
     }
@@ -614,6 +622,7 @@ function SpecialMenu() {
                 </>
               )}
 
+              {/* Dips & Drinks */}
               <div className="row gx-3">
                 {/* Dips */}
                 {getSpecialData?.noofDips === 0 ? (
@@ -705,7 +714,7 @@ function SpecialMenu() {
                   return (
                     <CartList
                       cData={cData}
-                      key={cData.productID}
+                      key={cData.id}
                       setPayloadEdit={setPayloadEdit}
                       payloadEdit={payloadEdit}
                       resetControls={resetControls}

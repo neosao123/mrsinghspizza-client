@@ -53,7 +53,7 @@ function Dips({ data, cartFn }) {
         ct?.product.map((data) => {
           if (data.productCode === pCode.productCode) {
             pCode.quantity = pCode.quantity + product.quantity;
-            pCode.totalPrice = pCode.totalPrice + product.totalPrice;
+            pCode.amount = pCode.amount + product.amount;
           }
         });
         const cartProduct = ct.product;

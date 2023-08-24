@@ -31,6 +31,39 @@ function OrderSummary({ cart }) {
         </div>
         <div className="d-flex justify-content-between flex-wrap">
           <div className="text-start mb-3">
+            <strong>Tax Amount : </strong>
+          </div>
+          <div className="text-end mb-3">
+            <span className="mx-4">
+              $ {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
+            </span>
+          </div>
+        </div>
+        <div className="d-flex justify-content-between flex-wrap">
+          <div className="text-start mb-3">
+            <strong>Convinence Charges (%) : </strong>
+          </div>
+          <div className="text-end mb-3">
+            <span className="mx-4">
+              {cart?.convinenceCharges ? cart?.convinenceCharges : 0}
+            </span>
+          </div>
+        </div>
+        <div className="d-flex justify-content-between flex-wrap">
+          <div className="text-start mb-3">
+            <strong>Delivery Charges : </strong>
+          </div>
+          <div className="text-end mb-3">
+            <span className="mx-4">
+              ${" "}
+              {cart?.deliveryCharges
+                ? cart?.deliveryCharges
+                : Number(0).toFixed(2)}
+            </span>
+          </div>
+        </div>
+        <div className="d-flex justify-content-between flex-wrap">
+          <div className="text-start mb-3">
             <strong>Grand Total : </strong>
           </div>
           <div className="text-end mb-3">

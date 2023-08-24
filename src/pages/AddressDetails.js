@@ -4,11 +4,10 @@ import { useFormik } from "formik";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import { useSelector } from "react-redux";
-import { deliverable, orderPlace, settingApi } from "../services";
+import { deliverable, orderPlace } from "../services";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
-import Payment from "./Payment";
 import GlobalContext from "../context/GlobalContext";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
@@ -39,7 +38,10 @@ function AddressDetails() {
 
   const paymentGateway = (values) => {
     let custFullName = values.firstname + " " + values?.lastname;
+    console.log(process.env.REACT_APP_CALLBACKURL);
     const payload = {
+      callbackUrl: process.env.REACT_APP_CALLBACKURL,
+      cancelUrl: process.env.REACT_APP_CANCEL,
       customerCode: user?.data?.customerCode,
       customerName: custFullName,
       mobileNumber: values?.phoneno,
@@ -78,8 +80,8 @@ function AddressDetails() {
           paymentGateway(values);
         } else {
           swal({
-            title: "Postal Code is not deliverable",
-            text: "Update Your Postal Code",
+            title: "Postal Code is Undeliverable",
+            text: `postal code cannot deliverable. Please change the postal code and try again`,
             icon: "warning",
             buttons: ["Cancel", "Ok"],
             dangerMode: true,

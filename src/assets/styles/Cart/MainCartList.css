@@ -8,6 +8,13 @@
   color: #ffffff !important;
   border: none;
 }
+.cancelCart {
+  background-color: #878787;
+  color: #ffffff !important;
+  border: none;
+}
+.cancelCart:hover,
+.cancelCart.active,
 .addtocart.active,
 .addtocart:hover {
   background-color: #2e2e2e !important;
@@ -26,4 +33,39 @@
 }
 .cartlistitem p {
   font-size: 1rem;
+}
+.amount {
+  min-width: fit-content;
+}
+.main-cartPizzaSize p,
+.main-cartQty p {
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.main-cartList h4 {
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+.main-cartPizzaSize span,
+.main-cartQty span {
+  font-size: 0.9rem;
+}
+.main-cartPizza p {
+  font-size: 0.9rem;
+  display: inline;
+  font-weight: 600;
+}
+.main-cartPizza span {
+  font-size: 0.85rem;
+  font-weight: 400;
+  margin-left: 1%;
+  line-height: 1.1rem;
+}
+.crust,
+.cheese,
+.specialbases {
+  min-width: fit-content;
+}
+.main-cartIcons {
+  min-width: fit-content;
 }

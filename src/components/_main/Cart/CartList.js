@@ -84,7 +84,6 @@ function CartList({
       }
     }
   };
-  console.log(cData);
   useEffect(() => {}, [payloadEdit]);
   return (
     <div className="row m-0 px-1 py-3 list-item">
@@ -101,13 +100,22 @@ function CartList({
         <p>Quantity :</p> <span className="mx-2">{cData?.quantity}</span>
       </div>
       {/* Pizza Size */}
-      <div className="col-lg-12 mb-1 text-start pSize">
-        <p className="">Size : </p>
-        <span className="mx-1">
-          {cData?.config?.size ? cData?.config?.size : ""}
-          {cData?.pizzaSize !== "" ? cData?.pizzaSize : ""}
-        </span>
-      </div>
+      {cData?.config?.size && (
+        <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
+          <p className="">Size : </p>
+          <span className="mx-2">
+            {cData?.config?.size ? cData?.config?.size : ""}
+          </span>
+        </div>
+      )}
+      {cData?.config?.pizzaSize && (
+        <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
+          <p className="">Size : </p>
+          <span className="mx-2">
+            {cData?.pizzaSize !== "" ? cData?.pizzaSize : ""}
+          </span>
+        </div>
+      )}
 
       {cData?.config?.pizza &&
         cData?.config?.pizza.length > 0 &&

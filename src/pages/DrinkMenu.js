@@ -22,7 +22,7 @@ function DrinkMenu() {
   }, []);
   return (
     <>
-      <div className="row gx-4 mt-3 mb-3 d-flex justify-content-center align-items-center ">
+      <div className="row gx-4 mt-3 mb-3 d-flex justify-content-start align-items-center ">
         {drinksData?.map((data, idx) => {
           return (
             <Drink

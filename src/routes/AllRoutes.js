@@ -11,6 +11,8 @@ import DefaultLayout from "../layouts/DefaultLayout";
 import Cart from "../pages/Cart";
 import AddressDetails from "../pages/AddressDetails";
 import Payment from "../pages/Payment";
+import Success from "../pages/Payment/Success";
+import Cancel from "../pages/Payment/Cancel";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -44,6 +46,8 @@ const AllRoutes = () => {
       <Route exact path="/addtocart" Component={Cart} />
       <Route exact path="/address-details" Component={AddressDetails} />
       <Route exact path="/card-payment" Component={Payment} />
+      <Route exact path="/payment/verify" Component={Success} />
+      <Route exact path="/payment/cancel" Component={Cancel} />
     </Routes>
   );
 };

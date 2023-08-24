@@ -120,3 +120,13 @@ export const settingApi = async () => {
   const { data: response } = await http.get("settings");
   return response;
 };
+
+export const paymentVerified = async (payload) => {
+  const { data: response } = await http.post("payment/verify", payload);
+  return response;
+};
+
+export const paymentCancel = async (payload) => {
+  const { data: response } = await http.post("payment/cancel", payload);
+  return response;
+};

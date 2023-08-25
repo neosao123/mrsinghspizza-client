@@ -12,12 +12,16 @@ export const GlobalProvider = ({ children }) => {
   const [url, setUrl] = useState(null);
   const [productType, setProductType] = useState();
   const [settings, setSettings] = useState();
+  const [regUser, setRegUser] = useState(
+    localStorage.getItem("registeredUser")
+  );
 
   return (
     <GlobalContext.Provider
       value={{
         auth: [isAuthenticated, setIsAuthenticated],
         user: [user, setUser],
+        regUser: [regUser, setRegUser],
         cart: [cart, setCart],
         productEdit: [payloadEdit, setPayloadEdit],
         urlPath: [url, setUrl],

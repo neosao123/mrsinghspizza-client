@@ -6,8 +6,9 @@
 @media (max-width: 1800px) {
   .main-nav .logo {
     /* padding: 25px 0 0 0px;
-    width: 13.2%; */
-    margin-top: 25px;
+    width: 13.2%;
+    margin-top: 25px; */
+    /* margin: 30px 18px; */
   }
   .main-nav .location-block {
     padding: 32px 0 0 30px;
@@ -18,9 +19,9 @@
   .main-nav .nav ul li a {
     padding: 50px 18px;
   }
-  .main-nav .nav-right-block {
-    width: 10.1%;
-  }
+  /* .main-nav .nav-right-block {
+    width: auto;
+  } */
   .main-nav:before {
     width: calc(100% - 10.1%);
     width: -webkit-calc(100% - 10.1%);
@@ -196,12 +197,13 @@
     width: auto;
     float: right;
     display: inline-block;
-    padding: 40px 15px 42px;
+    /* padding: 40px 15px 42px; */
   }
   .main-nav .logo {
     /* width: 11.2%;
-    padding: 35px 0 0 0px; */
-    margin-top: 25px;
+    /* padding: 35px 0 0 0px; */
+    /* margin-top: 25px; */
+    /* margin: 25px 18px; */
   }
   .block-stl3.stl1 .offer-block {
     padding: 0 20px 0 0;
@@ -369,15 +371,15 @@
 }
 
 @media (max-width: 1200px) {
-  .main-nav .nav-right-block span {
+  /* .main-nav .nav-right-block span {
     display: block;
-  }
+  } */
   .main-nav .nav-right-block {
-    background-color: transparent;
-    padding: 10px 15px 0;
+    /* background-color: transparent; */
+    /* padding: 10px 15px 0; */
   }
   .main-nav .nav-right-block:before {
-    background: transparent;
+    /* background: transparent; */
   }
   .main-nav .nav {
     width: auto;
@@ -389,7 +391,7 @@
   }
   .main-nav .logo {
     /* padding: 15px 0 0 0px; */
-    margin-top: 25px;
+    /* margin-top: 25px; */
   }
   .slider1 .slide1 .img-holder {
     max-width: 430px;
@@ -454,32 +456,34 @@
 
 @media (max-width: 1199px) {
   .main-nav .nav-right-block {
-    position: absolute;
+    /* position: absolute;
     right: 15px;
     top: 100px;
     padding: 6px;
     background: #ca0e2d;
-    border-radius: 50%;
+    border-radius: 50%; */
+    padding-top: 0.7% !important;
+    padding-bottom: 0.7% !important;
   }
   .main-nav .nav-right-block span {
-    position: absolute;
+    /* position: absolute; */
     display: block;
-    -webkit-transform: translateX(-50%);
-    -moz-transform: translateX(-50%);
-    -ms-transform: translateX(-50%);
-    -o-transform: translateX(-50%);
-    transform: translateX(-50%);
-    left: 50%;
-    margin: 0;
-    bottom: -30px;
+    /* -webkit-transform: translateX(-50%); */
+    /* -moz-transform: translateX(-50%); */
+    /* -ms-transform: translateX(-50%); */
+    /* -o-transform: translateX(-50%); */
+    /* transform: translateX(-50%); */
+    /* left: 50%; */
+    /* margin: 0; */
+    /* bottom: -30px; */
   }
   .main-nav .nav-right-block i:before {
     margin: 0;
   }
-  .main-nav .nav {
+  /* .main-nav .nav {
     padding: 0 0 0 0;
-    float: right;
-  }
+    float: center;
+  } */
   .block-stl1 span:before {
     font-size: 45px;
   }
@@ -823,9 +827,9 @@
 
 @media (max-width: 1023px) {
   a.nav-opener {
-    position: absolute;
+    /* position: absolute;
     right: 135px;
-    top: 29px;
+    top: 29px; */
   }
 
   a.nav-opener i {
@@ -906,14 +910,14 @@
     padding: 12px;
   }
   .main-nav .nav-right-block {
-    top: 15px;
+    /* top: 15px; */
   }
   .main-nav .nav ul li.active:before {
     display: none;
   }
   .main-nav .logo {
     /* width: 140px; */
-    margin-top: 25px;
+    /* margin-top: 25px; */
   }
   .home2 .logo {
     width: 140px;
@@ -950,11 +954,11 @@
     padding: 50px 0 50px;
   }
   .main-nav .nav-right-block {
-    top: 19px;
-    background-color: transparent;
+    /* top: 19px; */
+    /* background-color: transparent; */
   }
   .main-nav .nav-right-block span {
-    position: relative;
+    /* position: relative;
     top: 0;
     display: inline-block;
     -webkit-transform: translateX(0);
@@ -962,7 +966,7 @@
     -ms-transform: translateX(0);
     -o-transform: translateX(0);
     transform: translateX(0);
-    left: 10px;
+    left: 10px; */
   }
   .home2 .nav-right-block {
     padding: 17px 21px;
@@ -1457,17 +1461,17 @@
 @media (max-width: 768px) {
   .main-nav .logo {
     /* width: 110px; */
-    margin-top: 5px;
-    width: 30px;
-    height: 30px;
+    /* margin-top: 5px; */
+    /* width: 30px;
+    height: 30px; */
   }
   .main-nav .logo img {
-    width: 30px;
-    height: 30px;
+    /* width: 30px;
+    height: 30px; */
   }
-  .main-nav .nav-right-block {
+  /* .main-nav .nav-right-block {
     top: 14px;
-  }
+  } */
   a.nav-opener {
     top: 24px;
   }
@@ -1924,10 +1928,12 @@
     font-size: 55px;
   }
   .main-nav .nav-right-block {
-    display: none;
+    display: block;
+    height: inherit;
   }
   a.nav-opener {
-    right: 15px;
+    display: block;
+    /* right: 15px; */
   }
   .slider1 .text-block {
     padding: 30px 0 0;

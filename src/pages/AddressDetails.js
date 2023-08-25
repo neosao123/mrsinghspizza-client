@@ -60,7 +60,6 @@ function AddressDetails() {
       .then((response) => {
         localStorage.setItem("OrderID", response.orderCode);
         localStorage.setItem("sessionId", response.sessionId);
-        localStorage.setItem("callBackUrl", response.callBackUrl);
         window.open(response?.paymentUrl, "_blank");
       })
       .catch((error) => {
@@ -75,18 +74,18 @@ function AddressDetails() {
     };
     await deliverable(payload)
       .then((res) => {
-        console.log(res);
         if (res?.deliverable === true) {
           paymentGateway(values);
         } else {
           swal({
             title: "Postal Code is Undeliverable",
-            text: `postal code cannot deliverable. Please change the postal code and try again`,
+            text: `Postal code cannot deliverable. Please change the postal code and try again`,
             icon: "warning",
             buttons: ["Cancel", "Ok"],
             dangerMode: true,
           }).then(async (willOk) => {
             if (willOk) {
+              navigate("/address-details");
             } else {
               navigate("/");
             }

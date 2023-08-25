@@ -6,11 +6,12 @@ import { useFormik } from "formik";
 import Header from "../../components/_main/Header";
 import Footer from "../../components/_main/Footer";
 import { toast } from "react-toastify";
-import { customerRegistration } from "../../services";
+import { customerRegistration, deliverable } from "../../services";
 import GlobalContext from "../../context/GlobalContext";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../redux/authProvider/actionType";
+import swal from "sweetalert";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
@@ -45,37 +46,67 @@ function Registration() {
   const globalctx = useContext(GlobalContext);
   const [user, setUser] = globalctx.user;
   const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
+  const [regUser, setRegUser] = globalctx.regUser;
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const location = useLocation();
 
   const onSubmit = async (values) => {
-    console.log(values);
-    let payload = {
-      firstName: values.firstname,
-      lastName: values.lastname,
-      mobileNumber: values.phoneno,
-      city: values.city,
-      zipcode: values.postalcode,
-      password: values.password,
-      address: values.address,
-    };
-    console.log(payload);
-    await customerRegistration(payload)
-      .then((res) => {
-        setIsAuthenticated(true);
-        setUser(res.data);
-        dispatch({ type: LOGIN_SUCCESS, payload: res.data, token: res.token });
-        localStorage.setItem("user", JSON.stringify(res.data));
-        localStorage.setItem("token", res.token);
-        const redirectTo = localStorage.getItem("redirectTo");
-        navigate(redirectTo !== null ? redirectTo : "/");
-        localStorage.removeItem("redirectTo");
-        toast.success("Account registered successfully...");
+    await deliverable({ zipcode: values.postalcode })
+      .then(async (res) => {
+        if (res?.deliverable === true) {
+          let payload = {
+            firstName: values.firstname,
+            lastName: values.lastname,
+            mobileNumber: values.phoneno,
+            city: values.city,
+            zipcode: values.postalcode,
+            password: values.password,
+            address: values.address,
+          };
+          await customerRegistration(payload)
+            .then((res) => {
+              setIsAuthenticated(true);
+              setUser(res.data);
+              dispatch({
+                type: LOGIN_SUCCESS,
+                payload: res.data,
+                token: res.token,
+              });
+              localStorage.setItem("user", JSON.stringify(res.data));
+              localStorage.setItem("token", res.token);
+              localStorage.setItem("registeredUser", JSON.stringify(payload));
+              setRegUser(payload);
+              const redirectTo = localStorage.getItem("redirectTo");
+              navigate(redirectTo !== null ? redirectTo : "/");
+              localStorage.removeItem("redirectTo");
+              localStorage.setItem("prevUrl", location?.pathname);
+              toast.success("Account registered successfully...");
+            })
+            .catch((err) => {
+              if (err.response.status === 400 || err.response.status === 500) {
+                toast.error(err.response.data.message);
+              }
+            });
+        } else {
+          swal({
+            title: "Postal Code is Undeliverable",
+            text: `Postal code cannot deliverable. Please change the postal code and try again`,
+            icon: "warning",
+            buttons: {
+              ok: "Ok",
+            },
+            dangerMode: true,
+          }).then(async (willOk) => {
+            if (willOk) {
+            }
+          });
+        }
       })
-      .catch((err) => {
-        if (err.response.status === 400 || err.response.status === 500) {
-          toast.error(err.response.data.message);
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
         }
       });
   };

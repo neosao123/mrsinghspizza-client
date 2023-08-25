@@ -10,21 +10,89 @@ import MainCartList from "../components/_main/Cart/MainCartList";
 import LoadingLayout from "../layouts/LoadingLayout";
 import { useSelector } from "react-redux";
 import swal from "sweetalert";
+import { deliverable, orderPlace } from "../services";
 
 function Cart() {
   const globalCtx = useContext(GlobalContext);
   const [isAuthenticated, setIsAuthenticated] = globalCtx.auth;
   const [cart, setCart] = globalCtx.cart;
+  const [regUser, setRegUser] = globalCtx.regUser;
   const [loading, setLoading] = useState(false);
   const { user } = useSelector((state) => state);
 
   const navigate = useNavigate();
   const location = useLocation();
 
-  const handleCheckout = () => {
+  const paymentGateway = () => {
+    let custFullName = regUser.firstName + " " + regUser?.lastName;
+    console.log(process.env.REACT_APP_CALLBACKURL);
+    const payload = {
+      callbackUrl: process.env.REACT_APP_CALLBACKURL,
+      cancelUrl: process.env.REACT_APP_CANCEL,
+      customerCode: user?.data?.customerCode,
+      customerName: custFullName,
+      mobileNumber: regUser?.mobileNumber,
+      address: regUser?.address,
+      zipCode: regUser?.zipcode,
+      products: cart?.product,
+      subTotal: cart?.subtotal,
+      discountAmount: cart?.discountAmount,
+      taxPer: cart?.taxPer,
+      taxAmount: cart?.taxAmount,
+      deliveryCharges: cart?.deliveryCharges,
+      extraDeliveryCharges: cart?.extraDeliveryCharges,
+      grandTotal: cart?.grandtotal,
+    };
+    orderPlace(payload)
+      .then((response) => {
+        localStorage.setItem("OrderID", response.orderCode);
+        localStorage.setItem("sessionId", response.sessionId);
+        window.open(response?.paymentUrl, "_blank");
+      })
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
+
+  const handleCheckout = async () => {
     if (cart?.product?.length > 0) {
       if (isAuthenticated && user !== null) {
-        navigate("/address-details");
+        const previousUrl = localStorage.getItem("prevUrl");
+        if (previousUrl && previousUrl !== null) {
+          console.log(regUser.zipcode);
+          const payload = { zipcode: regUser.zipcode };
+          await deliverable(payload)
+            .then((res) => {
+              if (res?.deliverable === true) {
+                paymentGateway();
+              } else {
+                swal({
+                  title: "Postal Code is Undeliverable",
+                  text: `postal code cannot deliverable. Please change the postal code and try again`,
+                  icon: "warning",
+                  buttons: {
+                    ok: "Ok",
+                  },
+                  dangerMode: true,
+                }).then(async (willOk) => {
+                  if (willOk) {
+                  }
+                });
+              }
+            })
+            .catch((error) => {
+              if (
+                error.response.status === 400 ||
+                error.response.status === 500
+              ) {
+                toast.error(error.response.data.message);
+              }
+            });
+        } else {
+          navigate("/address-details");
+        }
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
         navigate("/registration");

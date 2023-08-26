@@ -171,6 +171,9 @@
   width: 65px;
   height: 65px;
 }
+.content {
+  background-color: #ffffff;
+}
 .content h3 {
   font-size: 1.3rem;
   font-weight: 600;
@@ -178,16 +181,12 @@
 .content {
   opacity: 0.95;
 }
-.create-acc-txt {
-  color: #1e3ef6;
-  line-height: 12px;
-}
-.create-acc-txt:hover,
-.create-acc-txt:focus,
-.create-acc-txt.active {
-  transition: 0.5s all ease-in-out;
-  color: #2e2e2e;
-}
 .regPage h3 {
   font-size: 1.5rem;
+}
+.noteTxt {
+  font-size: 0.9rem;
+}
+.formErrMsg {
+  font-size: 0.95rem;
 }

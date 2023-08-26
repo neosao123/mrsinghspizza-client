@@ -55,15 +55,20 @@ export default class CartFunction {
           });
         }
         let discountedAmount = Number(sub) - Number(discountAmount);
-        taxAmount = (discountedAmount * taxPer) / 100;
-        let taxableTotal = discountedAmount + taxAmount;
-        let convinenceAmount = (taxableTotal * convinenceCharges) / 100;
-        let convinencedTotal = taxableTotal + convinenceAmount;
-
+        taxAmount = (sub * taxPer) / 100;
+        let convinenceAmount = (sub * convinenceCharges) / 100;
+        let taxableTotal = taxAmount + convinenceAmount;
+        let taxableTotalAmount = discountedAmount + taxableTotal;
         gTotal =
-          Number(convinencedTotal) +
+          Number(taxableTotalAmount) +
           Number(deliveryCharges) +
           Number(extraDeliveryCharges);
+        console.log("discountedAmount", discountedAmount);
+        console.log("taxAmount", taxAmount);
+        console.log("convinenceAmount", convinenceAmount);
+        console.log("taxableTotal", taxableTotal);
+        console.log("taxableTotalAmount", taxableTotalAmount);
+        console.log("gTotal", gTotal);
 
         const currentCart = {
           product: cartProduct,

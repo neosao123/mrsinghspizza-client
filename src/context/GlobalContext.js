@@ -15,6 +15,7 @@ export const GlobalProvider = ({ children }) => {
   const [regUser, setRegUser] = useState(
     localStorage.getItem("registeredUser")
   );
+  const [reset, setReset] = useState(false);
 
   return (
     <GlobalContext.Provider
@@ -27,6 +28,7 @@ export const GlobalProvider = ({ children }) => {
         urlPath: [url, setUrl],
         productType: [productType, setProductType],
         settings: [settings, setSettings],
+        reset: [reset, setReset],
       }}
     >
       {children}

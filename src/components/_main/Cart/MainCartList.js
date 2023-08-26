@@ -15,13 +15,23 @@ function MainCartList({ cData, setLoading }) {
   const navigate = useNavigate();
   // Handle Delete Product
   const handleDelete = () => {
-    if (payloadEdit) {
-      if (payloadEdit?.id === cData?.id) {
-        setPayloadEdit();
+    if (cart?.product?.length === 1) {
+      cartFn.deleteCart(cData, cart, setCart, settings);
+      localStorage.removeItem("cart");
+      setCart();
+      setPayloadEdit();
+      cartFn.createCart(setCart);
+    } else {
+      if (payloadEdit) {
+        if (payloadEdit?.id === cData?.id) {
+          setPayloadEdit();
+          cartFn.deleteCart(cData, cart, setCart, settings);
+        } else {
+          cartFn.deleteCart(cData, cart, setCart, settings);
+        }
+      } else {
         cartFn.deleteCart(cData, cart, setCart, settings);
       }
-    } else {
-      cartFn.deleteCart(cData, cart, setCart, settings);
     }
   };
   // Handle Edit Product

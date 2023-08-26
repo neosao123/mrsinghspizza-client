@@ -23,17 +23,34 @@ function CartList({
 
   const handleDelete = (e) => {
     e.preventDefault();
-    if (payloadEdit) {
-      if (payloadEdit?.id === cData?.id) {
-        console.log("Deleted If Condition...");
-        setPayloadEdit();
-        resetControls();
+    if (cart?.product?.length === 1) {
+      if (payloadEdit) {
+        if (payloadEdit?.id === cData?.id) {
+          setPayloadEdit();
+          resetControls();
+          cartFn.deleteCart(cData, cart, setCart, settings);
+          localStorage.removeItem("cart");
+          setCart();
+          cartFn.createCart(setCart);
+        }
+      } else {
         cartFn.deleteCart(cData, cart, setCart, settings);
+        localStorage.removeItem("cart");
+        setCart();
+        cartFn.createCart(setCart);
+      }
+    } else {
+      if (payloadEdit) {
+        if (payloadEdit?.id === cData?.id) {
+          setPayloadEdit();
+          resetControls();
+          cartFn.deleteCart(cData, cart, setCart, settings);
+        } else {
+          cartFn.deleteCart(cData, cart, setCart, settings);
+        }
       } else {
         cartFn.deleteCart(cData, cart, setCart, settings);
       }
-    } else {
-      cartFn.deleteCart(cData, cart, setCart, settings);
     }
   };
 

@@ -14,19 +14,19 @@ const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
 
 const ValidateSchema = Yup.object({
-  firstname: Yup.string().required("Required"),
-  lastname: Yup.string().required("Required"),
+  firstname: Yup.string().required("First name is required"),
+  lastname: Yup.string().required("Last name is required"),
   phoneno: Yup.string()
-    .required("Required")
+    .required("Phone number is required")
     .matches(
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
-  city: Yup.string().required("Required"),
+  city: Yup.string().required("City is required"),
   postalcode: Yup.string()
-    .required("Required")
+    .required("Postal Code is required")
     .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),
-  address: Yup.string().required("Required"),
+  address: Yup.string().required("Address is required"),
 });
 
 function AddressDetails() {

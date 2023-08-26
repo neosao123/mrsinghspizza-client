@@ -2,7 +2,12 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import "../assets/styles/custom.css";
-import { getAllIngredients, getSides } from "../services";
+import {
+  deliverable,
+  getAllIngredients,
+  getSides,
+  orderPlace,
+} from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import "../assets/styles/CreateYourOwn/style.css";
 import GlobalContext from "../context/GlobalContext";
@@ -24,6 +29,7 @@ import Sides from "../components/CreateYourOwn/Sides";
 import CartFunction from "../components/cart";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
+import swal from "sweetalert";
 
 function CreateYourOwn() {
   const pizzaSizeArr = [
@@ -43,6 +49,7 @@ function CreateYourOwn() {
   const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [url, setUrl] = globalCtx.urlPath;
   const [settings, setSettings] = globalCtx.settings;
+  const [regUser, setRegUser] = globalCtx.regUser;
   // redux
   const { user } = useSelector((state) => state);
   // API States
@@ -68,7 +75,8 @@ function CreateYourOwn() {
   const [drinksArr, setDrinksArr] = useState([]);
   const [dipsArr, setDipsArr] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
-  const [reset, setReset] = useState(false);
+  const [reset, setReset] = useState();
+  // const [reset, setReset] = useState(false);
   // Healper Function
   const cartFn = new CartFunction();
 
@@ -172,8 +180,8 @@ function CreateYourOwn() {
         filteredCart.push(editedPayload);
         const cartProduct = filteredCart;
         cartFn.addCart(cartProduct, setCart, true, settings);
-        resetControls();
         setPayloadEdit();
+        resetControls();
       }
     } else {
       const payload = {
@@ -213,11 +221,77 @@ function CreateYourOwn() {
       }
     }
   };
+
+  const paymentGateway = () => {
+    let custFullName = regUser.firstName + " " + regUser?.lastName;
+    console.log(process.env.REACT_APP_CALLBACKURL);
+    const payload = {
+      callbackUrl: process.env.REACT_APP_CALLBACKURL,
+      cancelUrl: process.env.REACT_APP_CANCEL,
+      customerCode: user?.data?.customerCode,
+      customerName: custFullName,
+      mobileNumber: regUser?.mobileNumber,
+      address: regUser?.address,
+      zipCode: regUser?.zipcode,
+      products: cart?.product,
+      subTotal: cart?.subtotal,
+      discountAmount: cart?.discountAmount,
+      taxPer: cart?.taxPer,
+      taxAmount: cart?.taxAmount,
+      deliveryCharges: cart?.deliveryCharges,
+      extraDeliveryCharges: cart?.extraDeliveryCharges,
+      grandTotal: cart?.grandtotal,
+    };
+    orderPlace(payload)
+      .then((response) => {
+        localStorage.setItem("OrderID", response.orderCode);
+        localStorage.setItem("sessionId", response.sessionId);
+        window.open(response?.paymentUrl, "_blank");
+      })
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
   // Handle Place Order
-  const handlePlaceOrder = () => {
+  const handlePlaceOrder = async () => {
     if (cart?.product?.length > 0) {
       if (isAuthenticated && user !== null) {
-        navigate("/address-details");
+        const previousUrl = localStorage.getItem("prevUrl");
+        if (previousUrl && previousUrl !== null) {
+          console.log(regUser.zipcode);
+          const payload = { zipcode: regUser.zipcode };
+          await deliverable(payload)
+            .then((res) => {
+              if (res?.deliverable === true) {
+                paymentGateway();
+              } else {
+                swal({
+                  title: "Postal Code is Undeliverable",
+                  text: `postal code cannot deliverable. Please change the postal code and try again`,
+                  icon: "warning",
+                  buttons: {
+                    ok: "Ok",
+                  },
+                  dangerMode: true,
+                }).then(async (willOk) => {
+                  if (willOk) {
+                  }
+                });
+              }
+            })
+            .catch((error) => {
+              if (
+                error.response.status === 400 ||
+                error.response.status === 500
+              ) {
+                toast.error(error.response.data.message);
+              }
+            });
+        } else {
+          navigate("/address-details");
+        }
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
         navigate("/registration");
@@ -251,7 +325,7 @@ function CreateYourOwn() {
     setReset(true);
     setTimeout(() => {
       setReset(false);
-    }, 1000);
+    }, 200);
   };
 
   // ----- API -----
@@ -329,6 +403,7 @@ function CreateYourOwn() {
   ]);
   // Populate All Fields - Edit Pizza
   useEffect(() => {
+    console.log("payloadEdit create your own", payloadEdit);
     if (
       payloadEdit &&
       payloadEdit !== undefined &&

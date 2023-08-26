@@ -3,7 +3,13 @@ import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import SpecialPizzaSelection from "../components/_main/SpecialPizzaSelection";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
-import { getDips, getSpecialDetails, getToppings } from "../services";
+import {
+  deliverable,
+  getDips,
+  getSpecialDetails,
+  getToppings,
+  orderPlace,
+} from "../services";
 import LoadingLayout from "../layouts/LoadingLayout";
 import { toast } from "react-toastify";
 import GlobalContext from "../context/GlobalContext";
@@ -14,6 +20,8 @@ import Dips from "../components/SpecialPizza/Dips";
 import Drinks from "../components/SpecialPizza/Drinks";
 import { v4 as uuidv4 } from "uuid";
 import CartFunction from "../components/cart";
+import swal from "sweetalert";
+import { useSelector } from "react-redux";
 
 function SpecialMenu() {
   // Global Context
@@ -22,6 +30,9 @@ function SpecialMenu() {
   const [payloadEdit, setPayloadEdit] = globalCtx.productEdit;
   const [cart, setCart] = globalCtx.cart;
   const [settings, setSettings] = globalCtx.settings;
+  const [regUser, setRegUser] = globalCtx.regUser;
+  // redux
+  const { user } = useSelector((state) => state);
   // API Response - States
   const [getSpecialData, setGetSpecialData] = useState();
   const [dipsData, setDipsData] = useState();
@@ -381,13 +392,82 @@ function SpecialMenu() {
       }
     }
   };
+  const paymentGateway = () => {
+    let custFullName = regUser.firstName + " " + regUser?.lastName;
+    console.log(process.env.REACT_APP_CALLBACKURL);
+    const payload = {
+      callbackUrl: process.env.REACT_APP_CALLBACKURL,
+      cancelUrl: process.env.REACT_APP_CANCEL,
+      customerCode: user?.data?.customerCode,
+      customerName: custFullName,
+      mobileNumber: regUser?.mobileNumber,
+      address: regUser?.address,
+      zipCode: regUser?.zipcode,
+      products: cart?.product,
+      subTotal: cart?.subtotal,
+      discountAmount: cart?.discountAmount,
+      taxPer: cart?.taxPer,
+      taxAmount: cart?.taxAmount,
+      deliveryCharges: cart?.deliveryCharges,
+      extraDeliveryCharges: cart?.extraDeliveryCharges,
+      grandTotal: cart?.grandtotal,
+    };
+    orderPlace(payload)
+      .then((response) => {
+        localStorage.setItem("OrderID", response.orderCode);
+        localStorage.setItem("sessionId", response.sessionId);
+        window.open(response?.paymentUrl, "_blank");
+      })
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
   // Handle Place Order
-  const handlePlaceOrder = () => {
-    if (isAuthenticated) {
-      toast.success("Order Placed Successfully..");
+  const handlePlaceOrder = async () => {
+    if (cart?.product?.length > 0) {
+      if (isAuthenticated && user !== null) {
+        const previousUrl = localStorage.getItem("prevUrl");
+        if (previousUrl && previousUrl !== null) {
+          console.log(regUser.zipcode);
+          const payload = { zipcode: regUser.zipcode };
+          await deliverable(payload)
+            .then((res) => {
+              if (res?.deliverable === true) {
+                paymentGateway();
+              } else {
+                swal({
+                  title: "Postal Code is Undeliverable",
+                  text: `postal code cannot deliverable. Please change the postal code and try again`,
+                  icon: "warning",
+                  buttons: {
+                    ok: "Ok",
+                  },
+                  dangerMode: true,
+                }).then(async (willOk) => {
+                  if (willOk) {
+                  }
+                });
+              }
+            })
+            .catch((error) => {
+              if (
+                error.response.status === 400 ||
+                error.response.status === 500
+              ) {
+                toast.error(error.response.data.message);
+              }
+            });
+        } else {
+          navigate("/address-details");
+        }
+      } else {
+        localStorage.setItem("redirectTo", location?.pathname);
+        navigate("/registration");
+      }
     } else {
-      localStorage.setItem("redirectTo", location?.pathname);
-      navigate("/login");
+      toast.error("Cart is Empty...");
     }
   };
   // Reset Controls

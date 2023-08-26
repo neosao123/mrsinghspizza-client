@@ -20,13 +20,13 @@ const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 
 const ValidateSchema = Yup.object({
   phoneno: Yup.string()
-    .required("Required")
+    .required("Phone Number is Required")
     .matches(
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
   password: Yup.string()
-    .required("Required")
+    .required("Password is Required")
     .min(8, "Password must have at least 8 characters")
     .matches(/[0-9]/, getCharacterValidationError("digit")),
   // .matches(/[a-z]/, getCharacterValidationError("lowercase"))

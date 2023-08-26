@@ -13,6 +13,10 @@ import { useDispatch } from "react-redux";
 import { LOGIN_SUCCESS } from "../../redux/authProvider/actionType";
 import swal from "sweetalert";
 
+// Validation Functions
+const getCharacterValidationError = (str) => {
+  return `Your password must have at least 1 ${str} character`;
+};
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
 
@@ -27,7 +31,8 @@ const ValidateSchema = Yup.object({
     ),
   password: Yup.string()
     .required("Password is required")
-    .min(8, "Password must have at least 8 characters"),
+    .min(8, "Password must have at least 8 characters")
+    .matches(/[0-9]/, getCharacterValidationError("digit")),
   city: Yup.string().required("City is required"),
   postalcode: Yup.string()
     .required("Postal Code is required")

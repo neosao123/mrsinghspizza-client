@@ -13,6 +13,7 @@ import AddressDetails from "../pages/AddressDetails";
 import Payment from "../pages/Payment";
 import Success from "../pages/Payment/Success";
 import Cancel from "../pages/Payment/Cancel";
+import LoginReg from "../pages/Auth/LoginReg";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -39,8 +40,7 @@ const AllRoutes = () => {
     <Routes>
       <Route exact index path="/" Component={Home} />
       <Route exact path="/:ptype" Component={Home} />
-      <Route exact path="/login" Component={Login} />
-      <Route exact path="/registration" Component={Registration} />
+      <Route exact path="/login-registration" Component={LoginReg} />
       <Route exact path="/create-your-own/" Component={CreateYourOwn} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={Cart} />

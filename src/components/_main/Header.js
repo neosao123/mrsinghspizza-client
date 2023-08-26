@@ -29,13 +29,14 @@ const Header = () => {
         title: "Logout Confirmation",
         text: "Do you really want to logout?",
         icon: "warning",
-        buttons: ["Cancel", "Logut"],
+        buttons: ["Cancel", "Logout"],
         dangerMode: true,
       }).then(async (willDelete) => {
         if (willDelete) {
           localStorage.removeItem("user");
           localStorage.removeItem("token");
           localStorage.removeItem("registeredUser");
+          localStorage.removeItem("prevUrl");
           toast.success("Logged Out successfully");
           dispatch({ type: LOGOUT, payload: null });
           setTimeout(() => {
@@ -64,17 +65,13 @@ const Header = () => {
                       <img src={appLogo} alt="logo" className="img-fluid" />
                     </Link>
                   </div>
-                  {/* <Link className="nav-opener py-3">
-                    <i class="fa fa-bars" aria-hidden="true"></i>
-                  </Link> */}
-
                   {!dropMenu && (
                     <Link
                       className="nav-opener py-3"
                       onClick={() => setDropMenu(true)}
                       style={{ transition: ".5s all ease-in" }}
                     >
-                      <i class="fa fa-bars" aria-hidden="true"></i>
+                      <i className="fa fa-bars" aria-hidden="true"></i>
                     </Link>
                   )}
                   {dropMenu && (
@@ -82,7 +79,7 @@ const Header = () => {
                       className="nav-opener py-3"
                       onClick={() => setDropMenu(false)}
                     >
-                      <i class="fa fa-times" aria-hidden="true"></i>
+                      <i className="fa fa-times" aria-hidden="true"></i>
                     </Link>
                   )}
                   <nav className="nav">
@@ -120,7 +117,11 @@ const Header = () => {
                       <li className="drop" onClick={handleLogout}>
                         <Link
                           className="py-5"
-                          to={isAuthenticated === false ? "/login" : "/"}
+                          to={
+                            isAuthenticated === false
+                              ? "/login-registration"
+                              : "/"
+                          }
                         >
                           {isAuthenticated === false
                             ? "Login / Signup"
@@ -235,7 +236,7 @@ const Header = () => {
               <li onClick={handleLogout} className="py-2">
                 <Link
                   className="text-decoration-none text-dark"
-                  to={isAuthenticated === false ? "/login" : "/"}
+                  to={isAuthenticated === false ? "/login-registration" : "/"}
                 >
                   {isAuthenticated === false ? "Login / Signup" : "Logout"}
                 </Link>

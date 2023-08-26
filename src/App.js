@@ -1,6 +1,7 @@
 import { ToastContainer } from "react-toastify";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.js";
+
 import "animate.css";
 import "./assets/styles/style.css";
 import "./assets/styles/colors.css";

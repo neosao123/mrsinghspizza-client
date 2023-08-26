@@ -17,7 +17,7 @@ function OrderSummary({ cart }) {
           </div>
           <div className="text-end mb-3">
             <span className="mx-4">
-              $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+              {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
             </span>
           </div>
         </div>
@@ -35,7 +35,7 @@ function OrderSummary({ cart }) {
           </div>
           <div className="text-end mb-3">
             <span className="mx-4">
-              $ {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
+              {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
             </span>
           </div>
         </div>
@@ -55,7 +55,6 @@ function OrderSummary({ cart }) {
           </div>
           <div className="text-end mb-3">
             <span className="mx-4">
-              ${" "}
               {cart?.deliveryCharges
                 ? cart?.deliveryCharges
                 : Number(0).toFixed(2)}
@@ -66,7 +65,7 @@ function OrderSummary({ cart }) {
           <div className="text-start mb-3">
             <strong>Grand Total : </strong>
           </div>
-          <div className="text-end mb-3">
+          <div className="text-end fw-bold mb-3">
             <span className="mx-4">
               $ {cart?.grandtotal ? cart?.grandtotal : (0.0).toFixed(2)}
             </span>

@@ -114,7 +114,11 @@ function MainCartList({ cData, setLoading }) {
                   className="w-100 d-flex justify-content-start flex-column main-cartPizza"
                   key={index}
                 >
-                  <h4 className="mb-1 mt-1">Pizza {index + 1}</h4>
+                  <h4 className="mb-1 mt-1">
+                    {cData?.productType === "customized"
+                      ? "Pizza"
+                      : "Pizza " + (index + 1)}
+                  </h4>
 
                   {data?.crust && (
                     <div className="mb-1 crust">

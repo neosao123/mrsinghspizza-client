@@ -86,7 +86,7 @@ export default class CartFunction {
         setCart(currentCart);
         {
           isEdit === true
-            ? toast.success("Order Updated Successfully...")
+            ? toast.success("Product Updated Successfully...")
             : toast.success("Product Added Successfully...");
         }
       }

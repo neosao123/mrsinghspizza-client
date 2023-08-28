@@ -83,7 +83,7 @@ function Login() {
   }, [location]);
   return (
     <div className="row gx-3">
-      <div className="content p-5 col-lg-10 col-md-12 col-sm-12 rounded">
+      <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4">
         <h3 className="mb-4">
           <strong>Login</strong>
         </h3>

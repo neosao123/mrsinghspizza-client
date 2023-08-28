@@ -125,7 +125,7 @@ function CartList({
           </span>
         </div>
       )}
-      {cData?.config?.pizzaSize && (
+      {cData?.pizzaSize && (
         <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
           <p className="">Size : </p>
           <span className="mx-2">
@@ -142,7 +142,11 @@ function CartList({
               className="d-flex justify-content-start flex-column selectedPizza"
               key={index}
             >
-              <h4 className="mb-1">Pizza {index + 1}</h4>
+              <h4 className="mb-1">
+                {cData?.productType === "customized"
+                  ? "Pizza"
+                  : "Pizza " + (index + 1)}
+              </h4>
               {data?.crust && (
                 <div className="mb-1">
                   <p>Crust :</p>

@@ -20,19 +20,19 @@ const ValidateSchema = Yup.object({
   firstname: Yup.string()
     .required("First name is required")
     .matches(
-      /^[A-Za-z]+$/,
-      "First name should only contain alphabetic characters"
+      /^[A-Za-z\ ]+$/,
+      "First name should only contain alphabetic characters, spaces"
     )
     .min(3, "First name must be at least 3 characters")
     .max(50, "First name cannot be longer than 50 characters"),
   lastname: Yup.string()
     .required("Last name is required")
     .matches(
-      /^[A-Za-z]+$/,
-      "Last name should only contain alphabetic characters"
+      /^[A-Za-z\ ]+$/,
+      "Last name should only contain alphabetic characters, spaces"
     )
     .min(3, "Last name must be at least 3 characters")
-    .max(50, "First name cannot be longer than 50 characters"),
+    .max(50, "Last name cannot be longer than 50 characters"),
   phoneno: Yup.string()
     .required("Phone number is required")
     .matches(
@@ -49,10 +49,10 @@ const ValidateSchema = Yup.object({
     .required("City is required")
     .matches(
       /^[A-Za-z\ ]+$/,
-      "City name should only contain alphabetic characters, spaces, and hyphens"
+      "City name should only contain alphabetic characters, spaces"
     )
-    .min(3, "Last name must be at least 3 characters")
-    .max(50, "First name cannot be longer than 50 characters"),
+    .min(3, "City must be at least 3 characters")
+    .max(50, "City cannot be longer than 50 characters"),
   postalcode: Yup.string()
     .required("Postal Code is required")
     .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),

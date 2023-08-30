@@ -3,26 +3,43 @@
   font-weight: 700;
   color: #ef831b;
 }
+.cancelCart,
 .addtocart {
-  background-color: #ef831b;
   color: #ffffff !important;
   border: none;
+  font-size: 0.95rem;
+  font-weight: 550;
+}
+.addtocart {
+  background-color: #ef831b;
 }
 .cancelCart {
   background-color: #878787;
-  color: #ffffff !important;
-  border: none;
 }
 .cancelCart:hover,
 .cancelCart.active,
 .addtocart.active,
 .addtocart:hover {
   background-color: #2e2e2e !important;
-  transition: 0.3s all ease-in-out;
+  transition: 0.7s all ease-in-out;
 }
+/* Order Summary */
 .block-stl10 h3 {
-  font-size: 1.2rem !important;
+  font-size: 1rem !important;
 }
+.block-stl10 .ttl {
+  font-size: 0.95rem !important;
+  font-weight: 500;
+}
+.block-stl10 .stts {
+  font-size: 0.95rem !important;
+}
+.block-stl10 .ttlnm,
+.block-stl10 .odr-stts {
+  font-size: 1rem !important;
+  font-weight: 650;
+}
+/*  */
 .cartlistitem .image img {
   width: 75px;
   height: 75px;

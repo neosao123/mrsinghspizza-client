@@ -127,14 +127,14 @@ function Cart() {
         <LoadingLayout />
       ) : (
         <section className="new-block mb-3">
-          <div className="container-fluid">
+          <div className="container-fluid px-lg-4 px-md-4 px-sm-2">
             <div className="row gx-4">
-              <div className="col-lg-12 col-md-12 col-sm-12 px-4 py-2 mt-3">
+              <div className="col-lg-12 col-md-12 col-sm-12 py-2 mt-3">
                 <div className="d-flex justify-content-start align-items-center w-100 productList mb-1">
                   <h3 className="mx-2">Your Cart</h3>
                 </div>
               </div>
-              <div className="col-lg-8 col-md-12 col-sm-12 px-4 py-2 mt-1 mb-3">
+              <div className="col-lg-8 col-md-12 col-sm-12 py-2 mt-1 mb-3">
                 <ul className="list-group">
                   {cart?.product?.map((cData) => {
                     return (
@@ -148,73 +148,80 @@ function Cart() {
                 </ul>
               </div>
               {/* Order Summary */}
-              <div className="col-lg-4 col-md-12 col-sm-12 px-4 py-2 mt-1 mb-3">
-                <div className="block-stl10 odr-summary">
-                  <h3>Order Summary :</h3>
-                  <ul className="list-unstyled">
-                    <li>
-                      <span className="ttl">Sub Total</span>{" "}
-                      <span className="stts">
-                        $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
-                      </span>
-                    </li>
-                    <li>
-                      <span className="ttl">Tax Percentage (%)</span>{" "}
-                      <span className="stts">
-                        {cart?.taxPer ? cart?.taxPer : 0}
-                      </span>
-                    </li>
-                    <li>
-                      <span className="ttl">Tax Amount</span>{" "}
-                      <span className="stts">
-                        ${" "}
-                        {cart?.taxAmount
-                          ? cart?.taxAmount
-                          : Number(0).toFixed(2)}
-                      </span>
-                    </li>
-                    <li>
-                      <span className="ttl">Convinence Charges (%)</span>{" "}
-                      <span className="stts">
-                        {cart?.convinenceCharges ? cart?.convinenceCharges : 0}
-                      </span>
-                    </li>
-                    <li>
-                      <span className="ttl">Delivery Charges</span>{" "}
-                      <span className="stts">
-                        ${" "}
-                        {cart?.deliveryCharges
-                          ? cart?.deliveryCharges
-                          : Number(0).toFixed(2)}
-                      </span>
-                    </li>
-                  </ul>
-                  <div className="ttl-all">
-                    <span className="ttlnm">Grand Total</span>
-                    <span className="odr-stts">
-                      $ {cart?.grandtotal ? cart?.grandtotal : (0.0).toFixed(2)}
-                    </span>
-                  </div>
-                </div>
-                <div className="w-100 text-end d-flex justify-content-center flex-wrap align-items-center">
-                  <div className="row w-100">
-                    <div className="col-lg-6 col-md-6 col-sm-12">
-                      <button
-                        type="button"
-                        className="w-100 px-5 rounded my-3 py-3 cancelCart"
-                        onClick={handleCancelOrder}
-                      >
-                        Cancel Order
-                      </button>
+              <div className="col-lg-4 col-md-12 col-sm-12 py-2 mt-1 mb-3">
+                <div className="row">
+                  <div className="col-lg-12 col-md-12 col-sm-12 mb-2">
+                    <div className="block-stl10 odr-summary mb-0">
+                      <h3>Order Summary :</h3>
+                      <ul className="list-unstyled">
+                        <li>
+                          <span className="ttl">Sub Total</span>{" "}
+                          <span className="stts">
+                            {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+                          </span>
+                        </li>
+                        <li>
+                          <span className="ttl">Tax Percentage (%)</span>{" "}
+                          <span className="stts">
+                            {cart?.taxPer ? cart?.taxPer : 0}
+                          </span>
+                        </li>
+                        <li>
+                          <span className="ttl">Tax Amount</span>{" "}
+                          <span className="stts">
+                            {cart?.taxAmount
+                              ? cart?.taxAmount
+                              : Number(0).toFixed(2)}
+                          </span>
+                        </li>
+                        <li>
+                          <span className="ttl">Convinence Charges (%)</span>{" "}
+                          <span className="stts">
+                            {cart?.convinenceCharges
+                              ? cart?.convinenceCharges
+                              : 0}
+                          </span>
+                        </li>
+                        <li>
+                          <span className="ttl">Delivery Charges</span>{" "}
+                          <span className="stts">
+                            {cart?.deliveryCharges
+                              ? cart?.deliveryCharges
+                              : Number(0).toFixed(2)}
+                          </span>
+                        </li>
+                      </ul>
+                      <div className="ttl-all">
+                        <span className="ttlnm">Grand Total</span>
+                        <span className="odr-stts">
+                          ${" "}
+                          {cart?.grandtotal
+                            ? cart?.grandtotal
+                            : (0.0).toFixed(2)}
+                        </span>
+                      </div>
                     </div>
-                    <div className="col-lg-6 col-md-6 col-sm-12">
-                      <button
-                        type="submit"
-                        className="w-100 px-5 rounded my-3 py-3 addtocart"
-                        onClick={handleCheckout}
-                      >
-                        Checkout
-                      </button>
+                  </div>
+                  <div className="col-lg-12 col-md-12 col-sm-12">
+                    <div className="row gx-3">
+                      <div className="col-lg-6 col-md-6 col-sm-12">
+                        <button
+                          type="button"
+                          className="w-100 rounded my-2 py-3 cancelCart"
+                          onClick={handleCancelOrder}
+                        >
+                          Cancel Order
+                        </button>
+                      </div>
+                      <div className="col-lg-6 col-md-6 col-sm-12">
+                        <button
+                          type="submit"
+                          className="w-100 rounded my-2 py-3 addtocart"
+                          onClick={handleCheckout}
+                        >
+                          Checkout
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

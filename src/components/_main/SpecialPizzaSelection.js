@@ -33,7 +33,7 @@ function SpecialPizzaSelection({
       </div>
       {/* Crust, Cheese, Specialbases */}
       <div className="row mb-3 border-bottom">
-        <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
           <div className="d-flex justify-content-center flex-column align-items-start w-100">
             <p className="text-start mb-2">Crust :</p>
             <SpecialCrustDropdown
@@ -44,7 +44,7 @@ function SpecialPizzaSelection({
             />
           </div>
         </div>
-        <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
           <div className="d-flex justify-content-center flex-column align-items-start w-100">
             <p className="text-start mb-2">Cheese :</p>
             <SpecialCheeseDropdown
@@ -55,7 +55,7 @@ function SpecialPizzaSelection({
             />
           </div>
         </div>
-        <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
           <div className="d-flex justify-content-center flex-column align-items-start w-100">
             <p className="text-start mb-2">Specialbases :</p>
             <SpecialbasesDropDown
@@ -71,12 +71,9 @@ function SpecialPizzaSelection({
       <div className="p-2 pizza-heading text-center">
         <h4 className="my-1">Toppings</h4>
       </div>
-      <div
-        className="row gx-4 mb-3 mt-4"
-        style={{ maxHeight: "450px", overflowY: "scroll" }}
-      >
+      <div className="row gx-4 mb-3 mt-4 toppings">
         {/* count 2 toppings */}
-        <div className="col-lg-4 col-md-6 col-sm-12">
+        <div className="col-md-4 col-sm-12 tpsContent mb-3">
           <p className="text-center tps-title pb-3 border-bottom border-3">
             Toppings (Count 2)
           </p>
@@ -95,7 +92,7 @@ function SpecialPizzaSelection({
           })}
         </div>
         {/* count 1 toppings */}
-        <div className="col-lg-4 col-md-6 col-sm-12">
+        <div className="col-md-4 col-sm-12 tpsContent mb-3">
           <p className="text-center tps-title pb-3 border-bottom border-3">
             Toppings (Count 1)
           </p>
@@ -119,7 +116,7 @@ function SpecialPizzaSelection({
           })}
         </div>
         {/* indians toppings (free) */}
-        <div className="col-lg-4 col-md-6 col-sm-12">
+        <div className="col-md-4 col-sm-12 tpsContent mb-3">
           <p className="text-center tps-title pb-3 border-bottom border-3">
             Indians Style Toppings
           </p>

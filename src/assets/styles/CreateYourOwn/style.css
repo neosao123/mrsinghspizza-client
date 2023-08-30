@@ -14,9 +14,83 @@
 .placeOrderBtn button {
   background-color: #ef831b;
   color: #ffffff !important;
+  font-size: 0.86rem;
+  font-weight: 600;
 }
 .placeOrderBtn button.active,
 .placeOrderBtn button:focus,
 .placeOrderBtn button:hover {
   background-color: #2e2e2e !important;
+}
+
+.cartBtnBottom,
+.cartBtnBottom.active {
+  background-color: #df6c00;
+  color: #ffffff;
+}
+/* Toppings */
+.toppings {
+  max-height: 450px;
+  overflow-y: scroll;
+}
+.toppings > .form-select,
+.toppings button {
+  font-size: 0.85rem !important;
+}
+.toppings button {
+  font-weight: 600;
+}
+.toppings span {
+  font-size: 0.9rem !important;
+  line-height: 1.1rem;
+}
+/* Sides */
+.sidesContent .form-select,
+.sidesContent button {
+  font-size: 0.85rem;
+}
+.sidesContent button {
+  font-weight: 600;
+}
+.sidesContent span {
+  font-size: 0.9rem !important;
+  line-height: 1.1rem;
+}
+/* Dips */
+.dipsContent span {
+  font-size: 0.9rem !important;
+}
+.dipsContent .form-control,
+.dipsContent button {
+  font-size: 0.85rem;
+}
+.dipsContent button {
+  font-weight: 600;
+}
+/* Drinks */
+.drinksContent span {
+  font-size: 0.9rem !important;
+}
+.drinksContent .form-control,
+.drinksContent button {
+  font-size: 0.85rem;
+}
+.drinksContent button {
+  font-weight: 600;
+}
+
+@media screen and (min-width: 768px) and (max-width: 992px) {
+  .toppings {
+    max-height: 450px;
+    overflow-y: hidden;
+  }
+  .tpsContent {
+    max-height: 430px;
+    overflow-y: scroll;
+  }
+  .tps-title {
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+  }
 }

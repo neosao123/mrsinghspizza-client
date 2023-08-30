@@ -81,31 +81,34 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
 
   return (
     <div
-      className="p-2 d-flex justify-content-between align-items-center border-bottom"
+      className="row gx-3 m-0 p-0 border-bottom align-items-center py-1 py-md-0"
       key={data.dipsCode}
     >
-      <span className="mx-2">{data.dipsName}</span>
-      <div className="w-50 d-flex justify-content-end align-items-center">
-        <input
-          type="number"
-          className="form-control text-end w-25"
-          step={0.0}
-          value={qauntity}
-          onChange={handleQuantity}
-        />
-        <span className="mx-4">$ {data.price}</span>
-        <button
-          type="button"
-          className="addbtn btn btn-sm px-4 text-white text-center"
-          onClick={(e) => handleDips(e, data.dipsCode)}
-          style={{
-            backgroundColor: dispButtonColor,
-            transition: ".3s",
-            width: "100px",
-          }}
-        >
-          {dipsButton === false ? "Add" : "Remove"}
-        </button>
+      <span className="col-lg-8 col-md-6 col-sm-12 pb-lg-0 pt-2 pt-md-0">
+        {data.dipsName} <span className="mx-2">( $ {data.price} )</span>
+      </span>
+      <div className="col-lg-4 col-md-6 col-sm-12 pb-1">
+        <div className="input-group w-100 py-2 text-end">
+          <input
+            type="number"
+            className="form-control text-end"
+            step={0.0}
+            value={qauntity}
+            onChange={handleQuantity}
+          />
+          <button
+            type="button"
+            className="addbtn btn btn-sm text-white text-center"
+            onClick={(e) => handleDips(e, data.dipsCode)}
+            style={{
+              backgroundColor: dispButtonColor,
+              transition: ".3s",
+              width: "100px",
+            }}
+          >
+            {dipsButton === false ? "Add" : "Remove"}
+          </button>
+        </div>
       </div>
     </div>
   );

@@ -72,14 +72,14 @@ function Dips({ data, dipsArr, setDipsArr, reset, payloadEdit }) {
       >
         <span className="mx-2">{data.dipsName}</span>
         <div className="mx-1 d-flex align-items-center">
-          <button className="quantityBtn mx-2" onClick={countDec}>
+          <button className="quantityBtn mx-1" onClick={countDec}>
             <i className="fa fa-minus" aria-hidden="true"></i>
           </button>
           <span className="mx-1">{count}</span>
-          <button className="quantityBtn mx-2" onClick={countInc}>
+          <button className="quantityBtn mx-1" onClick={countInc}>
             <i className="fa fa-plus" aria-hidden="true"></i>
           </button>
-          <span className="mx-3"> $ {data?.price}</span>
+          <span className="mx-2"> $ {data?.price}</span>
         </div>
       </div>
     </>

@@ -30,6 +30,7 @@ import CartFunction from "../components/cart";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
 import swal from "sweetalert";
+import ResponsiveCart from "../components/_main/Cart/ResponsiveCart";
 
 function CreateYourOwn() {
   const pizzaSizeArr = [
@@ -429,15 +430,19 @@ function CreateYourOwn() {
       setDrinksArr(payloadEdit?.config?.drinks);
     }
   }, [payloadEdit]);
+
   return (
-    <div>
+    <div style={{ position: "relative" }}>
       <Header />
       {loading ? (
         <>
           <LoadingLayout />
         </>
       ) : (
-        <section className="container-fluid new-block m-0 p-0 w-100">
+        <section
+          className="container-fluid new-block m-0 p-0 w-100"
+          style={{ position: "relative" }}
+        >
           {/* Heading */}
           <div className="position-sticky top-0 custmized-main">
             <div className="d-flex flex-wrap justify-content-center bg-dark align-items-center p-3 custmized">
@@ -451,9 +456,9 @@ function CreateYourOwn() {
             </div>
           </div>
 
-          <div className="d-flex justify-content-between w-100">
+          <div className="row m-0 p-0 w-100 justify-content-center">
             {/* Pizza Selection */}
-            <div className="pizzaSelection w-75 m-3 p-3">
+            <div className="col-lg-9 col-md-12 col-sm-12 pizzaSelection py-lg-4 px-lg-3 px-3 py-4">
               {/* Pizza Size */}
               <div className="row mb-3 border-bottom">
                 <div className="col-lg-4 col-md-6 col-md-6 mb-3">
@@ -479,7 +484,7 @@ function CreateYourOwn() {
 
               {/* Crust, Cheese, Specialbases */}
               <div className="row mb-3 border-bottom">
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
                   <div className="d-flex justify-content-center flex-column align-items-start w-100">
                     <p className="text-start mb-2">Crust :</p>
                     <SelectedCrustDropDown
@@ -489,7 +494,7 @@ function CreateYourOwn() {
                     />
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
                   <div className="d-flex justify-content-center flex-column align-items-start w-100">
                     <p className="text-start mb-2">Cheese :</p>
                     <SelectedCheeseDropDown
@@ -499,7 +504,7 @@ function CreateYourOwn() {
                     />
                   </div>
                 </div>
-                <div className="col-lg-4 col-md-6 col-sm-12 mb-3">
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
                   <div className="d-flex justify-content-center flex-column align-items-start w-100">
                     <p className="text-start mb-2">Specialbases :</p>
                     <SelectedSpecialbasesDropDown
@@ -516,12 +521,9 @@ function CreateYourOwn() {
               <div className="p-2 pizza-heading text-center">
                 <h4 className="my-1">Toppings</h4>
               </div>
-              <div
-                className="row gx-4 mb-3 mt-4"
-                style={{ maxHeight: "450px", overflowY: "scroll" }}
-              >
+              <div className="row gx-4 mb-3 mt-4 toppings">
                 {/* count 2 toppings */}
-                <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="col-md-4 col-sm-12 tpsContent mb-3">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Toppings (Count 2)
                   </p>
@@ -539,7 +541,7 @@ function CreateYourOwn() {
                   })}
                 </div>
                 {/* count 1 toppings */}
-                <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="col-md-4 col-sm-12 tpsContent mb-3">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Toppings (Count 1)
                   </p>
@@ -557,7 +559,7 @@ function CreateYourOwn() {
                   })}
                 </div>
                 {/* indians toppings (free) */}
-                <div className="col-lg-4 col-md-6 col-sm-12">
+                <div className="col-md-4 col-sm-12 tpsContent mb-3">
                   <p className="text-center tps-title pb-3 border-bottom border-3">
                     Indians Style Toppings
                   </p>
@@ -577,14 +579,14 @@ function CreateYourOwn() {
               </div>
 
               {/* Sides */}
-              <div className="p-2 pizza-heading text-center">
+              <div className="p-2 pizza-heading text-center mb-2">
                 <h4 className="my-1">Sides</h4>
               </div>
               <div
                 className="row mb-3"
                 style={{ maxHeight: "450px", overflowY: "scroll" }}
               >
-                <div id="sides" className="mb-3">
+                <div id="sides" className="col-lg-12 mb-3 sidesContent">
                   {sideData?.map((data) => {
                     return (
                       <Sides
@@ -605,7 +607,7 @@ function CreateYourOwn() {
                 <h4 className="my-1">Dips</h4>
               </div>
               <div className="row mb-3">
-                <div id="dips" className="mb-3">
+                <div id="dips" className="col-lg-12 mb-3 dipsContent">
                   {allIngredients?.dips?.map((data) => {
                     return (
                       <Dips
@@ -626,7 +628,7 @@ function CreateYourOwn() {
                 <h4 className="my-1">Drinks</h4>
               </div>
               <div className="row mb-3">
-                <div id="drinks" className="mb-3">
+                <div id="drinks" className="col-lg-12 mb-3 drinksContent">
                   {allIngredients?.softdrinks?.map((data) => {
                     return (
                       <Drinks
@@ -643,10 +645,10 @@ function CreateYourOwn() {
               </div>
             </div>
 
-            <div className="w-25 m-3 p-3">
+            <div className="col-lg-3 py-lg-4 px-lg-3 d-lg-block d-none">
               {/* Total Price and Add To Cart - Button */}
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
-                <p className="text-drak mb-3 mx-1">
+                <p className="text-dark mb-3">
                   <strong>
                     $
                     {totalPrice
@@ -656,7 +658,7 @@ function CreateYourOwn() {
                 </p>
                 <button
                   type="button"
-                  className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
+                  className="addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
                   onClick={handleAddToCart}
                 >
                   <b>
@@ -690,7 +692,7 @@ function CreateYourOwn() {
                 <OrderSummary cart={cart} />
                 <div className="placeOrderBtn w-100 mt-3">
                   <button
-                    className="btn btn-md w-100 btn-pills"
+                    className="btn btn-md w-100 py-2 btn-pills"
                     onClick={handlePlaceOrder}
                   >
                     Place Order{" "}
@@ -699,9 +701,13 @@ function CreateYourOwn() {
               </div>
             </div>
           </div>
+          <ResponsiveCart
+            handleAddToCart={handleAddToCart}
+            totalPrice={totalPrice}
+            payloadEdit={payloadEdit}
+          />
         </section>
       )}
-
       <Footer />
     </div>
   );

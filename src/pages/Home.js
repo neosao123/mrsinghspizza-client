@@ -12,6 +12,7 @@ import GlobalContext from "../context/GlobalContext";
 import CartFunction from "../components/cart";
 import { settingApi } from "../services";
 import { toast } from "react-toastify";
+import ResponsiveCart from "../components/_main/Cart/ResponsiveCart";
 
 const Home = () => {
   // Global Context
@@ -291,7 +292,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-
+      <ResponsiveCart />
       <Footer />
     </div>
   );

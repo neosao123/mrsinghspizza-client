@@ -166,7 +166,7 @@ const Header = () => {
           }}
         >
           <nav className="nav w-100 d-flex justify-content-center">
-            <ul className="list-unstyled p-3">
+            <ul className="w-100 text-center list-unstyled p-3">
               <li className="border-bottom py-2">
                 <Link
                   className="text-decoration-none text-dark"

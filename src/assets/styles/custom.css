@@ -44,8 +44,8 @@
   background-color: #ffead7;
 }
 .pizzaSelection p {
-  font-size: 1.1rem !important;
-  font-weight: 600;
+  font-size: 1rem !important;
+  font-weight: 550;
 }
 .pizzaSelection .form-select {
   font-size: 0.9rem;
@@ -136,6 +136,9 @@
   background-color: #ef831b;
   color: #ffffff !important;
 }
+.addtocartbtn {
+  font-size: 0.86rem !important;
+}
 
 .customizedBtn:hover,
 .customizedBtn.active,
@@ -189,4 +192,12 @@
 }
 .formErrMsg {
   font-size: 0.95rem;
+}
+
+/* CartList */
+.orderSummary span {
+  font-size: 0.85rem;
+}
+.orderSummary div {
+  font-size: 0.9rem;
 }

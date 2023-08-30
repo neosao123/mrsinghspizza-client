@@ -6354,7 +6354,7 @@ ul.button-group {
 }
 .block-stl10 h3 {
   color: #000000;
-  font-size: 20px;
+  font-size: .8rem !important;
   text-transform: uppercase;
   margin-bottom: 10px;
   font-weight: 600;

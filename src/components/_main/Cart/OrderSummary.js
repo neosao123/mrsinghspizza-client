@@ -1,22 +1,17 @@
 import React from "react";
+import "../../../assets/styles/custom.css";
 
 function OrderSummary({ cart }) {
   return (
     <>
-      <input
-        type="number"
-        step={0.01}
-        defaultValue={0.0}
-        className="form-control mb-4 text-end d-none"
-      />
       {/* SubTotal, TaxPer, GrandTotal */}
-      <div className="row">
+      <div className="row orderSummary">
         <div className="d-flex justify-content-between">
           <div className="text-start mb-3">
             <strong>Sub Total : </strong>
           </div>
           <div className="text-end mb-3">
-            <span className="mx-4">
+            <span className="mx-2">
               {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
             </span>
           </div>
@@ -26,7 +21,7 @@ function OrderSummary({ cart }) {
             <strong>Tax Percentage (%) : </strong>
           </div>
           <div className="text-end mb-3">
-            <span className="mx-4">{cart?.taxPer ? cart?.taxPer : 0}</span>
+            <span className="mx-2">{cart?.taxPer ? cart?.taxPer : 0}</span>
           </div>
         </div>
         <div className="d-flex justify-content-between flex-wrap">
@@ -34,17 +29,17 @@ function OrderSummary({ cart }) {
             <strong>Tax Amount : </strong>
           </div>
           <div className="text-end mb-3">
-            <span className="mx-4">
+            <span className="mx-2">
               {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
             </span>
           </div>
         </div>
         <div className="d-flex justify-content-between flex-wrap">
           <div className="text-start mb-3">
-            <strong>Convinence Charges (%) : </strong>
+            <strong>Convinence Charges (%)</strong>
           </div>
           <div className="text-end mb-3">
-            <span className="mx-4">
+            <span className="mx-2">
               {cart?.convinenceCharges ? cart?.convinenceCharges : 0}
             </span>
           </div>
@@ -54,7 +49,7 @@ function OrderSummary({ cart }) {
             <strong>Delivery Charges : </strong>
           </div>
           <div className="text-end mb-3">
-            <span className="mx-4">
+            <span className="mx-2">
               {cart?.deliveryCharges
                 ? cart?.deliveryCharges
                 : Number(0).toFixed(2)}
@@ -66,7 +61,7 @@ function OrderSummary({ cart }) {
             <strong>Grand Total : </strong>
           </div>
           <div className="text-end fw-bold mb-3">
-            <span className="mx-4">
+            <span className="mx-2">
               $ {cart?.grandtotal ? cart?.grandtotal : (0.0).toFixed(2)}
             </span>
           </div>

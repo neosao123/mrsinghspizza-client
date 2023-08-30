@@ -77,36 +77,40 @@ function Sides({ data, setSidesArr, sidesArr, reset, payloadEdit }) {
 
   return (
     <div
-      className="p-2 d-flex justify-content-between align-items-center border-bottom"
+      className="row gx-3 m-0 p-0 border-bottom align-items-center py-1 py-md-0"
       key={data.sideCode}
     >
-      <span className="mx-2">{data.sideName}</span>
-      <div className="w-50 d-flex justify-content-end">
-        <select
-          className="form-select w-50 mx-4 d-inline-block"
-          ref={sidesRef}
-          onChange={handleCombination}
-        >
-          {data?.combination?.map((combination) => {
-            return (
-              <option key={combination.lineCode} value={combination.lineCode}>
-                {combination.size} - ${combination.price}
-              </option>
-            );
-          })}
-        </select>
-        <button
-          type="button"
-          className="addbtn btn btn-sm px-4 text-white"
-          onClick={handleSides}
-          style={{
-            backgroundColor: sideButtonColor,
-            transition: ".3s",
-            width: "100px",
-          }}
-        >
-          {sideButton === false ? "Add" : "Remove"}
-        </button>
+      <span className="col-lg-6 col-md-6 col-sm-12 pb-lg-0 pt-2 pt-md-0">
+        {data.sideName}
+      </span>
+      <div className="col-lg-6 col-md-6 col-sm-12 pb-1">
+        <div className="row gx-3 justify-content-lg-end justify-content-between py-2">
+          <select
+            className="col-lg-8 col-md-6 col-sm-6 mx-2 form-select"
+            ref={sidesRef}
+            onChange={handleCombination}
+          >
+            {data?.combination?.map((combination) => {
+              return (
+                <option key={combination.lineCode} value={combination.lineCode}>
+                  {combination.size} - ${combination.price}
+                </option>
+              );
+            })}
+          </select>
+          <button
+            type="button"
+            className="col-lg-4 col-md-6 col-sm-6 addbtn btn btn-sm px-4 text-white"
+            onClick={handleSides}
+            style={{
+              backgroundColor: sideButtonColor,
+              transition: ".3s",
+              width: "100px",
+            }}
+          >
+            {sideButton === false ? "Add" : "Remove"}
+          </button>
+        </div>
       </div>
     </div>
   );

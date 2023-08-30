@@ -22,6 +22,7 @@ import { v4 as uuidv4 } from "uuid";
 import CartFunction from "../components/cart";
 import swal from "sweetalert";
 import { useSelector } from "react-redux";
+import ResponsiveCart from "../components/_main/Cart/ResponsiveCart";
 
 function SpecialMenu() {
   // Global Context
@@ -634,9 +635,9 @@ function SpecialMenu() {
               </h2>
             </div>
           </div>
-          <div className="d-flex justify-content-between w-100">
+          <div className="row m-0 p-0 w-100 justify-content-center">
             {/* Pizza Selection */}
-            <div className="pizzaSelection w-75 m-3 p-3">
+            <div className="col-lg-9 col-md-12 col-sm-12 pizzaSelection py-lg-4 px-lg-3 px-3 py-4">
               {/* Pizza Size, noofToppings, additional-Toppings */}
               <div className="row mb-3 border-bottom">
                 <div className="col-lg-4 col-md-6 col-md-6 mb-3">
@@ -653,7 +654,7 @@ function SpecialMenu() {
                     </select>
                   </div>
                 </div>
-                <div className="col-lg-12 col-md-6 col-md-6 mb-3">
+                <div className="col-lg-12 col-md-12 col-md-12 mb-3">
                   <p>
                     Free Toppings :{" "}
                     <span className="mx-4">
@@ -661,7 +662,7 @@ function SpecialMenu() {
                     </span>
                   </p>
                 </div>
-                <div className="col-lg-12 col-md-6 col-md-6 mb-3">
+                <div className="col-lg-12 col-md-12 col-md-12 mb-3">
                   <p>
                     Additional Toppings Used :{" "}
                     <span className="mx-4">{additionalTps}</span>
@@ -684,7 +685,7 @@ function SpecialMenu() {
                     className="row mb-3"
                     style={{ maxHeight: "450px", overflowY: "scroll" }}
                   >
-                    <div id="sides" className="mb-3">
+                    <div id="sides" className="col-lg-12 mb-3 sidesContent">
                       {getSpecialData?.sides?.map((data) => {
                         return (
                           <Sides
@@ -713,7 +714,7 @@ function SpecialMenu() {
                       <h4 className="my-1">Dips</h4>
                     </div>
                     <div className="row gx-3 mb-3">
-                      <div id="dips" className="mb-3">
+                      <div id="dips" className="col-lg-12 mb-3 dipsContent">
                         {dipsData?.map((data) => {
                           return (
                             <Dips
@@ -762,9 +763,9 @@ function SpecialMenu() {
               </div>
             </div>
             {/* Total Price and Add To Cart - Button */}
-            <div className="w-25 m-3 p-3">
+            <div className="col-lg-3 py-lg-4 px-lg-3 d-lg-block d-none">
               <div className="d-flex w-100 align-items-center justify-content-center flex-column position-relative">
-                <p className="text-drak mb-3 mx-1">
+                <p className="text-dark mb-3">
                   <strong>
                     ${" "}
                     {totalPrice
@@ -774,7 +775,7 @@ function SpecialMenu() {
                 </p>
                 <button
                   type="button"
-                  className="position-sticky top-0 addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
+                  className="addtocartbtn w-50 btn btn-sm px-3 py-2 text-white"
                   onClick={handleAddToCart}
                 >
                   <b>
@@ -817,6 +818,11 @@ function SpecialMenu() {
               </div>
             </div>
           </div>
+          <ResponsiveCart
+            handleAddToCart={handleAddToCart}
+            totalPrice={totalPrice}
+            payloadEdit={payloadEdit}
+          />
         </section>
       )}
       <Footer />

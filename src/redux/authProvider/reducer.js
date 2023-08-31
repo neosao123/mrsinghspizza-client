@@ -1,4 +1,4 @@
-import { LOGIN_SUCCESS, LOGOUT } from "./actionType";
+import { LOGIN_SUCCESS, LOGOUT, UPDATEUSER } from "./actionType";
 
 export const authReducer = (state = null, { type, payload, token }) => {
   switch (type) {
@@ -10,6 +10,11 @@ export const authReducer = (state = null, { type, payload, token }) => {
       };
     case LOGOUT:
       return payload;
+    case UPDATEUSER:
+      return {
+        ...state,
+        data: payload,
+      };
     default:
       return state;
   }

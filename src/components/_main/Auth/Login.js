@@ -32,8 +32,8 @@ const ValidateSchema = Yup.object({
 
 function Login() {
   const [loginObj, setLoginObj] = new useState({
-    phoneno: "",
-    password: "",
+    phoneno: "9767040364",
+    password: "Client@123",
   });
   const globalctx = useContext(GlobalContext);
   const [user, setUser] = globalctx.user;

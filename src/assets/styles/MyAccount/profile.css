@@ -1,0 +1,29 @@
+.profilePhoto {
+  width: 5rem;
+  height: 5rem;
+  overflow: hidden;
+}
+.pTabs {
+  background-color: transparent;
+  color: #636363;
+  border-radius: 0% !important;
+}
+
+.pTabs:hover,
+.pTabs.active,
+.pTabs.focus {
+  background-color: #ff9026;
+  color: #fff;
+  transition: 0.3s all ease-in-out;
+}
+
+.icons {
+  width: 1.4rem;
+  height: 1.4rem;
+}
+.sideMenu {
+  background-color: #fff5eb;
+}
+.navMenu {
+  background-color: #fff3e8;
+}

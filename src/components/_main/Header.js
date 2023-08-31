@@ -50,8 +50,6 @@ const Header = () => {
     }
   };
 
-  // useEffect(() => {}, [dropMenu]);
-
   return (
     <>
       <div className="position-sticky top-0">
@@ -114,20 +112,19 @@ const Header = () => {
                           Contact Us
                         </Link>
                       </li>
-                      <li className="drop" onClick={handleLogout}>
-                        <Link
-                          className="py-5"
-                          to={
-                            isAuthenticated === false
-                              ? "/login-registration"
-                              : "/"
-                          }
-                        >
-                          {isAuthenticated === false
-                            ? "Login / Signup"
-                            : "Logout"}
-                        </Link>
-                      </li>
+                      {isAuthenticated === false ? (
+                        <li className="drop">
+                          <Link className="py-5" to={"/login-registration"}>
+                            Login / Signup
+                          </Link>
+                        </li>
+                      ) : (
+                        <li className="drop">
+                          <Link className="py-5" to={"/my-account"}>
+                            My Account
+                          </Link>
+                        </li>
+                      )}
                     </ul>
                   </nav>
                   <div className="nav-right-block w-auto px-4 py-4 h-100">

@@ -82,7 +82,10 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
       key={data.code}
     >
       <span className="col-lg-6 col-md-6 col-sm-12 pb-lg-0 pt-2 pt-md-0">
-        {data.sideName}
+        {data.sideName}{" "}
+        <span className="mx-2" style={{ textTransform: "capitalize" }}>
+          ( {data.type} )
+        </span>
       </span>
       <div className="col-lg-6 col-md-6 col-sm-12 pb-1">
         <div className="row gx-3 justify-content-lg-end justify-content-between py-2">

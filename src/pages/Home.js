@@ -292,7 +292,7 @@ const Home = () => {
           </div>
         </div>
       </section>
-      <ResponsiveCart />
+      {cart?.product?.length > 0 && <ResponsiveCart />}
       <Footer />
     </div>
   );

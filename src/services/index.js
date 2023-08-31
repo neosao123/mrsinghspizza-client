@@ -76,8 +76,11 @@ export const customerLogout = async (page, search, payload) => {
   const { data: response } = await http.post(`/customer/logout`);
   return response;
 };
-export const updateProfile = async (page, search, payload) => {
-  const { data: response } = await http.post(`/customer/updateProfile`);
+export const updateProfile = async (payload, page, search) => {
+  const { data: response } = await http.post(
+    `/customer/updateProfile`,
+    payload
+  );
   return response;
 };
 export const customerAddAddress = async (page, search, payload) => {
@@ -96,12 +99,23 @@ export const customerResetPassword = async (page, search, payload) => {
   const { data: response } = await http.post(`customer/resetPassword`);
   return response;
 };
+export const changePassword = async (payload, page, search) => {
+  const { data: response } = await http.post(
+    `customer/changepassword`,
+    payload
+  );
+  return response;
+};
+
 export const getVerifyToken = async (page, search, authToken) => {
   const { data: response } = await http.get(`verifyToken?token=${authToken}`);
   return response;
 };
-export const customerUpdatePassword = async (page, search, payload) => {
-  const { data: response } = await http.post(`customer/updatePassword`);
+export const customerUpdatePassword = async (payload, page, search) => {
+  const { data: response } = await http.post(
+    `customer/updatePassword`,
+    payload
+  );
   return response;
 };
 export const getCustomerDetails = async (page, search, authToken) => {

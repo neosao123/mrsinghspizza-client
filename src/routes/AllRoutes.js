@@ -2,8 +2,6 @@ import { HashRouter, Route, Routes, json, useNavigate } from "react-router-dom";
 import CreateYourOwn from "../pages/CreateYourOwn";
 import Home from "../pages/Home";
 import SpecialMenu from "../pages/SpecialMenu";
-import Login from "../pages/Auth/Login";
-import Registration from "../pages/Auth/Registration";
 import { useContext, useEffect, useState } from "react";
 import GlobalContext from "../context/GlobalContext";
 import AuthLayout from "../layouts/AuthLayout";
@@ -14,6 +12,7 @@ import Payment from "../pages/Payment";
 import Success from "../pages/Payment/Success";
 import Cancel from "../pages/Payment/Cancel";
 import LoginReg from "../pages/Auth/LoginReg";
+import MyAccount from "../pages/Auth/MyAccount";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -48,6 +47,7 @@ const AllRoutes = () => {
       <Route exact path="/card-payment" Component={Payment} />
       <Route exact path="/payment/verify" Component={Success} />
       <Route exact path="/payment/cancel" Component={Cancel} />
+      <Route exact path="/my-account" Component={MyAccount} />
     </Routes>
   );
 };

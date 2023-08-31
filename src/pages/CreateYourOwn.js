@@ -701,11 +701,13 @@ function CreateYourOwn() {
               </div>
             </div>
           </div>
-          <ResponsiveCart
-            handleAddToCart={handleAddToCart}
-            totalPrice={totalPrice}
-            payloadEdit={payloadEdit}
-          />
+          {cart?.product?.length > 0 && (
+            <ResponsiveCart
+              handleAddToCart={handleAddToCart}
+              totalPrice={totalPrice}
+              payloadEdit={payloadEdit}
+            />
+          )}
         </section>
       )}
       <Footer />

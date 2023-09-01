@@ -40,11 +40,9 @@ const HeroSlider = () => {
           <div className="slider-block slide1 new-block">
             <div className="container-fluid">
               <div className="row">
-                <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="col-lg-6 col-md-6 col-sm-6 order-md-1 order-2">
                   <div className="text-block">
-                    <h1 className="text-stl1 animate__animated animate__fadeInDown">
-                      Create Your Own
-                    </h1>
+                    <h1 className="text-stl1">Create Your Own</h1>
                     <div
                       className="number-block"
                       data-animation-in="fadeInUp"
@@ -61,9 +59,9 @@ const HeroSlider = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="col-lg-6 col-md-6 col-sm-6 order-md-2 order-1">
                   <div className="img-block img2">
-                    <div className="img-holder animate__animated animate__slideInLeft">
+                    <div className="img-holder">
                       <img src={pizzaImage} alt="" className="img-fluid" />
                     </div>
                   </div>
@@ -76,10 +74,10 @@ const HeroSlider = () => {
           <div className="slider-block slide1 new-block">
             <div className="container-fluid">
               <div className="row">
-                <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="col-lg-6 col-md-6 col-sm-6 order-md-1 order-2">
                   <div className="text-block">
                     <h1
-                      className="text-stl1 animate__animated animate__fadeInDown"
+                      className="text-stl1"
                       data-animation-in="lightSpeedIn"
                       data-animation-out="animate-out fadeOutRight"
                     >
@@ -101,9 +99,9 @@ const HeroSlider = () => {
                     </div>
                   </div>
                 </div>
-                <div className="col-lg-6 col-md-6 col-sm-6">
+                <div className="col-lg-6 col-md-6 col-sm-6 order-md-2 order-1">
                   <div className="img-block img2">
-                    <div className="img-holder animate__animated animate__slideInLeft">
+                    <div className="img-holder">
                       <img src={pizzaImage} alt="" className="img-fluid" />
                     </div>
                   </div>

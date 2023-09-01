@@ -144,3 +144,13 @@ export const paymentCancel = async (payload) => {
   const { data: response } = await http.post("payment/cancel", payload);
   return response;
 };
+
+export const getOrderList = async (payload) => {
+  const { data: response } = await http.post("customer/order/getlist", payload);
+  return response;
+};
+
+export const getPostalcodeList = async (payload) => {
+  const { data: response } = await http.post("zipcode/list", payload);
+  return response;
+};

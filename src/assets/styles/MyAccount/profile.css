@@ -7,6 +7,12 @@
   background-color: transparent;
   color: #636363;
   border-radius: 0% !important;
+  font-size: 0.88rem;
+  vertical-align: middle;
+}
+.userFullName {
+  font-size: 0.88rem !important;
+  letter-spacing: 0.05rem;
 }
 
 .pTabs:hover,
@@ -26,4 +32,48 @@
 }
 .navMenu {
   background-color: #fff3e8;
+}
+.cPasswordBtn,
+.profileUpdateBtn,
+.searchBtn {
+  background-color: #ff9026;
+  color: #fff !important;
+  font-size: 0.96rem;
+  font-weight: 550;
+}
+.cPasswordBtn.active,
+.cPasswordBtn:hover,
+.cPasswordBtn:focus,
+.profileUpdateBtn.active,
+.profileUpdateBtn:hover,
+.profileUpdateBtn:focus,
+.searchBtn.active,
+.searchBtn:hover,
+.searchBtn:focus {
+  background-color: #2e2e2e !important;
+}
+.pTabContainer {
+  box-shadow: 0 0px 4px #e3e3e3;
+  border-radius: 1%;
+  overflow: hidden;
+}
+.profileTabContent {
+  background-color: #fffdfb;
+}
+
+.cancelOrder,
+.viewOrder {
+  background-color: transparent;
+  color: #a38d67 !important;
+}
+.cPasswordLabel,
+.profileLabel,
+.searchLabel {
+  font-size: 0.9rem;
+  font-weight: 450;
+}
+.cPasswordInput,
+.profileInput,
+.searchInput {
+  font-size: 0.9rem;
 }

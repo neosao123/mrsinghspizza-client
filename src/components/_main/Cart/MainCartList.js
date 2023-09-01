@@ -96,7 +96,7 @@ function MainCartList({ cData, setLoading }) {
             </span>
           </div>
         )}
-        {cData?.config?.pizzaSize && (
+        {cData?.pizzaSize && (
           <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
             <p className="">Size : </p>
             <span className="mx-2">

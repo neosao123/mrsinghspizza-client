@@ -13,11 +13,9 @@ import Tab from "react-bootstrap/Tab";
 import Col from "react-bootstrap/Col";
 import ProfileUpdate from "../../components/_main/Auth/ProfileUpdate";
 import defaultAvatar from "../../assets/images/avatar.jpg";
-import profileUpdateIcon from "../../assets/images/profileUpdateIcon.png";
 import "../../assets/styles/MyAccount/profile.css";
-import ViewProfile from "../../components/_main/Auth/ViewProfile";
 import ChangePassword from "../../components/_main/Auth/ChangePassword";
-import MyOrders from "../../components/_main/MyOrders";
+import MyOrders from "../../components/_main/Auth/MyOrders";
 
 function MyAccount() {
   const globalCtx = useContext(GlobalContext);
@@ -69,19 +67,31 @@ function MyAccount() {
   return (
     <>
       <Header />
-      <div className="container">
+      <div className="container-fluid new-block">
         <Tab.Container id="left-tabs-example" defaultActiveKey="orderList">
-          <Row className="">
-            <Col sm={2} md={4} lg={3} className="sideMenu py-5 px-3">
+          <Row className="m-md-5 my-4 mx-2 pTabContainer">
+            <Col
+              lg={3}
+              md={12}
+              sm={12}
+              className="sideMenu py-lg-5 pb-0 pt-3 px-2"
+            >
               <div className="profile d-flex justify-content-center align-items-center flex-column">
                 <div className="profilePhoto rounded-circle">
-                  <img src={defaultAvatar} alt="" width="100%" height="100%" />
+                  <img
+                    src={
+                      user?.profilePhoto ? user?.profilePhoto : defaultAvatar
+                    }
+                    alt=""
+                    width="100%"
+                    height="100%"
+                  />
                 </div>
-                <div className="py-2">
+                <div className="pt-4 pb-2 userFullName">
                   <strong>{user?.fullName}</strong>
                 </div>
               </div>
-              <Nav className="flex-column text-start py-4 navMenu">
+              <Nav className="flex-column text-start py-3 navMenu">
                 <Nav.Item>
                   <Nav.Link
                     eventKey="orderList"
@@ -115,13 +125,13 @@ function MyAccount() {
                     className="text-start w-100 py-2 fw-bold btn btn-md pTabs border-bottom"
                     onClick={handleLogout}
                   >
-                    <i class="fa fa-sign-out" aria-hidden="true"></i>
+                    <i className="fa fa-sign-out icons" aria-hidden="true"></i>
                     <span className="mx-3">Logout</span>
                   </Nav.Link>
                 </Nav.Item>
               </Nav>
             </Col>
-            <Col sm={9}>
+            <Col lg={9} md={12} sm={12} className="profileTabContent">
               <Tab.Content>
                 <Tab.Pane eventKey="orderList">
                   <MyOrders />

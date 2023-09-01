@@ -87,6 +87,7 @@ function FreeToppings({
           <option value="Whole">Whole</option>
           <option value="Left Half">Left Half</option>
           <option value="Right Half">Right Half</option>
+          <option value="1/4">1/4</option>
         </select>
         <button
           type="button"

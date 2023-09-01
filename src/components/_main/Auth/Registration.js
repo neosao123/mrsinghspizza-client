@@ -1,13 +1,18 @@
 import { useFormik } from "formik";
-import React, { useContext, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import * as Yup from "yup";
 import swal from "sweetalert";
-import { customerRegistration, deliverable } from "../../../services";
+import {
+  customerRegistration,
+  deliverable,
+  getPostalcodeList,
+} from "../../../services";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import GlobalContext from "../../../context/GlobalContext";
 import { toast } from "react-toastify";
 import { LOGIN_SUCCESS } from "../../../redux/authProvider/actionType";
+import Select from "react-select";
 
 // Validation Functions
 const getCharacterValidationError = (str) => {
@@ -42,6 +47,7 @@ const ValidateSchema = Yup.object({
   password: Yup.string()
     .required("Password is required")
     .min(6, "Password must have at least 6 characters")
+    .max(20, "Password cannot be longer than 20 characters")
     .matches(/[0-9]/, getCharacterValidationError("digit"))
     .matches(/[a-z]/, getCharacterValidationError("lowercase"))
     .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
@@ -72,9 +78,29 @@ function Registration() {
   const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
   const [regUser, setRegUser] = globalctx.regUser;
 
+  const [postalCodeOp, setPostalCodeOp] = useState(null);
+  const [selectedOption, setSelectedOption] = useState(null);
+
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const location = useLocation();
+
+  const postalCodeList = async () => {
+    await getPostalcodeList()
+      .then((res) => {
+        console.log(res);
+        const options = res.data.map((item) => ({
+          value: item.code,
+          label: item.zipcode,
+        }));
+        setPostalCodeOp(options);
+      })
+      .catch((err) => {
+        if (err.response.status === 400 || err.response.status === 500) {
+          toast.error(err.response.data.message);
+        }
+      });
+  };
 
   const onSubmit = async (values) => {
     await deliverable({ zipcode: values.postalcode })
@@ -143,7 +169,7 @@ function Registration() {
       password: "",
       passwordconfirmation: "",
       city: "",
-      postalcode: "",
+      postalcode: selectedOption?.label,
       address: "",
     },
     validateOnBlur: true,
@@ -151,6 +177,10 @@ function Registration() {
     onSubmit,
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    postalCodeList();
+  }, []);
   return (
     <div className="row gx-3">
       <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
@@ -268,12 +298,15 @@ function Registration() {
                 Postal Code <small className="text-danger">*</small>
               </label>
               <p className="text-secondary noteTxt mb-2">Format: A1A1A1</p>
-              <input
-                className="form-control mb-3"
-                type="text"
+              <Select
+                className="basic-single mb-3"
+                classNamePrefix="select"
+                isClearable={true}
+                isSearchable={true}
                 name="postalcode"
-                value={formik.values.postalcode}
-                onChange={formik.handleChange}
+                value={selectedOption}
+                onChange={setSelectedOption}
+                options={postalCodeOp}
                 onBlur={formik.handleBlur}
               />
               {formik.touched.postalcode && formik.errors.postalcode ? (

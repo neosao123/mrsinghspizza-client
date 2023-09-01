@@ -20,8 +20,6 @@ const Header = () => {
   const dispatch = useDispatch();
 
   const [dropMenu, setDropMenu] = useState(false);
-
-  console.log(dropMenu);
   // Handle Logout
   const handleLogout = () => {
     if (isAuthenticated !== false) {
@@ -52,7 +50,7 @@ const Header = () => {
 
   return (
     <>
-      <div className="position-sticky top-0">
+      <div className="position-sticky top-0 ">
         <header className="new-block main-header">
           <div className="main-nav new-block">
             <div className="container-fluid ">
@@ -158,7 +156,7 @@ const Header = () => {
           style={{
             position: "fixed",
             top: "6.5rem",
-            zIndex: "1000",
+            zIndex: "8",
             transition: "1s all ease",
           }}
         >
@@ -230,14 +228,25 @@ const Header = () => {
                   Contact Us
                 </Link>
               </li>
-              <li onClick={handleLogout} className="py-2">
-                <Link
-                  className="text-decoration-none text-dark"
-                  to={isAuthenticated === false ? "/login-registration" : "/"}
-                >
-                  {isAuthenticated === false ? "Login / Signup" : "Logout"}
-                </Link>
-              </li>
+              {isAuthenticated === false ? (
+                <li className="py-2">
+                  <Link
+                    className="text-decoration-none text-dark"
+                    to={"/login-registration"}
+                  >
+                    Login / Signup
+                  </Link>
+                </li>
+              ) : (
+                <li className="py-2">
+                  <Link
+                    className="text-decoration-none text-dark"
+                    to={"/my-account"}
+                  >
+                    My Account
+                  </Link>
+                </li>
+              )}
             </ul>
           </nav>
         </div>

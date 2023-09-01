@@ -58,17 +58,19 @@ function ChangePassword() {
   return (
     <div className="container py-5">
       <div className="row justify-content-start">
-        <div className="col-lg-4">
+        <div className="col-lg-5 col-md-12 col-sm-12">
           <div className="row">
             <form onSubmit={formik.handleSubmit}>
-              <div className="col-lg-12 py-2">
-                <label className="form-label">Password</label>
+              <div className="col-lg-12 col-md-12 col-sm-12 py-2">
+                <label className="form-label cPasswordLabel">
+                  Password <small className="text-danger">*</small>
+                </label>
                 <p className="text-secondary noteTxt mb-2">
                   Password must 6 characters. Characters must contain atleast 1
                   digit, 1 uppercase, 1 lowercase
                 </p>
                 <input
-                  className="form-control"
+                  className="form-control cPasswordInput"
                   type="password"
                   name="password"
                   value={formik.values.password}
@@ -81,10 +83,12 @@ function ChangePassword() {
                   </div>
                 ) : null}
               </div>
-              <div className="col-lg-12 py-2">
-                <label className="form-label">Confirm Password</label>
+              <div className="col-lg-12 col-md-12 col-sm-12 py-2">
+                <label className="form-label cPasswordLabel">
+                  Confirm Password <small className="text-danger">*</small>
+                </label>
                 <input
-                  className="form-control"
+                  className="form-control cPasswordInput"
                   type="password"
                   name="passwordconfirmation"
                   value={formik.values.passwordconfirmation}
@@ -100,7 +104,7 @@ function ChangePassword() {
               </div>
               <div className="col-lg-12 py-2 w-100 mb-3 mt-4">
                 <button
-                  className="w-100 py-2 fw-bold btn btn-md regBtn"
+                  className="py-2 fw-bold btn btn-md cPasswordBtn"
                   type="submit"
                 >
                   Submit

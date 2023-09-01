@@ -24,7 +24,8 @@ const ValidateSchema = Yup.object({
     ),
   password: Yup.string()
     .required("Password is Required")
-    .min(8, "Password must have at least 8 characters")
+    .min(6, "Password must have at least 6 characters")
+    .max(20, "Password cannot be longer than 20 characters")
     .matches(/[0-9]/, getCharacterValidationError("digit"))
     .matches(/[a-z]/, getCharacterValidationError("lowercase"))
     .matches(/[A-Z]/, getCharacterValidationError("uppercase")),

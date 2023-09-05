@@ -154,3 +154,8 @@ export const getPostalcodeList = async (payload) => {
   const { data: response } = await http.post("zipcode/list", payload);
   return response;
 };
+
+export const getOrderDetails = async (payload) => {
+  const { data: response } = await http.post("customer/order/details", payload);
+  return response;
+};

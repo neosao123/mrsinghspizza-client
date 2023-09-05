@@ -45,9 +45,7 @@ const ValidateSchema = Yup.object({
     )
     .min(3, "City must be at least 3 characters")
     .max(50, "City cannot be longer than 50 characters"),
-  postalcode: Yup.string()
-    .required("Postal Code is required")
-    .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),
+  postalcode: Yup.string().required("Postal Code is required"),
   address: Yup.string().required("Address is required"),
 });
 
@@ -65,7 +63,7 @@ function AddressDetails() {
     await getPostalcodeList()
       .then((res) => {
         console.log(res);
-        const options = res.data.map((item) => ({
+        const options = res?.data?.map((item) => ({
           value: item.code,
           label: item.zipcode,
         }));
@@ -147,7 +145,7 @@ function AddressDetails() {
       firstname: user?.data?.firstName,
       lastname: user?.data?.lastName,
       phoneno: user?.data?.mobileNumber,
-      postalcode: selectedOption?.label,
+      postalcode: "",
       city: "",
       address: "",
     },
@@ -160,10 +158,6 @@ function AddressDetails() {
   useEffect(() => {
     postalCodeList();
   }, []);
-
-  // useEffect(() => {
-  //   console.log(selectedOption.label);
-  // }, [selectedOption]);
 
   return (
     <>
@@ -291,8 +285,15 @@ function AddressDetails() {
                         isClearable={true}
                         isSearchable={true}
                         name="postalcode"
-                        value={selectedOption}
-                        onChange={setSelectedOption}
+                        value={selectedOption?.find(
+                          (option) => option.label === formik.values.postalcode
+                        )}
+                        onChange={(selectedOption) => {
+                          const selectedValue = selectedOption
+                            ? selectedOption.label
+                            : "";
+                          formik.setFieldValue("postalcode", selectedValue);
+                        }}
                         options={postalCodeOp}
                         onBlur={formik.handleBlur}
                       />

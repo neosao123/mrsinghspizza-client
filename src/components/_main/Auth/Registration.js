@@ -59,9 +59,7 @@ const ValidateSchema = Yup.object({
     )
     .min(3, "City must be at least 3 characters")
     .max(50, "City cannot be longer than 50 characters"),
-  postalcode: Yup.string()
-    .required("Postal Code is required")
-    .matches(canadianPostalCode, "Invalid Canadian Postal Code format"),
+  postalcode: Yup.string().required("Postal Code is required"),
   address: Yup.string().required("Address is required"),
   passwordconfirmation: Yup.string()
     .oneOf(
@@ -169,7 +167,7 @@ function Registration() {
       password: "",
       passwordconfirmation: "",
       city: "",
-      postalcode: selectedOption?.label,
+      postalcode: "",
       address: "",
     },
     validateOnBlur: true,
@@ -304,10 +302,16 @@ function Registration() {
                 isClearable={true}
                 isSearchable={true}
                 name="postalcode"
-                value={selectedOption}
-                onChange={setSelectedOption}
+                value={selectedOption?.find(
+                  (option) => option.label === formik.values.postalcode
+                )}
+                onChange={(selectedOption) => {
+                  const selectedValue = selectedOption
+                    ? selectedOption.label
+                    : "";
+                  formik.setFieldValue("postalcode", selectedValue);
+                }}
                 options={postalCodeOp}
-                onBlur={formik.handleBlur}
               />
               {formik.touched.postalcode && formik.errors.postalcode ? (
                 <div className="text-danger formErrMsg mt-2 mb-3">

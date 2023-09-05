@@ -69,7 +69,7 @@ function Sides({ data, cartFn }) {
       <div className="d-flex justify-content-center flex-column p-3 box">
         <div className="text-end text-black">
           <span
-            className="badge bg-secondary px-2"
+            className="badge bg-secondary px-1"
             style={{
               letterSpacing: ".05rem",
               fontSize: ".8rem",

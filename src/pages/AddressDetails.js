@@ -49,7 +49,7 @@ const ValidateSchema = Yup.object({
   postalcode: Yup.string().required("Postal Code is required"),
   address: Yup.string()
     .required("Address is required")
-    .min(3, "Address must be at least 3 characters")
+    .min(20, "Address must be at least 3 characters")
     .max(50, "Address cannot be longer than 50 characters"),
 });
 

@@ -417,7 +417,8 @@ function SpecialMenu() {
       .then((response) => {
         localStorage.setItem("OrderID", response.orderCode);
         localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_blank");
+        window.open(response?.paymentUrl, "_self");
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {
@@ -433,6 +434,7 @@ function SpecialMenu() {
         if (previousUrl && previousUrl !== null) {
           console.log(regUser.zipcode);
           const payload = { zipcode: regUser.zipcode };
+          setLoading(true);
           await deliverable(payload)
             .then((res) => {
               if (res?.deliverable === true) {

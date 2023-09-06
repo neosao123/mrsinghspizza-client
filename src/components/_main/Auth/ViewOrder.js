@@ -42,11 +42,49 @@ function ViewOrder({ selectedCode }) {
               <strong>Order Details</strong>
             </h4>
           </div>
-          <div className="col-12 row mt-3 m-0 p-0">
-            <div className="col-lg-4 col-md-6 col-sm-12 py-2">
-              <span className="contentTitle">Order No: </span>
-              <span className="contentText">{orderData?.orderCode}</span>
-            </div>
+          {orderData?.orderStatus === "placed" ? (
+            <>
+              <div
+                className="col-12 rounded row mt-3 m-0 p-0 py-1"
+                style={{ backgroundColor: "#deffde" }}
+              >
+                <div className="col-lg-4 col-md-6 col-sm-12 py-2">
+                  <span className="contentTitle">Order No: </span>
+                  <span className="contentText fw-bold">
+                    {orderData?.orderCode}
+                  </span>
+                </div>
+                <div className="col-lg-4 col-md-6 col-sm-12 py-2">
+                  <span className="contentTitle">Order Status: </span>
+                  <span className="contentText fw-bold text-success">
+                    {orderData?.orderStatus}
+                  </span>
+                </div>
+              </div>
+            </>
+          ) : (
+            <>
+              <div
+                className="col-12 rounded row mt-3 m-0 p-0 py-1"
+                style={{ backgroundColor: "#ffd1d83d" }}
+              >
+                <div className="col-lg-4 col-md-6 col-sm-12 py-2">
+                  <span className="contentTitle">Order No: </span>
+                  <span className="contentText fw-bold">
+                    {orderData?.orderCode}
+                  </span>
+                </div>
+                <div className="col-lg-4 col-md-6 col-sm-12 py-2">
+                  <span className="contentTitle">Order Status: </span>
+                  <span className="contentText fw-bold text-danger">
+                    {orderData?.orderStatus}
+                  </span>
+                </div>
+              </div>
+            </>
+          )}
+
+          <div className="col-12 row m-0 p-0">
             <div className="col-lg-4 col-md-6 col-sm-12 py-2">
               <span className="contentTitle">Date: </span>
               <span className="contentText">{formattedDateTime}</span>
@@ -78,10 +116,6 @@ function ViewOrder({ selectedCode }) {
             <div className="col-lg-4 col-md-6 col-sm-12 py-2">
               <span className="contentTitle">Delivery Type: </span>
               <span className="contentText">{orderData?.deliveryType}</span>
-            </div>
-            <div className="col-lg-4 col-md-6 col-sm-12 py-2">
-              <span className="contentTitle">Order Status: </span>
-              <span className="contentText">{orderData?.orderStatus}</span>
             </div>
           </div>
           <hr className="my-2"></hr>
@@ -327,6 +361,8 @@ export const ToppingsDetails = ({ tpsDetails }) => {
   return (
     <div>
       {tpsDetails?.map((data) => {
+        const keyToCheck = "amount";
+        const keyExists = data.hasOwnProperty(keyToCheck);
         return (
           <div className="w-100 row py-1">
             <div className="col-8">
@@ -346,7 +382,7 @@ export const ToppingsDetails = ({ tpsDetails }) => {
             <div className="col-4 text-end">
               <span>
                 ${" "}
-                {data?.amount
+                {keyExists
                   ? Number(data?.amount).toFixed(2)
                   : data?.toppingsPrice}
               </span>

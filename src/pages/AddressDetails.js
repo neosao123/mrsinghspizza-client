@@ -10,6 +10,7 @@ import { useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import GlobalContext from "../context/GlobalContext";
 import Select from "react-select";
+import LoadingLayout from "../layouts/LoadingLayout";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
@@ -56,6 +57,7 @@ function AddressDetails() {
 
   const [postalCodeOp, setPostalCodeOp] = useState(null);
   const [selectedOption, setSelectedOption] = useState(null);
+  const [loading, setLoading] = useState(false);
 
   const navigate = useNavigate();
 
@@ -100,12 +102,16 @@ function AddressDetails() {
       .then((response) => {
         localStorage.setItem("OrderID", response.orderCode);
         localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_blank");
+        window.open(response?.paymentUrl, "_self");
+        setTimeout(() => {
+          setLoading(false);
+        }, 500);
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {
           toast.error(error.response.data.message);
         }
+        setLoading(false);
       });
   };
 
@@ -113,6 +119,7 @@ function AddressDetails() {
     const payload = {
       zipcode: values.postalcode,
     };
+    setLoading(true);
     await deliverable(payload)
       .then((res) => {
         if (res?.deliverable === true) {
@@ -137,6 +144,7 @@ function AddressDetails() {
         if (err.response.status === 400 || err.response.status === 500) {
           toast.error(err.response.data.message);
         }
+        setLoading(false);
       });
   };
   // Use Formik
@@ -162,163 +170,171 @@ function AddressDetails() {
   return (
     <>
       <Header />
-      <div
-        className="container-fluid d-flex justify-content-center align-items-center"
-        style={{ backgroundColor: "#ffffff" }}
-      >
-        <div className="container row w-100">
-          <div className="col-lg-6 col-md-12 col-sm-12 p-lg-4 p-md-4 p-sm-1">
-            <div className="row gx-3">
-              <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
-                <h3 className="mb-4">
-                  <strong>Address Details For Checkout</strong>
-                </h3>
+      {loading === true ? (
+        <>
+          <LoadingLayout />
+        </>
+      ) : (
+        <div
+          className="container-fluid d-flex justify-content-center align-items-center"
+          style={{ backgroundColor: "#ffffff" }}
+        >
+          <div className="container row w-100">
+            <div className="col-lg-6 col-md-12 col-sm-12 p-lg-4 p-md-4 p-sm-1">
+              <div className="row gx-3">
+                <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
+                  <h3 className="mb-4">
+                    <strong>Address Details For Checkout</strong>
+                  </h3>
 
-                <form className="w-100" onSubmit={formik.handleSubmit}>
-                  <div className="row gx-3">
-                    {/* FirstName */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        First Name <small className="text-danger">*</small>
-                      </label>
-                      <input
-                        className="form-control mb-3"
-                        type="text"
-                        name="firstname"
-                        value={formik.values.firstname}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.firstname && formik.errors.firstname ? (
-                        <div className="text-danger mt-2 mb-3">
-                          {formik.errors.firstname}
-                        </div>
-                      ) : null}
-                    </div>
-
-                    {/* LastName */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        Last Name <small className="text-danger">*</small>
-                      </label>
-                      <input
-                        className="form-control mb-3"
-                        type="text"
-                        name="lastname"
-                        value={formik.values.lastname}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.lastname && formik.errors.lastname ? (
-                        <div className="text-danger mt-2 mb-3">
-                          {formik.errors.lastname}
-                        </div>
-                      ) : null}
-                    </div>
-                    {/* Phone Number */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        Phone Number <small className="text-danger">*</small>
-                      </label>
-                      <input
-                        className=" form-control mb-3"
-                        type="tel"
-                        name="phoneno"
-                        value={formik.values.phoneno}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.phoneno && formik.errors.phoneno ? (
-                        <div className="text-danger mt-2 mb-3">
-                          {formik.errors.phoneno}
-                        </div>
-                      ) : null}
-                    </div>
-
-                    {/* Address */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        Address <small className="text-danger">*</small>
-                      </label>
-                      <input
-                        className=" form-control mb-3"
-                        type="text"
-                        name="address"
-                        value={formik.values.address}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                    </div>
-                    {formik.touched.address && formik.errors.address ? (
-                      <div className="text-danger mt-1 mb-3">
-                        {formik.errors.address}
+                  <form className="w-100" onSubmit={formik.handleSubmit}>
+                    <div className="row gx-3">
+                      {/* FirstName */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          First Name <small className="text-danger">*</small>
+                        </label>
+                        <input
+                          className="form-control mb-3"
+                          type="text"
+                          name="firstname"
+                          value={formik.values.firstname}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.firstname && formik.errors.firstname ? (
+                          <div className="text-danger mt-2 mb-3">
+                            {formik.errors.firstname}
+                          </div>
+                        ) : null}
                       </div>
-                    ) : null}
 
-                    {/* City */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        City <small className="text-danger">*</small>
-                      </label>
-                      <input
-                        className="form-control mb-3"
-                        type="text"
-                        name="city"
-                        value={formik.values.city}
-                        onChange={formik.handleChange}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.city && formik.errors.city ? (
-                        <div className="text-danger mt-2 mb-3">
-                          {formik.errors.city}
+                      {/* LastName */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          Last Name <small className="text-danger">*</small>
+                        </label>
+                        <input
+                          className="form-control mb-3"
+                          type="text"
+                          name="lastname"
+                          value={formik.values.lastname}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.lastname && formik.errors.lastname ? (
+                          <div className="text-danger mt-2 mb-3">
+                            {formik.errors.lastname}
+                          </div>
+                        ) : null}
+                      </div>
+                      {/* Phone Number */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          Phone Number <small className="text-danger">*</small>
+                        </label>
+                        <input
+                          className=" form-control mb-3"
+                          type="tel"
+                          name="phoneno"
+                          value={formik.values.phoneno}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.phoneno && formik.errors.phoneno ? (
+                          <div className="text-danger mt-2 mb-3">
+                            {formik.errors.phoneno}
+                          </div>
+                        ) : null}
+                      </div>
+
+                      {/* Address */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          Address <small className="text-danger">*</small>
+                        </label>
+                        <input
+                          className=" form-control mb-3"
+                          type="text"
+                          name="address"
+                          value={formik.values.address}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                      </div>
+                      {formik.touched.address && formik.errors.address ? (
+                        <div className="text-danger mt-1 mb-3">
+                          {formik.errors.address}
                         </div>
                       ) : null}
-                    </div>
-                    {/* Postal Code */}
-                    <div className="col-lg-12 col-md-12 col-sm-12">
-                      <label className="form-label">
-                        Postal Code <small className="text-danger">*</small>
-                      </label>
-                      <Select
-                        className="basic-single"
-                        classNamePrefix="select"
-                        isClearable={true}
-                        isSearchable={true}
-                        name="postalcode"
-                        value={selectedOption?.find(
-                          (option) => option.label === formik.values.postalcode
-                        )}
-                        onChange={(selectedOption) => {
-                          const selectedValue = selectedOption
-                            ? selectedOption.label
-                            : "";
-                          formik.setFieldValue("postalcode", selectedValue);
-                        }}
-                        options={postalCodeOp}
-                        onBlur={formik.handleBlur}
-                      />
-                      {formik.touched.postalcode && formik.errors.postalcode ? (
-                        <div className="text-danger mt-2 mb-3">
-                          {formik.errors.postalcode}
-                        </div>
-                      ) : null}
-                    </div>
 
-                    <div className="w-100 text-center mb-3 mt-4">
-                      <button
-                        className="w-100 py-2 fw-bold btn btn-md regBtn"
-                        type="submit"
-                      >
-                        Checkout
-                      </button>
+                      {/* City */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          City <small className="text-danger">*</small>
+                        </label>
+                        <input
+                          className="form-control mb-3"
+                          type="text"
+                          name="city"
+                          value={formik.values.city}
+                          onChange={formik.handleChange}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.city && formik.errors.city ? (
+                          <div className="text-danger mt-2 mb-3">
+                            {formik.errors.city}
+                          </div>
+                        ) : null}
+                      </div>
+                      {/* Postal Code */}
+                      <div className="col-lg-12 col-md-12 col-sm-12">
+                        <label className="form-label">
+                          Postal Code <small className="text-danger">*</small>
+                        </label>
+                        <Select
+                          className="basic-single"
+                          classNamePrefix="select"
+                          isClearable={true}
+                          isSearchable={true}
+                          name="postalcode"
+                          value={selectedOption?.find(
+                            (option) =>
+                              option.label === formik.values.postalcode
+                          )}
+                          onChange={(selectedOption) => {
+                            const selectedValue = selectedOption
+                              ? selectedOption.label
+                              : "";
+                            formik.setFieldValue("postalcode", selectedValue);
+                          }}
+                          options={postalCodeOp}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.postalcode &&
+                        formik.errors.postalcode ? (
+                          <div className="text-danger mt-2 mb-3">
+                            {formik.errors.postalcode}
+                          </div>
+                        ) : null}
+                      </div>
+
+                      <div className="w-100 text-center mb-3 mt-4">
+                        <button
+                          className="w-100 py-2 fw-bold btn btn-md regBtn"
+                          type="submit"
+                        >
+                          Checkout
+                        </button>
+                      </div>
                     </div>
-                  </div>
-                </form>
+                  </form>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
 
       <Footer />
     </>

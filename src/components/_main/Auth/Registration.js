@@ -60,7 +60,10 @@ const ValidateSchema = Yup.object({
     .min(3, "City must be at least 3 characters")
     .max(50, "City cannot be longer than 50 characters"),
   postalcode: Yup.string().required("Postal Code is required"),
-  address: Yup.string().required("Address is required"),
+  address: Yup.string()
+    .required("Address is required")
+    .min(3, "Address must be at least 3 characters")
+    .max(50, "Address cannot be longer than 50 characters"),
   passwordconfirmation: Yup.string()
     .oneOf(
       [Yup.ref("password"), null],
@@ -111,7 +114,9 @@ function Registration() {
             city: values.city,
             zipcode: values.postalcode,
             password: values.password,
+            password_confirmation: values.passwordconfirmation,
             address: values.address,
+            profilePhoto: "",
           };
           await customerRegistration(payload)
             .then((res) => {

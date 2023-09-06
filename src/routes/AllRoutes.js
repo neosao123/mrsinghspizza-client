@@ -8,7 +8,6 @@ import AuthLayout from "../layouts/AuthLayout";
 import DefaultLayout from "../layouts/DefaultLayout";
 import Cart from "../pages/Cart";
 import AddressDetails from "../pages/AddressDetails";
-import Payment from "../pages/Payment";
 import Success from "../pages/Payment/Success";
 import Cancel from "../pages/Payment/Cancel";
 import LoginReg from "../pages/Auth/LoginReg";
@@ -44,7 +43,6 @@ const AllRoutes = () => {
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={Cart} />
       <Route exact path="/address-details" Component={AddressDetails} />
-      <Route exact path="/card-payment" Component={Payment} />
       <Route exact path="/payment/verify" Component={Success} />
       <Route exact path="/payment/cancel" Component={Cancel} />
       <Route exact path="/my-account" Component={MyAccount} />

@@ -64,13 +64,17 @@ function ResponsiveCart({ handleAddToCart, totalPrice, payloadEdit }) {
             }
           >
             <b>
-              {location?.pathname === "/"
-                ? "Checkout"
-                : payloadEdit &&
+              {location?.pathname === "/" ? (
+                "Checkout"
+              ) : (
+                <>
+                  {payloadEdit &&
                   payloadEdit !== undefined &&
                   payloadEdit?.productType === "customized"
-                ? "Update Pizza"
-                : "Add To Cart"}
+                    ? "Update Pizza"
+                    : "Add To Cart"}
+                </>
+              )}
             </b>
           </button>
         </div>

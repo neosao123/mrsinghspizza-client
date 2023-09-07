@@ -34,7 +34,7 @@ function MyAccount() {
         title: "Logout Confirmation",
         text: "Do you really want to logout?",
         icon: "warning",
-        buttons: ["Cancel", "Logut"],
+        buttons: ["Cancel", "Logout"],
         dangerMode: true,
       }).then(async (willDelete) => {
         if (willDelete) {

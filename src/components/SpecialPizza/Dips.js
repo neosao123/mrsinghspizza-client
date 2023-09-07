@@ -1,52 +1,48 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 
-function Dips({ data, dipsArr, setDipsArr, reset, payloadEdit }) {
-  const [count, setCount] = useState(0);
+function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
+  let freeDips = Number(noofDips);
+  const dipsRef = useRef(null);
 
-  const handleDips = (isAdd) => {
-    const dipsObject = {
-      dipsCode: data.dipsCode,
-      dipsName: data.dipsName,
-      price: data?.price,
-      qauntity: "1",
-      amount: data?.price,
+  // Create Object & setDipsObj
+  const dipsObject = (object) => {
+    const Obj = {
+      dipsCode: object?.dipsCode,
+      dipsName: object?.dipsName,
+      price: object?.price,
+      quantity: freeDips,
+      amount: Number(0).toFixed(2),
     };
-    if (isAdd === true) {
-      setDipsArr((prev) => [...prev, dipsObject]);
-    } else {
-      const removedArr = dipsArr.filter((items) => {
-        if (items?.dipsCode === data?.dipsCode) {
-          return items;
-        }
-      });
-      const filteredArr = dipsArr?.filter(
-        (items) => items.dipsCode !== data?.dipsCode
+    setDipsObj(Obj);
+  };
+
+  // Get Current Obj
+  const current = () => {
+    if (dipsRef.current) {
+      console.log(dipsRef.current.value);
+      const selectedDips = dipsData.find(
+        (items) => items?.dipsCode === dipsRef.current.value
       );
-      const mergedArr = removedArr.slice(0, -1).concat(filteredArr);
-      setDipsArr(mergedArr);
+      dipsObject(selectedDips);
     }
   };
 
-  // Count Decrease
-  const countDec = () => {
-    if (count > 0) {
-      setCount((count) => count - 1);
-      handleDips(false);
-    }
-  };
-  // Count Increase
-  const countInc = () => {
-    setCount((count) => count + 1);
-    handleDips(true);
+  // handle Drinks
+  const handleDips = (e) => {
+    current();
   };
 
   // ---- UseEffect ----
   // UseEffect - Reset
   useEffect(() => {
     if (reset) {
-      setCount(0);
+      dipsRef.current.value = dipsData[0]?.dipsCode;
     }
   }, [reset]);
+  // UseEffect Get Current Value
+  useEffect(() => {
+    current();
+  }, []);
   // Populate - Edit
   useEffect(() => {
     if (
@@ -54,32 +50,32 @@ function Dips({ data, dipsArr, setDipsArr, reset, payloadEdit }) {
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
-      let qty = 0;
-      payloadEdit?.config?.dips.map((items) => {
-        if (items?.dipsCode === data?.dipsCode) {
-          qty += Number(items.qauntity);
-          setCount(qty);
-        }
-      });
+      dipsRef.current.value = payloadEdit?.config?.dips?.dipsCode;
     }
   }, [payloadEdit]);
 
   return (
     <>
-      <div
-        className="p-2 my-2 d-flex justify-content-between align-items-center border-bottom"
-        key={data.dipsCode}
-      >
-        <span className="mx-2">{data.dipsName}</span>
-        <div className="mx-1 d-flex align-items-center">
-          <button className="quantityBtn mx-1" onClick={countDec}>
-            <i className="fa fa-minus" aria-hidden="true"></i>
-          </button>
-          <span className="mx-1">{count}</span>
-          <button className="quantityBtn mx-1" onClick={countInc}>
-            <i className="fa fa-plus" aria-hidden="true"></i>
-          </button>
-          <span className="mx-2"> $ {data?.price}</span>
+      <div className="row m-0 p-0 align-items-center">
+        <div className="col-lg-8 col-md-8 col-sm-12 order-md-1 order-2">
+          <select
+            className="w-100 form-select my-3"
+            ref={dipsRef}
+            style={{ width: "300px" }}
+            onChange={handleDips}
+            value={dipsObj?.dipsCode}
+          >
+            {dipsData?.map((data) => {
+              return (
+                <option key={data.dipsCode} value={data.dipsCode}>
+                  {data?.dipsName} - $ {Number(0.0).toFixed(2)}
+                </option>
+              );
+            })}
+          </select>
+        </div>
+        <div className="col-lg-4 col-md-4 col-sm-12 text-md-end text-start mt-md-0 mt-4 order-md-2 order-1">
+          <span>Quantity : {freeDips}</span>
         </div>
       </div>
     </>

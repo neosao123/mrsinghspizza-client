@@ -53,7 +53,7 @@ function SpecialMenu() {
   const [pizzaSizePrice, setPizzaSizePrice] = useState();
   const [pizzaState, setPizzaState] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
-  const [dipsArr, setDipsArr] = useState([]);
+  const [dipsObj, setDipsObj] = useState({});
   const [drinksObj, setDrinksObj] = useState();
   const [totalPrice, setTotalPrice] = useState();
   let calcDipsArr = [];
@@ -64,6 +64,8 @@ function SpecialMenu() {
   // Free Toppings, Sides, Dips, Drinks
   const [freeTpsCount, setFreeTpsCount] = useState();
   const [additionalTps, setAdditionalTps] = useState(0);
+
+  // console.log("API Data", getSpecialData);
 
   // Handle Pizza Size and Price
   const handlePizzaSize = () => {
@@ -251,30 +253,6 @@ function SpecialMenu() {
     });
     calculatedPrice += Number(totalSidesPrice);
 
-    // Handle Dips Price
-    let noOfFreeDips = Number(getSpecialData?.noofDips);
-    let dipsPrice = Number(0);
-    if (dipsArr.length >= 0) {
-      dipsArr?.map((items) => {
-        if (noOfFreeDips > 0) {
-          let amount = 0;
-          let obj = {
-            ...items,
-            amount: amount,
-          };
-          calcDipsArr.push(obj);
-          noOfFreeDips--;
-        } else {
-          calcDipsArr.push(items);
-        }
-      });
-    }
-    calcDipsArr?.map((dips) => {
-      dipsPrice = Number(dips?.qauntity) * Number(dips?.amount);
-      totalDipsPrice += Number(dipsPrice);
-    });
-    calculatedPrice += Number(totalDipsPrice);
-
     // Set Total Price
     setTotalPrice(Number(calculatedPrice).toFixed(2));
   };
@@ -319,7 +297,7 @@ function SpecialMenu() {
         config: {
           pizza: pizzaState,
           sides: sidesArr,
-          dips: calcDipsArr,
+          dips: dipsObj,
           drinks: drinksObj,
         },
         quantity: Number(1),
@@ -328,6 +306,7 @@ function SpecialMenu() {
         pizzaSize: pizzaSize,
         comments: "",
       };
+      console.log(editedPayload);
       if (editedPayload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         const filteredCart = ct?.product?.filter(
@@ -375,7 +354,7 @@ function SpecialMenu() {
         config: {
           pizza: pizzaState,
           sides: sidesArr,
-          dips: calcDipsArr,
+          dips: dipsObj,
           drinks: drinksObj,
         },
         quantity: Number(1),
@@ -384,6 +363,7 @@ function SpecialMenu() {
         pizzaSize: pizzaSize,
         comments: "",
       };
+      console.log(payload);
       if (payload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         ct.product.push(payload);
@@ -487,7 +467,13 @@ function SpecialMenu() {
       amount: Number(0).toFixed(2),
     });
     setSidesArr([]);
-    setDipsArr([]);
+    setDipsObj({
+      dipsCode: dipsData?.[0]?.dipsCode,
+      dipsName: dipsData?.[0]?.dipsName,
+      price: dipsData?.[0]?.price,
+      quantity: Number(getSpecialData?.noofDips),
+      amount: Number(0).toFixed(2),
+    });
     calcDipsArr = [];
     setAdditionalTps(0);
     setReset(true);
@@ -570,9 +556,10 @@ function SpecialMenu() {
     calulatePrice();
     setFreeTpsCount(noOfFreeToppings);
     setAdditionalTps(noOfAdditionalTps);
+    console.log("dipsObject :", dipsObj);
   }, [
     sidesArr,
-    dipsArr,
+    dipsObj,
     drinksObj,
     pizzaSize,
     pizzaSizePrice,
@@ -585,14 +572,20 @@ function SpecialMenu() {
   // UseEffect For Set Default Values
   useEffect(() => {
     if (!payloadEdit) {
-      setPizzaSize("Large");
-      setPizzaSizePrice(Number(getSpecialData?.largePizzaPrice));
       createEmptyObjects(Number(getSpecialData?.noofPizzas));
       if (getSpecialData?.noofToppings !== undefined) {
         setFreeTpsCount(Number(getSpecialData?.noofToppings));
         setAdditionalTps(0);
       }
-      setTotalPrice(getSpecialData?.largePizzaPrice);
+      if (Number(getSpecialData?.largePizzaPrice) !== 0) {
+        setPizzaSize("Large");
+        setPizzaSizePrice(Number(getSpecialData?.largePizzaPrice));
+        setTotalPrice(getSpecialData?.largePizzaPrice);
+      } else {
+        setPizzaSize("Extra Large");
+        setPizzaSizePrice(Number(getSpecialData?.extraLargePizzaPrice));
+        setTotalPrice(getSpecialData?.extraLargePizzaPrice);
+      }
     }
   }, [getSpecialData]);
   // Populate All Fields - Edit Pizza
@@ -611,7 +604,7 @@ function SpecialMenu() {
       }
       setPizzaState(payloadEdit?.config?.pizza);
       setSidesArr(payloadEdit?.config?.sides);
-      setDipsArr(payloadEdit?.config?.dips);
+      setDipsObj(payloadEdit?.config?.dips);
       setDrinksObj(payloadEdit?.config?.drinks);
     }
   }, [payloadEdit]);
@@ -651,8 +644,16 @@ function SpecialMenu() {
                       ref={pizzaSizeRef}
                       value={pizzaSize}
                     >
-                      <option value="Large">Large</option>
-                      <option value="Extra Large">Extra Large</option>
+                      {Number(getSpecialData?.largePizzaPrice) !== 0 ? (
+                        <option value="Large">Large</option>
+                      ) : (
+                        ""
+                      )}
+                      {Number(getSpecialData?.extraLargePizzaPrice) !== 0 ? (
+                        <option value="Extra Large">Extra Large</option>
+                      ) : (
+                        ""
+                      )}
                     </select>
                   </div>
                 </div>
@@ -708,7 +709,7 @@ function SpecialMenu() {
               {/* Dips & Drinks */}
               <div className="row gx-3">
                 {/* Dips */}
-                {getSpecialData?.noofDips === 0 ? (
+                {Number(getSpecialData?.noofDips) === 0 ? (
                   ""
                 ) : (
                   <div className="col-lg-6 col-md-6 col-sm-12">
@@ -717,18 +718,16 @@ function SpecialMenu() {
                     </div>
                     <div className="row gx-3 mb-3">
                       <div id="dips" className="col-lg-12 mb-3 dipsContent">
-                        {dipsData?.map((data) => {
-                          return (
-                            <Dips
-                              key={data.dipsCode}
-                              data={data}
-                              dipsArr={dipsArr}
-                              setDipsArr={setDipsArr}
-                              reset={reset}
-                              payloadEdit={payloadEdit}
-                            />
-                          );
-                        })}
+                        {dipsData?.length > 0 && (
+                          <Dips
+                            dipsData={dipsData}
+                            dipsObj={dipsObj}
+                            setDipsObj={setDipsObj}
+                            noofDips={getSpecialData?.noofDips}
+                            reset={reset}
+                            payloadEdit={payloadEdit}
+                          />
+                        )}
                       </div>
                     </div>
                   </div>

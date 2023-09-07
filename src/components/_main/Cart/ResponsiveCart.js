@@ -36,7 +36,7 @@ function ResponsiveCart({ handleAddToCart, totalPrice, payloadEdit }) {
             ""
           ) : (
             <i
-              class="fa fa-chevron-left"
+              className="fa fa-chevron-left"
               aria-hidden="true"
               style={{ cursor: "pointer" }}
               onClick={handleBackButton}

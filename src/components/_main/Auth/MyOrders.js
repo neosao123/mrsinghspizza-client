@@ -4,6 +4,7 @@ import GlobalContext from "../../../context/GlobalContext";
 import { getOrderList } from "../../../services";
 import ViewOrder from "./ViewOrder";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
+import { toast } from "react-toastify";
 
 function MyOrders() {
   const globalCtx = useContext(GlobalContext);
@@ -12,9 +13,9 @@ function MyOrders() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [fromDate, setFromDate] = useState();
-  const [toDate, setToDate] = useState();
-  const [paymentOrderId, setPaymentOrderId] = useState();
+  const [fromDate, setFromDate] = useState("");
+  const [toDate, setToDate] = useState("");
+  const [transactionId, setTransactionId] = useState();
   const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState();
   const [viewOrder, setViewOrder] = useState(false);
@@ -36,13 +37,7 @@ function MyOrders() {
     {
       name: "Order Status",
       selector: (row) => {
-        return <span>{}</span>;
-      },
-    },
-    {
-      name: "Payment Status",
-      selector: (row) => {
-        return <span>{}</span>;
+        return <span>{row?.orderStatus}</span>;
       },
     },
     {
@@ -52,9 +47,9 @@ function MyOrders() {
       },
     },
     {
-      name: "Payment Id",
+      name: "Transaction Id",
       selector: (row) => {
-        return <span>{}</span>;
+        return <span>{row?.txnId}</span>;
       },
     },
     {
@@ -78,12 +73,13 @@ function MyOrders() {
 
   // Handle
   const fetchData = async (page) => {
+    console.log(transactionId, toDate);
     try {
       setLoading(true);
       const payload = {
         fromDate: fromDate ? fromDate : "",
         toDate: toDate ? toDate : "",
-        paymentOrderId: paymentOrderId,
+        transactionId: transactionId,
         customerCode: user?.customerCode,
         page: page,
       };
@@ -113,7 +109,7 @@ function MyOrders() {
       const payload = {
         fromDate: fromDate ? fromDate : "",
         toDate: toDate ? toDate : "",
-        paymentOrderId: paymentOrderId,
+        transactionId: transactionId,
         customerCode: user?.customerCode,
         page: page,
       };
@@ -135,9 +131,36 @@ function MyOrders() {
 
   const handleSearch = (e) => {
     e.preventDefault();
-    fetchData(1);
+    if (fromDate === "" && toDate === "") {
+      fetchData(1);
+    } else {
+      if (fromDate <= toDate) {
+        fetchData(1);
+      } else {
+        toast.error("From Date cannot be greater than To Date.");
+      }
+    }
   };
 
+  const handleClear = async (e) => {
+    e.preventDefault();
+    setFromDate("");
+    setToDate("");
+    setTransactionId("");
+    await fetchData(1);
+  };
+
+  // useEffect(() => {
+  //   if (fromDate === "" || toDate === "") {
+  //     fetchData(1);
+  //   } else {
+  //     if (fromDate <= toDate) {
+  //       fetchData(1);
+  //     } else {
+  //       toast.error("From Date cannot be greater than To Date.");
+  //     }
+  //   }
+  // }, [fromDate, toDate, transactionId]);
   useEffect(() => {
     fetchData(1);
   }, []);
@@ -147,21 +170,23 @@ function MyOrders() {
       {viewOrder === false ? (
         <div className="container py-5">
           <div className="row align-items-end">
-            <div className="col-lg-3 col-md-6 col-sm-12 my-1">
+            <div className="col-lg-4 col-md-6 col-sm-12 my-1">
               <label className="form-label my-3 searchLabel">From Date</label>
               <input
                 className="form-control searchInput"
                 type="date"
+                value={fromDate}
                 onChange={(e) => {
                   setFromDate(e.target.value);
                 }}
               />
             </div>
-            <div className="col-lg-3 col-md-6 col-sm-12 my-1">
+            <div className="col-lg-4 col-md-6 col-sm-12 my-1">
               <label className="form-label my-3 searchLabel">To Date</label>
               <input
                 className="form-control searchInput"
                 type="date"
+                value={toDate}
                 onChange={(e) => {
                   setToDate(e.target.value);
                 }}
@@ -169,23 +194,33 @@ function MyOrders() {
             </div>
             <div className="col-lg-4 col-md-6 col-sm-12 my-1">
               <label className="form-label my-3 searchLabel">
-                Payment Order ID
+                Transaction ID
               </label>
               <input
                 className="form-control searchInput"
                 type="text"
+                value={transactionId}
                 onChange={(e) => {
-                  setPaymentOrderId(e.target.value);
+                  setTransactionId(e.target.value);
                 }}
               />
             </div>
             <div className="col-lg-2 col-md-6 col-sm-12 my-1">
               <button
-                type="w-100 button"
-                className="btn btn-lg searchBtn"
+                type="button"
+                className="w-100 btn btn-md searchBtn"
                 onClick={handleSearch}
               >
                 Search
+              </button>
+            </div>
+            <div className="col-lg-2 col-md-6 col-sm-12 my-1">
+              <button
+                type="button"
+                className="w-100 btn btn-md clearBtn"
+                onClick={handleClear}
+              >
+                Clear
               </button>
             </div>
             <div className="col-12 pt-4">

@@ -21,19 +21,6 @@ const AllRoutes = () => {
   const [isAuthenticated, setIsAuthenticated] = globalctx.auth;
   const [user, setUser] = globalctx.user;
 
-  // useEffect(() => {
-  //   const user = localStorage.getItem("user") ?? null;
-
-  //   if (user != null) {
-  //     const userData = JSON.parse(user);
-  //     if (userData) {
-  //       setIsAuthenticated(true);
-  //     } else {
-  //       navigate("/login");
-  //     }
-  //   }
-  // }, [setIsAuthenticated, setUser, navigate]);
-
   return (
     <Routes>
       <Route exact index path="/" Component={Home} />
@@ -43,8 +30,7 @@ const AllRoutes = () => {
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={Cart} />
       <Route exact path="/address-details" Component={AddressDetails} />
-      <Route exact path="/payment/verify" Component={Success} />
-      <Route exact path="/payment/cancel" Component={Cancel} />
+      <Route exact path="/order/verify" Component={Success} />
       <Route exact path="/my-account" Component={MyAccount} />
     </Routes>
   );

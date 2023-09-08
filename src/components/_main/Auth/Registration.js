@@ -13,6 +13,7 @@ import GlobalContext from "../../../context/GlobalContext";
 import { toast } from "react-toastify";
 import { LOGIN_SUCCESS } from "../../../redux/authProvider/actionType";
 import Select from "react-select";
+import LoadingLayout from "../../../layouts/LoadingLayout";
 
 // Validation Functions
 const getCharacterValidationError = (str) => {
@@ -62,7 +63,7 @@ const ValidateSchema = Yup.object({
   postalcode: Yup.string().required("Postal Code is required"),
   address: Yup.string()
     .required("Address is required")
-    .min(20, "Address must be at least 3 characters")
+    .min(20, "Address must be at least 20 characters")
     .max(50, "Address cannot be longer than 50 characters"),
   passwordconfirmation: Yup.string()
     .oneOf(
@@ -72,7 +73,7 @@ const ValidateSchema = Yup.object({
     .required("Confirm Password is required"),
 });
 
-function Registration() {
+function Registration({ setLoading }) {
   // Global Context
   const globalctx = useContext(GlobalContext);
   const [user, setUser] = globalctx.user;
@@ -104,6 +105,7 @@ function Registration() {
   };
 
   const onSubmit = async (values) => {
+    setLoading(true);
     await deliverable({ zipcode: values.postalcode })
       .then(async (res) => {
         if (res?.deliverable === true) {
@@ -136,6 +138,7 @@ function Registration() {
               localStorage.removeItem("redirectTo");
               localStorage.setItem("prevUrl", location?.pathname);
               toast.success("Account registered successfully...");
+              setLoading(false);
             })
             .catch((err) => {
               if (err.response.status === 400 || err.response.status === 500) {
@@ -158,6 +161,7 @@ function Registration() {
         }
       })
       .catch((error) => {
+        setLoading(false);
         if (error.response.status === 400 || error.response.status === 500) {
           toast.error(error.response.data.message);
         }
@@ -185,203 +189,205 @@ function Registration() {
     postalCodeList();
   }, []);
   return (
-    <div className="row gx-3">
-      <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
-        <h3 className="mb-4">
-          <strong>Create An Account</strong>
-        </h3>
+    <>
+      <div className="row gx-3">
+        <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
+          <h3 className="mb-4">
+            <strong>Create An Account</strong>
+          </h3>
 
-        <form className="w-100" onSubmit={formik.handleSubmit}>
-          <div className="row gx-3">
-            {/* FirstName */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                First Name <small className="text-danger">*</small>
-              </label>
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="firstname"
-                value={formik.values.firstname}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.firstname && formik.errors.firstname ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.firstname}
-                </div>
-              ) : null}
-            </div>
-
-            {/* LastName */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Last Name <small className="text-danger">*</small>
-              </label>
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="lastname"
-                value={formik.values.lastname}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.lastname && formik.errors.lastname ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.lastname}
-                </div>
-              ) : null}
-            </div>
-            {/* Phone Number */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Phone Number <small className="text-danger">*</small>
-              </label>
-              <p className="text-secondary noteTxt mb-2">
-                Please use a valid phone number. ex. (XXX) XXX-XXXX
-              </p>
-              <input
-                className=" form-control mb-3"
-                type="tel"
-                name="phoneno"
-                value={formik.values.phoneno}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.phoneno && formik.errors.phoneno ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.phoneno}
-                </div>
-              ) : null}
-            </div>
-
-            {/* Address */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Address <small className="text-danger">*</small>
-              </label>
-              <input
-                className=" form-control mb-3"
-                type="text"
-                name="address"
-                value={formik.values.address}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-            </div>
-            {formik.touched.address && formik.errors.address ? (
-              <div className="text-danger formErrMsg mt-2 mb-3">
-                {formik.errors.address}
+          <form className="w-100" onSubmit={formik.handleSubmit}>
+            <div className="row gx-3">
+              {/* FirstName */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  First Name <small className="text-danger">*</small>
+                </label>
+                <input
+                  className="form-control mb-3"
+                  type="text"
+                  name="firstname"
+                  value={formik.values.firstname}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.firstname && formik.errors.firstname ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.firstname}
+                  </div>
+                ) : null}
               </div>
-            ) : null}
 
-            {/* City */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                City <small className="text-danger">*</small>
-              </label>
-              <input
-                className="form-control mb-3"
-                type="text"
-                name="city"
-                value={formik.values.city}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.city && formik.errors.city ? (
+              {/* LastName */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Last Name <small className="text-danger">*</small>
+                </label>
+                <input
+                  className="form-control mb-3"
+                  type="text"
+                  name="lastname"
+                  value={formik.values.lastname}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.lastname && formik.errors.lastname ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.lastname}
+                  </div>
+                ) : null}
+              </div>
+              {/* Phone Number */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Phone Number <small className="text-danger">*</small>
+                </label>
+                <p className="text-secondary noteTxt mb-2">
+                  Please use a valid phone number. ex. (XXX) XXX-XXXX
+                </p>
+                <input
+                  className=" form-control mb-3"
+                  type="tel"
+                  name="phoneno"
+                  value={formik.values.phoneno}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.phoneno && formik.errors.phoneno ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.phoneno}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Address */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Address <small className="text-danger">*</small>
+                </label>
+                <input
+                  className=" form-control mb-3"
+                  type="text"
+                  name="address"
+                  value={formik.values.address}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+              </div>
+              {formik.touched.address && formik.errors.address ? (
                 <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.city}
+                  {formik.errors.address}
                 </div>
               ) : null}
-            </div>
 
-            {/* Postal Code */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Postal Code <small className="text-danger">*</small>
-              </label>
-              <p className="text-secondary noteTxt mb-2">Format: A1A1A1</p>
-              <Select
-                className="basic-single mb-3"
-                classNamePrefix="select"
-                isClearable={true}
-                isSearchable={true}
-                name="postalcode"
-                value={selectedOption?.find(
-                  (option) => option.label === formik.values.postalcode
-                )}
-                onChange={(selectedOption) => {
-                  const selectedValue = selectedOption
-                    ? selectedOption.label
-                    : "";
-                  formik.setFieldValue("postalcode", selectedValue);
-                }}
-                options={postalCodeOp}
-              />
-              {formik.touched.postalcode && formik.errors.postalcode ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.postalcode}
-                </div>
-              ) : null}
-            </div>
+              {/* City */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  City <small className="text-danger">*</small>
+                </label>
+                <input
+                  className="form-control mb-3"
+                  type="text"
+                  name="city"
+                  value={formik.values.city}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.city && formik.errors.city ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.city}
+                  </div>
+                ) : null}
+              </div>
 
-            {/* Password */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Password <small className="text-danger">*</small>
-              </label>
-              <p className="text-secondary noteTxt mb-2">
-                Password must 6 characters. Characters must contain atleast 1
-                digit, 1 uppercase, 1 lowercase
-              </p>
-              <input
-                className="form-control mb-3"
-                type="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.password && formik.errors.password ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.password}
-                </div>
-              ) : null}
-            </div>
+              {/* Postal Code */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Postal Code <small className="text-danger">*</small>
+                </label>
+                <p className="text-secondary noteTxt mb-2">Format: A1A1A1</p>
+                <Select
+                  className="basic-single mb-3"
+                  classNamePrefix="select"
+                  isClearable={true}
+                  isSearchable={true}
+                  name="postalcode"
+                  value={selectedOption?.find(
+                    (option) => option.label === formik.values.postalcode
+                  )}
+                  onChange={(selectedOption) => {
+                    const selectedValue = selectedOption
+                      ? selectedOption.label
+                      : "";
+                    formik.setFieldValue("postalcode", selectedValue);
+                  }}
+                  options={postalCodeOp}
+                />
+                {formik.touched.postalcode && formik.errors.postalcode ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.postalcode}
+                  </div>
+                ) : null}
+              </div>
 
-            {/* Confirm Password */}
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label">
-                Confirm Password <small className="text-danger">*</small>
-              </label>
-              <input
-                className="form-control mb-3"
-                type="password"
-                name="passwordconfirmation"
-                value={formik.values.passwordconfirmation}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.passwordconfirmation &&
-              formik.errors.passwordconfirmation ? (
-                <div className="text-danger formErrMsg mt-2 mb-3">
-                  {formik.errors.passwordconfirmation}
-                </div>
-              ) : null}
-            </div>
+              {/* Password */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Password <small className="text-danger">*</small>
+                </label>
+                <p className="text-secondary noteTxt mb-2">
+                  Password must 6 characters. Characters must contain atleast 1
+                  digit, 1 uppercase, 1 lowercase
+                </p>
+                <input
+                  className="form-control mb-3"
+                  type="password"
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.password}
+                  </div>
+                ) : null}
+              </div>
 
-            <div className="w-100 text-center mb-3 mt-4">
-              <button
-                className="w-100 py-2 fw-bold btn btn-md regBtn"
-                type="submit"
-              >
-                Create An Account
-              </button>
+              {/* Confirm Password */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Confirm Password <small className="text-danger">*</small>
+                </label>
+                <input
+                  className="form-control mb-3"
+                  type="password"
+                  name="passwordconfirmation"
+                  value={formik.values.passwordconfirmation}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.passwordconfirmation &&
+                formik.errors.passwordconfirmation ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.passwordconfirmation}
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="w-100 text-center mb-3 mt-4">
+                <button
+                  className="w-100 py-2 fw-bold btn btn-md regBtn"
+                  type="submit"
+                >
+                  Create An Account
+                </button>
+              </div>
             </div>
-          </div>
-        </form>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

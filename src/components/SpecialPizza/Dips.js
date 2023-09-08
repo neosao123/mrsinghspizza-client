@@ -19,7 +19,6 @@ function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
   // Get Current Obj
   const current = () => {
     if (dipsRef.current) {
-      console.log(dipsRef.current.value);
       const selectedDips = dipsData.find(
         (items) => items?.dipsCode === dipsRef.current.value
       );

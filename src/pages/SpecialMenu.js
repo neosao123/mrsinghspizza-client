@@ -52,7 +52,7 @@ function SpecialMenu() {
   const [pizzaSize, setPizzaSize] = useState("Large");
   const [pizzaSizePrice, setPizzaSizePrice] = useState();
   const [pizzaState, setPizzaState] = useState([]);
-  const [sidesArr, setSidesArr] = useState([]);
+  const [sidesArr, setSidesArr] = useState({});
   const [dipsObj, setDipsObj] = useState({});
   const [drinksObj, setDrinksObj] = useState();
   const [totalPrice, setTotalPrice] = useState();
@@ -234,24 +234,24 @@ function SpecialMenu() {
     });
     calculatedPrice += totalTwoTpsPrice;
 
-    // Handle Sides Price
-    sidesArr?.map((data) => {
-      const filtered = getSpecialData?.freesides?.find(
-        (items) => items.code === data?.sideCode
-      );
-      if (filtered && getSpecialData?.freesides.length !== 0) {
-        filtered?.lineEntries?.map((items) => {
-          if (items.code === data?.lineCode) {
-            totalSidesPrice += Number(0);
-          } else {
-            totalSidesPrice += Number(data?.sidePrice);
-          }
-        });
-      } else {
-        totalSidesPrice += Number(data?.sidePrice);
-      }
-    });
-    calculatedPrice += Number(totalSidesPrice);
+    // // Handle Sides Price
+    // sidesArr?.map((data) => {
+    //   const filtered = getSpecialData?.freesides?.find(
+    //     (items) => items.code === data?.sideCode
+    //   );
+    //   if (filtered && getSpecialData?.freesides.length !== 0) {
+    //     filtered?.lineEntries?.map((items) => {
+    //       if (items.code === data?.lineCode) {
+    //         totalSidesPrice += Number(0);
+    //       } else {
+    //         totalSidesPrice += Number(data?.sidePrice);
+    //       }
+    //     });
+    //   } else {
+    //     totalSidesPrice += Number(data?.sidePrice);
+    //   }
+    // });
+    // calculatedPrice += Number(totalSidesPrice);
 
     // Set Total Price
     setTotalPrice(Number(calculatedPrice).toFixed(2));
@@ -395,9 +395,8 @@ function SpecialMenu() {
     };
     orderPlace(payload)
       .then((response) => {
-        localStorage.setItem("OrderID", response.orderCode);
-        localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_self");
+        localStorage.setItem("placedOrder", JSON.stringify(response));
+        navigate("/order/verify");
         setLoading(false);
       })
       .catch((error) => {
@@ -466,7 +465,15 @@ function SpecialMenu() {
       price: getSpecialData?.pops[0]?.price,
       amount: Number(0).toFixed(2),
     });
-    setSidesArr([]);
+    const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
+    const sidesObject = {
+      sideCode: getSpecialData?.freesides?.[0]?.code,
+      sideName: getSpecialData?.freesides?.[0]?.sideName,
+      lineCode: combinationData?.code,
+      sidePrice: combinationData?.price,
+      sideSize: combinationData?.size,
+    };
+    setSidesArr(sidesObject);
     setDipsObj({
       dipsCode: dipsData?.[0]?.dipsCode,
       dipsName: dipsData?.[0]?.dipsName,
@@ -556,7 +563,7 @@ function SpecialMenu() {
     calulatePrice();
     setFreeTpsCount(noOfFreeToppings);
     setAdditionalTps(noOfAdditionalTps);
-    console.log("dipsObject :", dipsObj);
+    console.log("SidesObject :", sidesArr);
   }, [
     sidesArr,
     dipsObj,
@@ -586,6 +593,15 @@ function SpecialMenu() {
         setPizzaSizePrice(Number(getSpecialData?.extraLargePizzaPrice));
         setTotalPrice(getSpecialData?.extraLargePizzaPrice);
       }
+      const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
+      const sidesObject = {
+        sideCode: getSpecialData?.freesides?.[0]?.code,
+        sideName: getSpecialData?.freesides?.[0]?.sideName,
+        lineCode: combinationData?.code,
+        sidePrice: combinationData?.price,
+        sideSize: combinationData?.size,
+      };
+      setSidesArr(sidesObject);
     }
   }, [getSpecialData]);
   // Populate All Fields - Edit Pizza
@@ -677,7 +693,7 @@ function SpecialMenu() {
               {spSelection}
 
               {/* Sides */}
-              {getSpecialData?.sides.length === 0 ? (
+              {getSpecialData?.freesides.length === 0 ? (
                 ""
               ) : (
                 <>
@@ -689,7 +705,7 @@ function SpecialMenu() {
                     style={{ maxHeight: "450px", overflowY: "scroll" }}
                   >
                     <div id="sides" className="col-lg-12 mb-3 sidesContent">
-                      {getSpecialData?.sides?.map((data) => {
+                      {getSpecialData?.freesides?.map((data) => {
                         return (
                           <Sides
                             key={data.code}

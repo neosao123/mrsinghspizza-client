@@ -40,6 +40,13 @@ function MyAccount() {
         if (willDelete) {
           localStorage.removeItem("user");
           localStorage.removeItem("token");
+          if (
+            localStorage.getItem("registeredUser") !== null ||
+            localStorage.getItem("prevUrl") !== null
+          ) {
+            localStorage.removeItem("registeredUser");
+            localStorage.removeItem("prevUrl");
+          }
           toast.success("Logged Out successfully");
           dispatch({ type: LOGOUT, payload: null });
           setTimeout(() => {

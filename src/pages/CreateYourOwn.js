@@ -245,9 +245,9 @@ function CreateYourOwn() {
     };
     orderPlace(payload)
       .then((response) => {
-        localStorage.setItem("OrderID", response.orderCode);
-        localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_self");
+        localStorage.setItem("placedOrder", JSON.stringify(response));
+        navigate("/order/verify");
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {

@@ -6,7 +6,7 @@ import Footer from "../components/_main/Footer";
 import { useSelector } from "react-redux";
 import { deliverable, getPostalcodeList, orderPlace } from "../services";
 import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
+import { json, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
 import GlobalContext from "../context/GlobalContext";
 import Select from "react-select";
@@ -49,7 +49,7 @@ const ValidateSchema = Yup.object({
   postalcode: Yup.string().required("Postal Code is required"),
   address: Yup.string()
     .required("Address is required")
-    .min(20, "Address must be at least 3 characters")
+    .min(20, "Address must be at least 20 characters")
     .max(50, "Address cannot be longer than 50 characters"),
 });
 
@@ -103,12 +103,9 @@ function AddressDetails() {
     };
     orderPlace(payload)
       .then((response) => {
-        localStorage.setItem("OrderID", response.orderCode);
-        localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_self");
-        setTimeout(() => {
-          setLoading(false);
-        }, 500);
+        localStorage.setItem("placedOrder", JSON.stringify(response));
+        navigate("/order/verify");
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {

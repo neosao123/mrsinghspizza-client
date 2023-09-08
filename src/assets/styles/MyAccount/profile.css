@@ -49,8 +49,17 @@
 .profileUpdateBtn:focus,
 .searchBtn.active,
 .searchBtn:hover,
-.searchBtn:focus {
+.searchBtn:focus,
+.clearBtn.active,
+.clearBtn:hover,
+.clearBtn:focus {
   background-color: #2e2e2e !important;
+}
+.clearBtn {
+  background-color: #c60202;
+  color: #fafafa !important;
+  font-size: 0.96rem;
+  font-weight: 550;
 }
 .pTabContainer {
   box-shadow: 0 0px 4px #e3e3e3;

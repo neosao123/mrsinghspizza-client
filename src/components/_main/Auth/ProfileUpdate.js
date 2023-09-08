@@ -69,7 +69,7 @@ function ProfileUpdate() {
         setUser(data);
         dispatch({ type: UPDATEUSER, payload: data });
         setTimeout(() => {
-          toast.success("Profile Upadated Successfully.");
+          toast.success("Profile Updated Successfully.");
         }, 500);
       } else {
         toast.error(result.message);

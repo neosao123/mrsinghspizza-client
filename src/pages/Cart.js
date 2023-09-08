@@ -45,9 +45,9 @@ function Cart() {
     };
     orderPlace(payload)
       .then((response) => {
-        localStorage.setItem("OrderID", response.orderCode);
-        localStorage.setItem("sessionId", response.sessionId);
-        window.open(response?.paymentUrl, "_blank");
+        localStorage.setItem("placedOrder", JSON.stringify(response));
+        navigate("/order/verify");
+        setLoading(false);
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {
@@ -61,6 +61,7 @@ function Cart() {
       if (isAuthenticated && user !== null) {
         const previousUrl = localStorage.getItem("prevUrl");
         if (previousUrl && previousUrl !== null) {
+          setLoading(true);
           console.log(regUser.zipcode);
           const payload = { zipcode: regUser.zipcode };
           await deliverable(payload)

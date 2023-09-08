@@ -8,6 +8,7 @@ import { useDispatch } from "react-redux";
 import GlobalContext from "../../../context/GlobalContext";
 import { customerLogin } from "../../../services";
 import { LOGIN_SUCCESS } from "../../../redux/authProvider/actionType";
+import LoadingLayout from "../../../layouts/LoadingLayout";
 
 // Validation Functions
 const getCharacterValidationError = (str) => {
@@ -31,7 +32,7 @@ const ValidateSchema = Yup.object({
     .matches(/[A-Z]/, getCharacterValidationError("uppercase")),
 });
 
-function Login() {
+function Login({ setLoading }) {
   const [loginObj, setLoginObj] = new useState({
     phoneno: "9767040364",
     password: "Client@123",
@@ -46,6 +47,7 @@ function Login() {
   const dispatch = useDispatch();
 
   const onSubmit = async (values) => {
+    setLoading(true);
     let payload = {
       username: values.phoneno,
       password: values.password,
@@ -61,11 +63,13 @@ function Login() {
         navigate(redirectTo !== null ? redirectTo : "/");
         localStorage.removeItem("redirectTo");
         toast.success("Successfully Login");
+        setLoading(true);
       })
       .catch((err) => {
         if (err.response.status === 400 || err.response.status === 500) {
           toast.error(err.response.data.message);
         }
+        setLoading(false);
       });
   };
 
@@ -83,58 +87,60 @@ function Login() {
     setUrl(location?.pathname);
   }, [location]);
   return (
-    <div className="row gx-3">
-      <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4">
-        <h3 className="mb-4">
-          <strong>Login</strong>
-        </h3>
-        <form className="w-100" onSubmit={formik.handleSubmit}>
-          <div className="row gx-3">
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className="form-label mb-2">Phone Number</label>
-              <input
-                className="form-control  mb-3"
-                type="tel"
-                name="phoneno"
-                value={formik.values.phoneno}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.phoneno && formik.errors.phoneno ? (
-                <div className="text-danger mt-2 mb-3">
-                  {formik.errors.phoneno}
-                </div>
-              ) : null}
+    <>
+      <div className="row gx-3">
+        <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4">
+          <h3 className="mb-4">
+            <strong>Login</strong>
+          </h3>
+          <form className="w-100" onSubmit={formik.handleSubmit}>
+            <div className="row gx-3">
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label mb-2">Phone Number</label>
+                <input
+                  className="form-control  mb-3"
+                  type="tel"
+                  name="phoneno"
+                  value={formik.values.phoneno}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.phoneno && formik.errors.phoneno ? (
+                  <div className="text-danger mt-2 mb-3">
+                    {formik.errors.phoneno}
+                  </div>
+                ) : null}
+              </div>
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className=" form-label mb-2">Password</label>
+                <input
+                  className="form-control  mb-3"
+                  type="password"
+                  name="password"
+                  value={formik.values.password}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.password && formik.errors.password ? (
+                  <div className="text-danger mt-2 mb-3">
+                    {formik.errors.password}
+                  </div>
+                ) : null}
+              </div>
             </div>
-            <div className="col-lg-12 col-md-12 col-sm-12">
-              <label className=" form-label mb-2">Password</label>
-              <input
-                className="form-control  mb-3"
-                type="password"
-                name="password"
-                value={formik.values.password}
-                onChange={formik.handleChange}
-                onBlur={formik.handleBlur}
-              />
-              {formik.touched.password && formik.errors.password ? (
-                <div className="text-danger mt-2 mb-3">
-                  {formik.errors.password}
-                </div>
-              ) : null}
-            </div>
-          </div>
 
-          <div className="w-100 text-center mb-3 mt-4">
-            <button
-              type="submit"
-              className="w-100 py-2 fw-bold btn btn-md loginBtn"
-            >
-              Login
-            </button>
-          </div>
-        </form>
+            <div className="w-100 text-center mb-3 mt-4">
+              <button
+                type="submit"
+                className="w-100 py-2 fw-bold btn btn-md loginBtn"
+              >
+                Login
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

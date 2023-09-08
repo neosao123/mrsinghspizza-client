@@ -211,25 +211,41 @@ function CartList({
         })}
 
       {/* Sides */}
-      {cData?.config?.sides?.length > 0 && (
-        <div className="selectedPizza mb-1">
+      {cData?.productType === "customized" &&
+        cData?.config?.sides?.length > 0 && (
+          <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
+            <p>Sides :</p>
+            {cData?.config?.sides?.map((data) => {
+              return (
+                <span>
+                  {data?.sideName} ({data?.sideSize}),
+                </span>
+              );
+            })}
+          </div>
+        )}
+      {cData?.productType === "special" && cData?.config?.sides && (
+        <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
           <p>Sides :</p>
-          {cData?.config?.sides?.map((data) => {
-            return (
-              <span>
-                {data?.sideName} ({data?.sideSize}),
-              </span>
-            );
-          })}
+          <span>
+            {cData?.config?.sides?.sideName} ({cData?.config?.sides?.sideSize}),
+          </span>
         </div>
       )}
       {/* Dips */}
-      {cData?.config?.dips?.length > 0 && (
-        <div className="selectedPizza mb-1">
+      {cData?.productType === "customized" &&
+        cData?.config?.dips?.length > 0 && (
+          <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
+            <p>Dips: </p>
+            {cData?.config?.dips?.map((data) => {
+              return <span>{data?.dipsName},</span>;
+            })}
+          </div>
+        )}
+      {cData?.productType === "special" && cData?.config?.dips && (
+        <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
           <p>Dips: </p>
-          {cData?.config?.dips?.map((data) => {
-            return <span>{data?.dipsName},</span>;
-          })}
+          <span>{cData?.config?.dips?.dipsName},</span>;
         </div>
       )}
       {/* Drinks */}

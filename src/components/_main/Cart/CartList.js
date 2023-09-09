@@ -101,6 +101,14 @@ function CartList({
       }
     }
   };
+
+  // isEmptyObject
+  function isEmptyObject(obj) {
+    return Object.keys(obj).length === 0;
+  }
+
+  console.log(isEmptyObject(cData?.config?.sides));
+
   useEffect(() => {}, [payloadEdit]);
   return (
     <div className="row m-0 px-1 py-3 list-item">
@@ -224,14 +232,16 @@ function CartList({
             })}
           </div>
         )}
-      {cData?.productType === "special" && cData?.config?.sides && (
-        <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
-          <p>Sides :</p>
-          <span>
-            {cData?.config?.sides?.sideName} ({cData?.config?.sides?.sideSize}),
-          </span>
-        </div>
-      )}
+      {cData?.productType === "special" &&
+        isEmptyObject(cData?.config?.sides) === false && (
+          <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
+            <p>Sides :</p>
+            <span>
+              {cData?.config?.sides?.sideName} ({cData?.config?.sides?.sideSize}
+              ),
+            </span>
+          </div>
+        )}
       {/* Dips */}
       {cData?.productType === "customized" &&
         cData?.config?.dips?.length > 0 && (
@@ -242,12 +252,13 @@ function CartList({
             })}
           </div>
         )}
-      {cData?.productType === "special" && cData?.config?.dips && (
-        <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
-          <p>Dips: </p>
-          <span>{cData?.config?.dips?.dipsName},</span>;
-        </div>
-      )}
+      {cData?.productType === "special" &&
+        isEmptyObject(cData?.config?.dips) === false && (
+          <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
+            <p>Dips: </p>
+            <span>{cData?.config?.dips?.dipsName},</span>
+          </div>
+        )}
       {/* Drinks */}
       {cData?.productType === "customized" &&
         cData?.config?.drinks?.length > 0 && (
@@ -258,12 +269,13 @@ function CartList({
             })}
           </div>
         )}
-      {cData?.productType === "special" && (
-        <div className="selectedPizza mb-1">
-          <p>Drinks: </p>
-          <span>{cData?.config?.drinks?.drinksName}</span>
-        </div>
-      )}
+      {cData?.productType === "special" &&
+        isEmptyObject(cData?.config?.drinks) === false && (
+          <div className="selectedPizza mb-1">
+            <p>Drinks: </p>
+            <span>{cData?.config?.drinks?.drinksName}</span>
+          </div>
+        )}
 
       {/* Edit & Delete */}
       <div className="col-lg-12 mt-1">

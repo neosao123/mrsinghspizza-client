@@ -45,6 +45,9 @@ const ValidateSchema = Yup.object({
       canadianPhoneNumberRegExp,
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
+  email: Yup.string()
+    .email("Invalid email address")
+    .required("Email is required"),
   password: Yup.string()
     .required("Password is required")
     .min(6, "Password must have at least 6 characters")
@@ -113,6 +116,7 @@ function Registration({ setLoading }) {
             firstName: values.firstname,
             lastName: values.lastname,
             mobileNumber: values.phoneno,
+            email: values.email,
             city: values.city,
             zipcode: values.postalcode,
             password: values.password,
@@ -161,10 +165,10 @@ function Registration({ setLoading }) {
         }
       })
       .catch((error) => {
-        setLoading(false);
         if (error.response.status === 400 || error.response.status === 500) {
           toast.error(error.response.data.message);
         }
+        setLoading(false);
       });
   };
   // Use Formik
@@ -173,6 +177,7 @@ function Registration({ setLoading }) {
       firstname: "",
       lastname: "",
       phoneno: "",
+      email: "",
       password: "",
       passwordconfirmation: "",
       city: "",
@@ -256,6 +261,29 @@ function Registration({ setLoading }) {
                 {formik.touched.phoneno && formik.errors.phoneno ? (
                   <div className="text-danger formErrMsg mt-2 mb-3">
                     {formik.errors.phoneno}
+                  </div>
+                ) : null}
+              </div>
+
+              {/* Email */}
+              <div className="col-lg-12 col-md-12 col-sm-12">
+                <label className="form-label">
+                  Email <small className="text-danger">*</small>
+                </label>
+                <p className="text-secondary noteTxt mb-2">
+                  Please use a valid email address
+                </p>
+                <input
+                  className=" form-control mb-3"
+                  type="email"
+                  name="email"
+                  value={formik.values.email}
+                  onChange={formik.handleChange}
+                  onBlur={formik.handleBlur}
+                />
+                {formik.touched.email && formik.errors.email ? (
+                  <div className="text-danger formErrMsg mt-2 mb-3">
+                    {formik.errors.email}
                   </div>
                 ) : null}
               </div>

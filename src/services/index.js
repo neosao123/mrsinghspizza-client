@@ -95,8 +95,8 @@ export const customerDeleteAddress = async (page, search, payload) => {
   const { data: response } = await http.post(`customer/deleteAddress`);
   return response;
 };
-export const customerResetPassword = async (page, search, payload) => {
-  const { data: response } = await http.post(`customer/resetPassword`);
+export const customerResetPassword = async (payload, page, search) => {
+  const { data: response } = await http.post(`customer/resetPassword`, payload);
   return response;
 };
 export const changePassword = async (payload, page, search) => {

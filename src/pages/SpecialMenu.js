@@ -54,7 +54,7 @@ function SpecialMenu() {
   const [pizzaState, setPizzaState] = useState([]);
   const [sidesArr, setSidesArr] = useState({});
   const [dipsObj, setDipsObj] = useState({});
-  const [drinksObj, setDrinksObj] = useState();
+  const [drinksObj, setDrinksObj] = useState({});
   const [totalPrice, setTotalPrice] = useState();
   let calcDipsArr = [];
   let calcOneTpsArr = [];
@@ -465,22 +465,30 @@ function SpecialMenu() {
       price: getSpecialData?.pops[0]?.price,
       amount: Number(0).toFixed(2),
     });
-    const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
-    const sidesObject = {
-      sideCode: getSpecialData?.freesides?.[0]?.code,
-      sideName: getSpecialData?.freesides?.[0]?.sideName,
-      lineCode: combinationData?.code,
-      sidePrice: combinationData?.price,
-      sideSize: combinationData?.size,
-    };
-    setSidesArr(sidesObject);
-    setDipsObj({
-      dipsCode: dipsData?.[0]?.dipsCode,
-      dipsName: dipsData?.[0]?.dipsName,
-      price: dipsData?.[0]?.price,
-      quantity: Number(getSpecialData?.noofDips),
-      amount: Number(0).toFixed(2),
-    });
+    if (getSpecialData?.freesides && getSpecialData?.freesides.length > 0) {
+      const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
+      const sidesObject = {
+        sideCode: getSpecialData?.freesides?.[0]?.code,
+        sideName: getSpecialData?.freesides?.[0]?.sideName,
+        lineCode: combinationData?.code,
+        sidePrice: combinationData?.price,
+        sideSize: combinationData?.size,
+      };
+      setSidesArr(sidesObject);
+    } else {
+      setSidesArr({});
+    }
+    if (Number(getSpecialData?.noofDips) > 0) {
+      setDipsObj({
+        dipsCode: dipsData?.[0]?.dipsCode,
+        dipsName: dipsData?.[0]?.dipsName,
+        price: dipsData?.[0]?.price,
+        quantity: Number(getSpecialData?.noofDips),
+        amount: Number(0).toFixed(2),
+      });
+    } else {
+      setDipsObj({});
+    }
     calcDipsArr = [];
     setAdditionalTps(0);
     setReset(true);
@@ -593,15 +601,32 @@ function SpecialMenu() {
         setPizzaSizePrice(Number(getSpecialData?.extraLargePizzaPrice));
         setTotalPrice(getSpecialData?.extraLargePizzaPrice);
       }
-      const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
-      const sidesObject = {
-        sideCode: getSpecialData?.freesides?.[0]?.code,
-        sideName: getSpecialData?.freesides?.[0]?.sideName,
-        lineCode: combinationData?.code,
-        sidePrice: combinationData?.price,
-        sideSize: combinationData?.size,
-      };
-      setSidesArr(sidesObject);
+
+      if (getSpecialData?.freesides && getSpecialData?.freesides.length > 0) {
+        const combinationData =
+          getSpecialData?.freesides?.[0]?.lineEntries?.[0];
+        const sidesObject = {
+          sideCode: getSpecialData?.freesides?.[0]?.code,
+          sideName: getSpecialData?.freesides?.[0]?.sideName,
+          lineCode: combinationData?.code,
+          sidePrice: combinationData?.price,
+          sideSize: combinationData?.size,
+        };
+        setSidesArr(sidesObject);
+      } else {
+        setSidesArr({});
+      }
+      if (Number(getSpecialData?.noofDips) > 0) {
+        setDipsObj({
+          dipsCode: dipsData?.[0]?.dipsCode,
+          dipsName: dipsData?.[0]?.dipsName,
+          price: dipsData?.[0]?.price,
+          quantity: Number(getSpecialData?.noofDips),
+          amount: Number(0).toFixed(2),
+        });
+      } else {
+        setDipsObj({});
+      }
     }
   }, [getSpecialData]);
   // Populate All Fields - Edit Pizza
@@ -693,7 +718,8 @@ function SpecialMenu() {
               {spSelection}
 
               {/* Sides */}
-              {getSpecialData?.freesides.length === 0 ? (
+              {getSpecialData?.freesides &&
+              getSpecialData?.freesides.length <= 0 ? (
                 ""
               ) : (
                 <>

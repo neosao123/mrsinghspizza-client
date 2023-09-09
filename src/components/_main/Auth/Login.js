@@ -127,6 +127,11 @@ function Login({ setLoading }) {
                   </div>
                 ) : null}
               </div>
+              {/* <div className="col-lg-12 col-md-12 col-sm-12 text-end">
+                <Link to={"/forget-password"} className="text-primary">
+                  Forget Password
+                </Link>
+              </div> */}
             </div>
 
             <div className="w-100 text-center mb-3 mt-4">

@@ -42,6 +42,16 @@ function SpecialMenuList() {
                 >
                   {data.name}
                 </h3>
+                <p
+                  className="sppizzasize mb-2 text-truncate"
+                  style={{
+                    overflow: "hidden",
+                    whiteSpace: "nowrap",
+                    color: "#dd6b00",
+                  }}
+                >
+                  {data?.subtitle ? data?.subtitle : " - "}
+                </p>
                 <p className="sppizzasize text-secondary mb-2">
                   Size : <span className="mx-2">Large / Extra Large</span>
                 </p>

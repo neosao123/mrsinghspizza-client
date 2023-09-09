@@ -5,6 +5,9 @@ import { getOrderList } from "../../../services";
 import ViewOrder from "./ViewOrder";
 import { IoArrowBackCircleOutline } from "react-icons/io5";
 import { toast } from "react-toastify";
+// import DatePicker from "react-bootstrap-date-picker";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 function MyOrders() {
   const globalCtx = useContext(GlobalContext);
@@ -13,13 +16,14 @@ function MyOrders() {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const [totalRows, setTotalRows] = useState(0);
-  const [fromDate, setFromDate] = useState("");
-  const [toDate, setToDate] = useState("");
-  const [transactionId, setTransactionId] = useState();
+  const [fromDate, setFromDate] = useState(null);
+  const [toDate, setToDate] = useState(null);
+  const [transactionId, setTransactionId] = useState(null);
   const [perPage, setPerPage] = useState(10);
   const [currentPage, setCurrentPage] = useState();
   const [viewOrder, setViewOrder] = useState(false);
   const [selectedCode, setSelectedCode] = useState();
+  const [selectedDate, setSelectedDate] = useState(null);
 
   const columns = [
     {
@@ -72,17 +76,27 @@ function MyOrders() {
   ];
 
   // Handle
-  const fetchData = async (page) => {
-    console.log(transactionId, toDate);
+  const fetchData = async (page, isClear) => {
     try {
       setLoading(true);
-      const payload = {
-        fromDate: fromDate ? fromDate : "",
-        toDate: toDate ? toDate : "",
-        transactionId: transactionId,
-        customerCode: user?.customerCode,
-        page: page,
-      };
+      let payload;
+      if (isClear === true) {
+        payload = {
+          fromDate: "",
+          toDate: "",
+          transactionId: "",
+          customerCode: user?.customerCode,
+          page: page,
+        };
+      } else {
+        payload = {
+          fromDate: fromDate ? fromDate : "",
+          toDate: toDate ? toDate : "",
+          transactionId: transactionId,
+          customerCode: user?.customerCode,
+          page: page,
+        };
+      }
       await getOrderList(payload)
         .then((response) => {
           setData(response.data);
@@ -99,7 +113,7 @@ function MyOrders() {
     }
   };
   const handlePageChange = (page) => {
-    fetchData(page);
+    fetchData(page, false);
   };
 
   const handlePerRowsChange = async (newPerPage, page) => {
@@ -132,7 +146,7 @@ function MyOrders() {
   const handleSearch = (e) => {
     e.preventDefault();
     if (fromDate === "" && toDate === "") {
-      fetchData(1);
+      fetchData(1, false);
     } else {
       if (fromDate <= toDate) {
         fetchData(1);
@@ -142,12 +156,11 @@ function MyOrders() {
     }
   };
 
-  const handleClear = async (e) => {
-    e.preventDefault();
+  const handleClear = async () => {
     setFromDate("");
     setToDate("");
     setTransactionId("");
-    await fetchData(1);
+    fetchData(1, true);
   };
 
   // useEffect(() => {
@@ -192,6 +205,13 @@ function MyOrders() {
                 }}
               />
             </div>
+            {/* <div>
+              <DatePicker
+                selected={selectedDate}
+                onChange={(date) => setSelectedDate(date)}
+                dateFormat="yyyy-MM-dd" // Customize the date format as needed
+              />
+            </div> */}
             <div className="col-lg-4 col-md-6 col-sm-12 my-1">
               <label className="form-label my-3 searchLabel">
                 Transaction ID
@@ -205,24 +225,29 @@ function MyOrders() {
                 }}
               />
             </div>
-            <div className="col-lg-2 col-md-6 col-sm-12 my-1">
-              <button
-                type="button"
-                className="w-100 btn btn-md searchBtn"
-                onClick={handleSearch}
-              >
-                Search
-              </button>
+            <div className="col-lg-4 col-md-6 col-sm-12 my-1">
+              <div className="row gx-5 m-0 p-0">
+                <div className="col-lg-6 col-md-6 col-sm-6 py-2 px-1">
+                  <button
+                    type="button"
+                    className="w-100 btn btn-sm searchBtn"
+                    onClick={handleSearch}
+                  >
+                    Search
+                  </button>
+                </div>
+                <div className="col-lg-6 col-md-6 col-sm-6 py-2 px-1">
+                  <button
+                    type="button"
+                    className="w-100 btn btn-sm clearBtn"
+                    onClick={handleClear}
+                  >
+                    Clear
+                  </button>
+                </div>
+              </div>
             </div>
-            <div className="col-lg-2 col-md-6 col-sm-12 my-1">
-              <button
-                type="button"
-                className="w-100 btn btn-md clearBtn"
-                onClick={handleClear}
-              >
-                Clear
-              </button>
-            </div>
+            {/* <div className="col-lg-2 col-md-6 col-sm-12 my-1"></div> */}
             <div className="col-12 pt-4">
               <DataTable
                 columns={columns}

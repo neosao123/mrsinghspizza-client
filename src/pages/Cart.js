@@ -11,6 +11,7 @@ import LoadingLayout from "../layouts/LoadingLayout";
 import { useSelector } from "react-redux";
 import swal from "sweetalert";
 import { deliverable, orderPlace } from "../services";
+import { AiOutlineShoppingCart } from "react-icons/ai";
 
 function Cart() {
   const globalCtx = useContext(GlobalContext);
@@ -243,9 +244,17 @@ function Cart() {
           ) : (
             <>
               <div className="new-block">
-                <div className="row m-0 p-0">
-                  <div className="text-center">
-                    <p className="py-5 emptyCartMsg">Your Cart is Empty</p>
+                <div
+                  className="row m-0 p-0 align-items-center"
+                  style={{ height: "600px !important" }}
+                >
+                  <div className="text-center ">
+                    <div className="py-1">
+                      <AiOutlineShoppingCart
+                        style={{ width: "40px", height: "40px" }}
+                      />
+                    </div>
+                    <p className="emptyCartMsg py-4">Your Cart is Empty</p>
                     <button
                       className="btn btn-md addtocart mb-3"
                       onClick={handleContinueShopping}

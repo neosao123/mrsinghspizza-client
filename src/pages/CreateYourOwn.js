@@ -171,6 +171,7 @@ function CreateYourOwn() {
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
+        pizzaPrice: pizzaSizePrice,
         comments: "",
       };
       if (editedPayload) {
@@ -211,6 +212,7 @@ function CreateYourOwn() {
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
+        pizzaPrice: pizzaSizePrice,
         comments: "",
       };
       if (payload) {

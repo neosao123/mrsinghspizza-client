@@ -140,9 +140,6 @@ function ViewOrder({ selectedCode }) {
                       Quantity
                     </th>
                     <th className="tableHead" scope="col">
-                      Price
-                    </th>
-                    <th className="tableHead" scope="col">
                       Amount
                     </th>
                   </tr>
@@ -177,8 +174,12 @@ function ViewOrder({ selectedCode }) {
                               )}
                             </td>
                             <td className="tableData">{order?.quantity}</td>
-                            <td className="tableData">$ {order?.price}</td>
-                            <td className="tableData">$ {order?.amount}</td>
+                            <td className="tableData">
+                              ${" "}
+                              {order?.productType === "special"
+                                ? order?.pizzaPrice
+                                : order?.amount}
+                            </td>
                           </tr>
                         </>
                       );
@@ -190,7 +191,6 @@ function ViewOrder({ selectedCode }) {
                   <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td className="tableHead">Sub Total :</td>
                     <td className="tableData">
                       <span>$ {orderData?.subTotal}</span>
@@ -198,7 +198,6 @@ function ViewOrder({ selectedCode }) {
                   </tr>
                   {/* Tax Percentage */}
                   <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td className="tableHead">Tax Per :</td>
@@ -210,7 +209,6 @@ function ViewOrder({ selectedCode }) {
                   <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td className="tableHead">Tax Amount :</td>
                     <td className="tableData">
                       <span>$ {orderData?.taxAmount}</span>
@@ -220,7 +218,6 @@ function ViewOrder({ selectedCode }) {
                   <tr>
                     <td></td>
                     <td></td>
-                    <td></td>
                     <td className="tableHead">Delivery Charges :</td>
                     <td className="tableData">
                       <span>$ {orderData?.deliveryCharges}</span>
@@ -228,7 +225,6 @@ function ViewOrder({ selectedCode }) {
                   </tr>
                   {/* Delivery Charges */}
                   <tr>
-                    <td></td>
                     <td></td>
                     <td></td>
                     <td className="tableHead">Grand Total :</td>
@@ -259,48 +255,79 @@ export const PizzaDetails = ({ pizzaData }) => {
       {pizzaData?.config?.pizza?.map((data, index) => {
         return (
           <div className="w-100">
-            <div className="pizzaDetailsTitle my-1">
-              {pizzaData?.productType === "special" ? "Next Pizza :" : ""}
-            </div>
+            {(data?.crust?.crustName !== "Regular" ||
+              data?.cheese?.cheeseName !== "Mozzarella") && (
+              <div className="pizzaDetailsTitle my-1">
+                {pizzaData?.productType === "special" ? "Next Pizza :" : ""}
+              </div>
+            )}
+
             {/* Crust */}
-            <div className="py-1">
-              <span className="pizzaDetailsTitle ">Crust : </span>
-              <span>{data?.crust?.crustName}</span>
-            </div>
+            {data?.crust?.crustName === "Regular" ? (
+              ""
+            ) : (
+              <div className="py-1">
+                <span className="pizzaDetailsTitle ">Crust : </span>
+                <span>{data?.crust?.crustName}</span>
+              </div>
+            )}
             {/* Cheese */}
-            <div className="py-1">
-              <span className="pizzaDetailsTitle pt-3">Cheese : </span>
-              <span>{data?.cheese?.cheeseName}</span>
-            </div>
+            {data?.cheese?.cheeseName === "Mozzarella" ? (
+              ""
+            ) : (
+              <div className="py-1">
+                <span className="pizzaDetailsTitle pt-3">Cheese : </span>
+                <span>{data?.cheese?.cheeseName}</span>
+              </div>
+            )}
             {/* Specialbases */}
-            <div className="py-1">
-              <span className="pizzaDetailsTitle pt-3">Specialbases : </span>
-              <span>{data?.specialbases?.specialbaseName}</span>
-            </div>
+            {data?.specialbases && (
+              <div className="py-1">
+                <span className="pizzaDetailsTitle pt-3">Specialbases : </span>
+                <span>{data?.specialbases?.specialbaseName}</span>
+              </div>
+            )}
 
             {/* Toppings */}
-            <div className="py-1">
-              <span className="pizzaDetailsTitle pt-3">Toppings : </span>
-            </div>
+            {(data?.toppings?.countAsTwo.length > 0 ||
+              data?.toppings?.countAsOne.length > 0 ||
+              data?.toppings?.freeToppings.length > 0) && (
+              <>
+                <div className="py-1">
+                  <span className="pizzaDetailsTitle pt-3">Toppings : </span>
+                </div>
+              </>
+            )}
             <div className="">
               {data?.toppings?.countAsTwo &&
                 data?.toppings?.countAsTwo?.length > 0 && (
                   <>
-                    <ToppingsDetails tpsDetails={data?.toppings?.countAsTwo} />
+                    <ToppingsDetails
+                      tpsDetails={data?.toppings?.countAsTwo}
+                      count={2}
+                    />
                   </>
                 )}
               {data?.toppings?.countAsOne &&
                 data?.toppings?.countAsOne?.length > 0 && (
                   <>
-                    <ToppingsDetails tpsDetails={data?.toppings?.countAsOne} />
+                    <ToppingsDetails
+                      tpsDetails={data?.toppings?.countAsOne}
+                      count={1}
+                    />
                   </>
                 )}
               {data?.toppings?.freeToppings &&
                 data?.toppings?.freeToppings?.length > 0 && (
                   <>
-                    <ToppingsDetails
-                      tpsDetails={data?.toppings?.freeToppings}
-                    />
+                    {data?.toppings?.freeToppings?.length >= 6 ? (
+                      <>Indian Style Toppings</>
+                    ) : (
+                      <ToppingsDetails
+                        tpsDetails={data?.toppings?.freeToppings}
+                        count={0}
+                      />
+                    )}
                   </>
                 )}
             </div>
@@ -323,41 +350,72 @@ export const PizzaDetails = ({ pizzaData }) => {
           })}
         </>
       )}
-      {pizzaData?.config?.dips && pizzaData?.config?.dips.length > 0 && (
+      {pizzaData?.productType === "special" ? (
         <>
-          <div className="py-1">
-            <span className="pizzaDetailsTitle pt-3">Dips : </span>
-            {pizzaData?.config?.dips?.map((data, index) => {
-              return (
-                <span>
-                  {data?.dipsName}{" "}
-                  {pizzaData?.config?.dips.length - 1 === index ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
+          {pizzaData?.config?.dips && (
+            <>
+              <div className="py-1">
+                <span className="pizzaDetailsTitle pt-3">Dips : </span>
+                <span>{pizzaData?.config?.dips.dipsName}</span>
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <>
+          {pizzaData?.config?.dips && pizzaData?.config?.dips.length > 0 && (
+            <>
+              <div className="py-1">
+                <span className="pizzaDetailsTitle pt-3">Dips : </span>
+                {pizzaData?.config?.dips?.map((data, index) => {
+                  return (
+                    <span>
+                      {data?.dipsName}{" "}
+                      {pizzaData?.config?.dips.length - 1 === index ? "" : ","}
+                    </span>
+                  );
+                })}
+              </div>
+            </>
+          )}
         </>
       )}
-      {pizzaData?.config?.drinks && pizzaData?.config?.drinks.length > 0 && (
+      {pizzaData?.productType === "special" ? (
         <>
-          <div className="py-1">
-            <span className="pizzaDetailsTitle pt-3">Drinks : </span>
-            {pizzaData?.config?.drinks?.map((data, index) => {
-              return (
-                <span>
-                  {data?.drinksName}
-                  {pizzaData?.config?.drinks.length - 1 === index ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
+          {pizzaData?.config?.drinks && (
+            <div className="py-1">
+              <span className="pizzaDetailsTitle pt-3">Drinks : </span>
+              <span>{pizzaData?.config?.drinks?.drinksName}</span>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          {pizzaData?.config?.drinks &&
+            pizzaData?.config?.drinks.length > 0 && (
+              <>
+                <div className="py-1">
+                  <span className="pizzaDetailsTitle pt-3">Drinks : </span>
+                  {pizzaData?.config?.drinks?.map((data, index) => {
+                    return (
+                      <span>
+                        {data?.drinksName}
+                        {pizzaData?.config?.drinks.length - 1 === index
+                          ? ""
+                          : ","}
+                      </span>
+                    );
+                  })}
+                </div>
+              </>
+            )}
         </>
       )}
     </div>
   );
 };
 
-export const ToppingsDetails = ({ tpsDetails }) => {
+export const ToppingsDetails = ({ tpsDetails, count }) => {
   return (
     <div>
       {tpsDetails?.map((data) => {
@@ -366,6 +424,7 @@ export const ToppingsDetails = ({ tpsDetails }) => {
         return (
           <div className="w-100 row py-1">
             <div className="col-8">
+              {count === 2 ? <> ( 2 ) </> : ""}
               <span>{data?.toppingsName} </span>
               <span>
                 ({" "}

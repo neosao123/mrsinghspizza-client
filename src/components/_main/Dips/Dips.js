@@ -33,6 +33,7 @@ function Dips({ data, cartFn }) {
       quantity: count,
       amount: totalPrice,
       pizzaSize: "",
+      pizzaPrice: "",
       comments: "",
     };
     setProduct(obj);

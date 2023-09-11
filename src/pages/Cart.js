@@ -245,10 +245,10 @@ function Cart() {
             <>
               <div className="new-block">
                 <div
-                  className="row m-0 p-0 align-items-center"
-                  style={{ height: "600px !important" }}
+                  className="row m-0 p-0 align-items-center justify-content-center"
+                  style={{ height: "600px" }}
                 >
-                  <div className="text-center ">
+                  <div className="text-center">
                     <div className="py-1">
                       <AiOutlineShoppingCart
                         style={{ width: "40px", height: "40px" }}

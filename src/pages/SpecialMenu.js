@@ -163,9 +163,6 @@ function SpecialMenu() {
     let calculatedPrice = Number(0);
     let totalOneTpsPrice = Number(0);
     let totalTwoTpsPrice = Number(0);
-    let totalSidesPrice = Number(0);
-    let totalDipsPrice = Number(0);
-
     // OnChange Pizza Size - Price
     calculatedPrice += Number(pizzaSizePrice) || 0;
 
@@ -304,6 +301,7 @@ function SpecialMenu() {
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
+        pizzaPrice: pizzaSizePrice,
         comments: "",
       };
       console.log(editedPayload);
@@ -361,6 +359,7 @@ function SpecialMenu() {
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
         pizzaSize: pizzaSize,
+        pizzaPrice: pizzaSizePrice,
         comments: "",
       };
       console.log(payload);

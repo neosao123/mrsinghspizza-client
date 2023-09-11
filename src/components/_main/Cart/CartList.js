@@ -141,6 +141,14 @@ function CartList({
           </span>
         </div>
       )}
+      {cData?.pizzaPrice && (
+        <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
+          <p className="">Pizza Price : </p>
+          <span className="mx-2">
+            $ {cData?.pizzaPrice !== "" ? cData?.pizzaPrice : ""}
+          </span>
+        </div>
+      )}
 
       {cData?.config?.pizza &&
         cData?.config?.pizza.length > 0 &&

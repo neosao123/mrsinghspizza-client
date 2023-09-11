@@ -109,6 +109,14 @@ function MainCartList({ cData, setLoading }) {
             </span>
           </div>
         )}
+        {cData?.pizzaPrice && (
+          <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
+            <p className="">Pizza Price : </p>
+            <span className="mx-2">
+              $ {cData?.pizzaPrice !== "" ? cData?.pizzaPrice : ""}
+            </span>
+          </div>
+        )}
 
         <div className="w-100 d-flex justify-content-start flex-column main-cartList">
           {cData?.config?.pizza &&

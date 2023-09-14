@@ -47,6 +47,10 @@ const ValidateSchema = Yup.object({
     ),
   email: Yup.string()
     .email("Invalid email address")
+    .matches(
+      /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/,
+      "Invalid Email Address"
+    )
     .required("Email is required"),
   password: Yup.string()
     .required("Password is required")
@@ -71,7 +75,7 @@ const ValidateSchema = Yup.object({
   passwordconfirmation: Yup.string()
     .oneOf(
       [Yup.ref("password"), null],
-      "Passwords and Confirm Password must be same"
+      "Password and Confirm Password must be same"
     )
     .required("Confirm Password is required"),
 });
@@ -148,6 +152,7 @@ function Registration({ setLoading }) {
               if (err.response.status === 400 || err.response.status === 500) {
                 toast.error(err.response.data.message);
               }
+              setLoading(false);
             });
         } else {
           swal({

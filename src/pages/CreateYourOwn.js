@@ -297,7 +297,7 @@ function CreateYourOwn() {
         }
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
-        navigate("/registration");
+        navigate("/login-registration");
       }
     } else {
       toast.error("Cart is Empty...");

@@ -89,6 +89,8 @@ export const SelectedSpecialbasesDropDown = ({
         specialbaseName: selectedSb.specialbaseName,
         price: selectedSb.price,
       });
+    } else {
+      setSpecialbases("");
     }
   };
   useEffect(() => {
@@ -100,7 +102,7 @@ export const SelectedSpecialbasesDropDown = ({
     <select
       className="form-select form-drop w-100"
       onChange={handleSpecialBases}
-      value={!specialbases ? "" : specialbases?.specialbaseCode}
+      value={specialbases?.specialbaseCode ? specialbases?.specialbaseCode : ""}
     >
       <option value={""}>---- Choose Specialbases ----</option>
       {allIngredients?.specialbases?.map((data) => {

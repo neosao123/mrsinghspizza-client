@@ -25,6 +25,7 @@ function MyAccount() {
   const [url, setUrl] = globalCtx.urlPath;
   const [productType, setProductType] = globalCtx.productType;
   const [userProfile, setUserProfiel] = useState();
+  const [reset, setReset] = useState(false);
   //
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -71,6 +72,12 @@ function MyAccount() {
       navigate("/");
     }
   }, [navigate, user]);
+
+  useEffect(() => {
+    setTimeout(() => {
+      setReset(false);
+    }, 1000);
+  }, [reset]);
   return (
     <>
       <Header />
@@ -103,6 +110,9 @@ function MyAccount() {
                   <Nav.Link
                     eventKey="orderList"
                     className="text-start w-100 py-2 fw-bold btn btn-md pTabs border-bottom"
+                    onClick={(e) => {
+                      setReset(true);
+                    }}
                   >
                     <i className="fa fa-table icons" aria-hidden="true"></i>
                     <span className="mx-3">My Orders</span>
@@ -121,6 +131,9 @@ function MyAccount() {
                   <Nav.Link
                     eventKey="changePassword"
                     className="text-start w-100 py-2 fw-bold btn btn-md pTabs border-bottom"
+                    onClick={(e) => {
+                      setReset(true);
+                    }}
                   >
                     <i className="fa fa-key icons" aria-hidden="true"></i>
                     <span className="mx-3">Change Password</span>
@@ -141,13 +154,13 @@ function MyAccount() {
             <Col lg={9} md={12} sm={12} className="profileTabContent">
               <Tab.Content>
                 <Tab.Pane eventKey="orderList">
-                  <MyOrders />
+                  <MyOrders reset={reset} />
                 </Tab.Pane>
                 <Tab.Pane eventKey="updatedProfile">
                   <ProfileUpdate />
                 </Tab.Pane>
                 <Tab.Pane eventKey="changePassword">
-                  <ChangePassword />
+                  <ChangePassword reset={reset} />
                 </Tab.Pane>
               </Tab.Content>
             </Col>

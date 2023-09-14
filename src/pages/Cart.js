@@ -186,7 +186,7 @@ function Cart() {
                             </li>
                             <li>
                               <span className="ttl">
-                                Convinence Charges (%)
+                                Convenience Charges (%)
                               </span>{" "}
                               <span className="stts">
                                 {cart?.convinenceCharges

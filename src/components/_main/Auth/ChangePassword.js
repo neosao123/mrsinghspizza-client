@@ -1,5 +1,5 @@
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import { toast } from "react-toastify";
 import * as Yup from "yup";
 import { changePassword, customerUpdatePassword } from "../../../services";
@@ -23,7 +23,7 @@ const validationSchema = Yup.object({
     )
     .required("Confirm Password is required"),
 });
-function ChangePassword() {
+function ChangePassword({ reset }) {
   const iniValues = {
     password: "",
     passwordconfirmation: "",
@@ -55,6 +55,14 @@ function ChangePassword() {
     onSubmit,
     enableReinitialize: true,
   });
+
+  useEffect(() => {
+    if (reset === true) {
+      formik.resetForm({
+        values: iniValues, // Reset the form to initial values
+      });
+    }
+  }, [reset]);
   return (
     <div className="container py-5">
       <div className="row justify-content-start">

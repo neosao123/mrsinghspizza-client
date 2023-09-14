@@ -9,7 +9,7 @@ import { toast } from "react-toastify";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-function MyOrders() {
+function MyOrders({ reset }) {
   const globalCtx = useContext(GlobalContext);
   const [user, setUser] = globalCtx.user;
   const [isOpen, setIsOpen] = useState(false);
@@ -163,20 +163,19 @@ function MyOrders() {
     fetchData(1, true);
   };
 
-  // useEffect(() => {
-  //   if (fromDate === "" || toDate === "") {
-  //     fetchData(1);
-  //   } else {
-  //     if (fromDate <= toDate) {
-  //       fetchData(1);
-  //     } else {
-  //       toast.error("From Date cannot be greater than To Date.");
-  //     }
-  //   }
-  // }, [fromDate, toDate, transactionId]);
   useEffect(() => {
     fetchData(1);
   }, []);
+
+  useEffect(() => {
+    if (reset === true) {
+      setFromDate("");
+      setToDate("");
+      setTransactionId("");
+      fetchData(1, true);
+      setViewOrder(false);
+    }
+  }, [reset]);
 
   return (
     <>

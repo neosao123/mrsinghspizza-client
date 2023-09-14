@@ -14,6 +14,10 @@ const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
 const validationSchema = Yup.object({
   firstName: Yup.string().required("First name is required"),
   lastName: Yup.string().required("Last name is required"),
+  email: Yup.string()
+    .email("Invalid email address")
+    .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, "Invalid Email Address")
+    .required("Email is required"),
 });
 
 function ProfileUpdate() {
@@ -28,6 +32,7 @@ function ProfileUpdate() {
     firstName: user?.firstName,
     lastName: user?.lastName,
     mobileNumber: user?.mobileNumber,
+    email: user?.email,
     customerCode: user?.customerCode,
   };
 
@@ -51,6 +56,7 @@ function ProfileUpdate() {
     formData.append("firstName", values.firstName);
     formData.append("lastName", values.lastName);
     formData.append("mobileNumber", values.mobileNumber);
+    formData.append("email", values.email);
     if (selectedFile) {
       formData.append("profilePhoto", selectedFile);
     }
@@ -148,6 +154,28 @@ function ProfileUpdate() {
             onBlur={formik.handleBlur}
             readOnly
           />
+        </div>
+        <div className="col-lg-6 col-md-12 col-sm-12 mb-3">
+          <label htmlFor="lastName" className="form-label profileLabel">
+            Email Address <small className="text-danger">*</small>{" "}
+          </label>
+          <p className="text-secondary noteTxt mb-2">
+            Please use a valid email address.
+          </p>
+          <input
+            type="text"
+            className="form-control mb-3 profileInput"
+            id="email"
+            name="email"
+            value={formik.values.email}
+            onChange={formik.handleChange}
+            onBlur={formik.handleBlur}
+          />
+          {formik.touched.email && formik.errors.email ? (
+            <small className="text-danger formErrMsg mt-2 mb-3">
+              {formik.errors.email}
+            </small>
+          ) : null}
         </div>
         <div className="col-lg-6 col-md-12 col-sm-12 mb-3">
           <label htmlFor="mobileNumber" className="form-label profileLabel">

@@ -231,10 +231,11 @@ function CartList({
         cData?.config?.sides?.length > 0 && (
           <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
             <p>Sides :</p>
-            {cData?.config?.sides?.map((data) => {
+            {cData?.config?.sides?.map((data, index) => {
               return (
                 <span>
-                  {data?.sideName} ({data?.sideSize}),
+                  {data?.sideName} ({data?.sideSize})
+                  {cData?.config?.sides?.length === index + 1 ? "" : ","}
                 </span>
               );
             })}
@@ -246,7 +247,7 @@ function CartList({
             <p>Sides :</p>
             <span>
               {cData?.config?.sides?.sideName} ({cData?.config?.sides?.sideSize}
-              ),
+              )
             </span>
           </div>
         )}
@@ -255,8 +256,14 @@ function CartList({
         cData?.config?.dips?.length > 0 && (
           <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
             <p>Dips: </p>
-            {cData?.config?.dips?.map((data) => {
-              return <span>{data?.dipsName},</span>;
+            {cData?.config?.dips?.map((data, index) => {
+              console.log(cData?.config?.dips?.length, index);
+              return (
+                <span>
+                  {data?.dipsName}
+                  {cData?.config?.dips?.length === index + 1 ? "" : ","}
+                </span>
+              );
             })}
           </div>
         )}
@@ -264,7 +271,7 @@ function CartList({
         isEmptyObject(cData?.config?.dips) === false && (
           <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
             <p>Dips: </p>
-            <span>{cData?.config?.dips?.dipsName},</span>
+            <span>{cData?.config?.dips?.dipsName}</span>
           </div>
         )}
       {/* Drinks */}
@@ -272,8 +279,13 @@ function CartList({
         cData?.config?.drinks?.length > 0 && (
           <div className="selectedPizza mb-1">
             <p>Drinks: </p>
-            {cData?.config?.drinks?.map((data) => {
-              return <span>{data?.drinksName},</span>;
+            {cData?.config?.drinks?.map((data, index) => {
+              return (
+                <span>
+                  {data?.drinksName}{" "}
+                  {cData?.config?.drinks?.length === index + 1 ? "" : ","}
+                </span>
+              );
             })}
           </div>
         )}

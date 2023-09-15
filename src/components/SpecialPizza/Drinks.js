@@ -17,7 +17,7 @@ function Drinks({
       price: object?.price,
       amount: Number(0).toFixed(2),
     };
-    setDrinksObj(Obj);
+    setDrinksObj([Obj]);
   };
   // Get Current Obj
   const current = () => {
@@ -69,7 +69,7 @@ function Drinks({
       ref={drinksRef}
       style={{ width: "300px" }}
       onChange={handleDrinks}
-      value={drinksObj?.drinksCode}
+      value={drinksObj[0]?.drinksCode}
     >
       {getSpecialData?.pops.map((data) => {
         return (

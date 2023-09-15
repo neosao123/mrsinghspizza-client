@@ -24,8 +24,8 @@ function CountAsTwo({
           pizzaIndex: count - 1,
         };
         let arr = [...pizzaState];
-        arr[count - 1].toppings.countAsTwo = [
-          ...arr[count - 1].toppings.countAsTwo,
+        arr[count - 1].toppings.countAsTwoToppings = [
+          ...arr[count - 1].toppings.countAsTwoToppings,
           tpsObject,
         ];
         setPizzaState(arr);
@@ -36,13 +36,13 @@ function CountAsTwo({
       setTpsButton(false);
       setTpsButttonColor("#606060");
       twoTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[count - 1].toppings.countAsTwo.filter(
+      const updatedArr = pizzaState[count - 1].toppings.countAsTwoToppings.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsTwo: updatedArr,
+        countAsTwoToppings: updatedArr,
       };
       setPizzaState(arr);
     }
@@ -50,7 +50,7 @@ function CountAsTwo({
 
   const handleTwoTpsPlacement = () => {
     if (twoTpsRef.current) {
-      const filteredArr = pizzaState[count - 1].toppings.countAsTwo.map(
+      const filteredArr = pizzaState[count - 1].toppings.countAsTwoToppings.map(
         (items) => {
           if (items.toppingsCode === data.toppingsCode) {
             return {
@@ -64,7 +64,7 @@ function CountAsTwo({
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsTwo: filteredArr,
+        countAsTwoToppings: filteredArr,
       };
       setPizzaState(arr);
     }
@@ -86,7 +86,7 @@ function CountAsTwo({
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
-      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsTwo.map(
+      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsTwoToppings.map(
         (items) => {
           if (items?.toppingsCode === data?.toppingsCode) {
             setTpsButton(true);

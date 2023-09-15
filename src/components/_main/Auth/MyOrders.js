@@ -204,13 +204,6 @@ function MyOrders({ reset }) {
                 }}
               />
             </div>
-            {/* <div>
-              <DatePicker
-                selected={selectedDate}
-                onChange={(date) => setSelectedDate(date)}
-                dateFormat="yyyy-MM-dd" // Customize the date format as needed
-              />
-            </div> */}
             <div className="col-lg-4 col-md-6 col-sm-12 my-1">
               <label className="form-label my-3 searchLabel">
                 Transaction ID

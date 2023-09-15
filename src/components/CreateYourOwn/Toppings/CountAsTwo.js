@@ -59,13 +59,15 @@ function CountAsTwo({
   // Populate - Edit
   useEffect(() => {
     if (payloadEdit) {
-      payloadEdit?.config?.pizza[0]?.toppings?.countAsTwo.map((items) => {
-        if (items?.toppingsCode === data?.toppingsCode) {
-          setTpsButton(true);
-          setTpsButttonColor("#e40000");
-          tpsRef.current.value = items?.toppingsPlacement;
+      payloadEdit?.config?.pizza[0]?.toppings?.countAsTwoToppings.map(
+        (items) => {
+          if (items?.toppingsCode === data?.toppingsCode) {
+            setTpsButton(true);
+            setTpsButttonColor("#e40000");
+            tpsRef.current.value = items?.toppingsPlacement;
+          }
         }
-      });
+      );
     }
   }, [payloadEdit]);
 

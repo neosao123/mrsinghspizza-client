@@ -24,8 +24,8 @@ function CountAsOne({
           pizzaIndex: count - 1,
         };
         let arr = [...pizzaState];
-        arr[count - 1].toppings.countAsOne = [
-          ...arr[count - 1].toppings.countAsOne,
+        arr[count - 1].toppings.countAsOneToppings = [
+          ...arr[count - 1].toppings.countAsOneToppings,
           tpsObject,
         ];
         setPizzaState(arr);
@@ -36,13 +36,15 @@ function CountAsOne({
       setTpsButton(false);
       setTpsButttonColor("#606060");
       oneTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[count - 1].toppings.countAsOne.filter(
+      const updatedArr = pizzaState[
+        count - 1
+      ].toppings.countAsOneToppings.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOne: updatedArr,
+        countAsOneToppings: updatedArr,
       };
       setPizzaState(arr);
     }
@@ -50,7 +52,7 @@ function CountAsOne({
 
   const handleOneTpsPlacement = () => {
     if (oneTpsRef.current) {
-      const filteredArr = pizzaState[count - 1].toppings.countAsOne.map(
+      const filteredArr = pizzaState[count - 1].toppings.countAsOneToppings.map(
         (items) => {
           if (items.toppingsCode === data.toppingsCode) {
             return {
@@ -64,7 +66,7 @@ function CountAsOne({
       let arr = [...pizzaState];
       arr[count - 1].toppings = {
         ...arr[count - 1].toppings,
-        countAsOne: filteredArr,
+        countAsOneToppings: filteredArr,
       };
       setPizzaState(arr);
     }
@@ -86,7 +88,7 @@ function CountAsOne({
       payloadEdit !== undefined &&
       payloadEdit.productType === "special"
     ) {
-      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsOne.map(
+      payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsOneToppings.map(
         (items) => {
           if (items?.toppingsCode === data?.toppingsCode) {
             setTpsButton(true);

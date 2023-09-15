@@ -157,8 +157,8 @@ function CreateYourOwn() {
               cheese: cheese,
               specialbases: specialbases,
               toppings: {
-                countAsTwo: countTwoToppingsArr,
-                countAsOne: countOneToppingsArr,
+                countAsTwoToppings: countTwoToppingsArr,
+                countAsOneToppings: countOneToppingsArr,
                 freeToppings: freeToppingsArr,
               },
             },
@@ -198,8 +198,8 @@ function CreateYourOwn() {
               cheese: cheese,
               specialbases: specialbases,
               toppings: {
-                countAsTwo: countTwoToppingsArr,
-                countAsOne: countOneToppingsArr,
+                countAsTwoToppings: countTwoToppingsArr,
+                countAsOneToppings: countOneToppingsArr,
                 freeToppings: freeToppingsArr,
               },
             },
@@ -421,10 +421,10 @@ function CreateYourOwn() {
       setCheese(payloadEdit?.config?.pizza[0]?.cheese);
       setSpecialbases(payloadEdit?.config?.pizza[0]?.specialbases);
       setCountTwoToppingsArr(
-        payloadEdit?.config?.pizza[0]?.toppings?.countAsTwo
+        payloadEdit?.config?.pizza[0]?.toppings?.countAsTwoToppings
       );
       setCountOneToppingsArr(
-        payloadEdit?.config?.pizza[0]?.toppings?.countAsOne
+        payloadEdit?.config?.pizza[0]?.toppings?.countAsOneToppings
       );
       setFreeToppingsArr(payloadEdit?.config?.pizza[0]?.toppings?.freeToppings);
       setSidesArr(payloadEdit?.config?.sides);

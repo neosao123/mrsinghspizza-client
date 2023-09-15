@@ -11,14 +11,21 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
       (data) => data.code === sidesRef.current.value
     );
     const sidesObject = {
-      sideCode: data?.code,
+      code: data?.code,
       sideName: data?.sideName,
-      lineCode: combinationData?.code,
-      sidePrice: combinationData?.price,
-      sideSize: combinationData?.size,
+      type: data?.type,
+      image: data?.image,
+      lineEntries: [
+        {
+          code: combinationData?.code,
+          size: combinationData?.size,
+          price: combinationData?.price,
+        },
+      ],
+      qty: 1,
     };
 
-    setSidesArr(sidesObject);
+    setSidesArr([sidesObject]);
     // if (sidesButton === false) {
     //   if (sidesRef.current) {
     //     const combinationData = data?.lineEntries?.find(
@@ -78,7 +85,7 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
           id={`sidesRadioBtn-${data?.code}`}
           value={`sidesRadioBtn-${data?.code}`}
           onChange={handleSides}
-          checked={data?.code === sidesArr?.sideCode ? true : false}
+          checked={data?.code === sidesArr[0]?.code ? true : false}
         />
 
         <span className="px-2">

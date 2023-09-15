@@ -107,8 +107,6 @@ function CartList({
     return Object.keys(obj).length === 0;
   }
 
-  console.log(isEmptyObject(cData?.config?.sides));
-
   useEffect(() => {}, [payloadEdit]);
   return (
     <div className="row m-0 px-1 py-3 list-item">
@@ -163,30 +161,31 @@ function CartList({
                   ? "Pizza"
                   : "Pizza " + (index + 1)}
               </h4>
-              {data?.crust && (
+              {data?.crust && isEmptyObject(data?.crust) === false && (
                 <div className="mb-1">
                   <p>Crust :</p>
                   <span>{data?.crust?.crustName}</span>
                 </div>
               )}
-              {data?.cheese && (
+              {data?.cheese && isEmptyObject(data?.cheese) === false && (
                 <div className="mb-1">
                   <p>Cheese :</p>
                   <span>{data?.cheese?.cheeseName}</span>
                 </div>
               )}
-              {data?.specialbases && (
-                <div className="mb-1">
-                  <p>Specialbases :</p>
-                  <span>{data?.specialbases?.specialbaseName}</span>
-                </div>
-              )}
+              {data?.specialbases &&
+                isEmptyObject(data?.specialbases) === false && (
+                  <div className="mb-1">
+                    <p>Specialbases :</p>
+                    <span>{data?.specialbases?.specialbaseName}</span>
+                  </div>
+                )}
               <div className="mb-1">
                 {/* Count As Two */}
-                {data?.toppings?.countAsTwo.length > 0 && (
+                {data?.toppings?.countAsTwoToppings.length > 0 && (
                   <div className="mb-1">
                     <p>Toppings (Count 2) : </p>
-                    {data?.toppings?.countAsTwo?.map((data) => {
+                    {data?.toppings?.countAsTwoToppings?.map((data) => {
                       return (
                         <span className="mx-1">
                           {data?.toppingsName} ({data?.toppingsPlacement}),
@@ -196,10 +195,10 @@ function CartList({
                   </div>
                 )}
                 {/* Count As One */}
-                {data?.toppings?.countAsOne?.length > 0 && (
+                {data?.toppings?.countAsOneToppings?.length > 0 && (
                   <div className="mb-1">
                     <p>Toppings (Count 1) : </p>
-                    {data?.toppings?.countAsOne?.map((data) => {
+                    {data?.toppings?.countAsOneToppings?.map((data) => {
                       return (
                         <span className="mx-1">
                           {data?.toppingsName} ({data?.toppingsPlacement}),
@@ -227,75 +226,49 @@ function CartList({
         })}
 
       {/* Sides */}
-      {cData?.productType === "customized" &&
-        cData?.config?.sides?.length > 0 && (
-          <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
-            <p>Sides :</p>
-            {cData?.config?.sides?.map((data, index) => {
-              return (
-                <span>
-                  {data?.sideName} ({data?.sideSize})
-                  {cData?.config?.sides?.length === index + 1 ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      {cData?.productType === "special" &&
-        isEmptyObject(cData?.config?.sides) === false && (
-          <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
-            <p>Sides :</p>
-            <span>
-              {cData?.config?.sides?.sideName} ({cData?.config?.sides?.sideSize}
-              )
-            </span>
-          </div>
-        )}
+      {cData?.config?.sides?.length > 0 && (
+        <div className="w-100 d-flex justify-content-start flex-wrap align-items-center main-cartPizza mb-1">
+          <p>Sides :</p>
+          {console.log(cData?.config?.sides)}
+          {cData?.config?.sides?.map((data, index) => {
+            return (
+              <span>
+                {data?.sideName} ({data?.sideSize})
+                {cData?.config?.sides?.length === index + 1 ? "" : ","}
+              </span>
+            );
+          })}
+        </div>
+      )}
       {/* Dips */}
-      {cData?.productType === "customized" &&
-        cData?.config?.dips?.length > 0 && (
-          <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
-            <p>Dips: </p>
-            {cData?.config?.dips?.map((data, index) => {
-              console.log(cData?.config?.dips?.length, index);
-              return (
-                <span>
-                  {data?.dipsName}
-                  {cData?.config?.dips?.length === index + 1 ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      {cData?.productType === "special" &&
-        isEmptyObject(cData?.config?.dips) === false && (
-          <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
-            <p>Dips: </p>
-            <span>{cData?.config?.dips?.dipsName}</span>
-          </div>
-        )}
+      {cData?.config?.dips?.length > 0 && (
+        <div className="w-100 d-flex justify-content-start align-items-center flex-warp main-cartPizza mb-1">
+          <p>Dips: </p>
+          {cData?.config?.dips?.map((data, index) => {
+            console.log(cData?.config?.dips?.length, index);
+            return (
+              <span>
+                {data?.dipsName}
+                {cData?.config?.dips?.length === index + 1 ? "" : ","}
+              </span>
+            );
+          })}
+        </div>
+      )}
       {/* Drinks */}
-      {cData?.productType === "customized" &&
-        cData?.config?.drinks?.length > 0 && (
-          <div className="selectedPizza mb-1">
-            <p>Drinks: </p>
-            {cData?.config?.drinks?.map((data, index) => {
-              return (
-                <span>
-                  {data?.drinksName}{" "}
-                  {cData?.config?.drinks?.length === index + 1 ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
-        )}
-      {cData?.productType === "special" &&
-        isEmptyObject(cData?.config?.drinks) === false && (
-          <div className="selectedPizza mb-1">
-            <p>Drinks: </p>
-            <span>{cData?.config?.drinks?.drinksName}</span>
-          </div>
-        )}
+      {cData?.config?.drinks?.length > 0 && (
+        <div className="selectedPizza mb-1">
+          <p>Drinks: </p>
+          {cData?.config?.drinks?.map((data, index) => {
+            return (
+              <span>
+                {data?.drinksName}{" "}
+                {cData?.config?.drinks?.length === index + 1 ? "" : ","}
+              </span>
+            );
+          })}
+        </div>
+      )}
 
       {/* Edit & Delete */}
       <div className="col-lg-12 mt-1">

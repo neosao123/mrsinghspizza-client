@@ -254,7 +254,7 @@ export const PizzaDetails = ({ pizzaData }) => {
     <div>
       {pizzaData?.config?.pizza?.map((data, index) => {
         return (
-          <div className="w-100">
+          <div className="w-100" key={index}>
             {(data?.crust?.crustName !== "Regular" ||
               data?.cheese?.cheeseName !== "Mozzarella") && (
               <div className="pizzaDetailsTitle my-1">
@@ -289,8 +289,8 @@ export const PizzaDetails = ({ pizzaData }) => {
             )}
 
             {/* Toppings */}
-            {(data?.toppings?.countAsTwo.length > 0 ||
-              data?.toppings?.countAsOne.length > 0 ||
+            {(data?.toppings?.countAsTwoToppings.length > 0 ||
+              data?.toppings?.countAsOneToppings.length > 0 ||
               data?.toppings?.freeToppings.length > 0) && (
               <>
                 <div className="py-1">
@@ -299,20 +299,20 @@ export const PizzaDetails = ({ pizzaData }) => {
               </>
             )}
             <div className="">
-              {data?.toppings?.countAsTwo &&
-                data?.toppings?.countAsTwo?.length > 0 && (
+              {data?.toppings?.countAsTwoToppings &&
+                data?.toppings?.countAsTwoToppings?.length > 0 && (
                   <>
                     <ToppingsDetails
-                      tpsDetails={data?.toppings?.countAsTwo}
+                      tpsDetails={data?.toppings?.countAsTwoToppings}
                       count={2}
                     />
                   </>
                 )}
-              {data?.toppings?.countAsOne &&
-                data?.toppings?.countAsOne?.length > 0 && (
+              {data?.toppings?.countAsOneToppings &&
+                data?.toppings?.countAsOneToppings?.length > 0 && (
                   <>
                     <ToppingsDetails
-                      tpsDetails={data?.toppings?.countAsOne}
+                      tpsDetails={data?.toppings?.countAsOneToppings}
                       count={1}
                     />
                   </>

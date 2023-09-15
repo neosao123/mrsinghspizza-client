@@ -13,7 +13,7 @@ function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
       quantity: freeDips,
       amount: Number(0).toFixed(2),
     };
-    setDipsObj(Obj);
+    setDipsObj([Obj]);
   };
 
   // Get Current Obj
@@ -62,7 +62,7 @@ function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
             ref={dipsRef}
             style={{ width: "300px" }}
             onChange={handleDips}
-            value={dipsObj?.dipsCode}
+            value={dipsObj[0]?.dipsCode}
           >
             {dipsData?.map((data) => {
               return (

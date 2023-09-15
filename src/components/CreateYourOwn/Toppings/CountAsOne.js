@@ -59,13 +59,15 @@ function CountAsOne({
   // Populate - Edit
   useEffect(() => {
     if (payloadEdit) {
-      payloadEdit?.config?.pizza[0]?.toppings?.countAsOne.map((items) => {
-        if (items?.toppingsCode === data?.toppingsCode) {
-          setTpsButton(true);
-          setTpsButttonColor("#e40000");
-          tpsRef.current.value = items?.toppingsPlacement;
+      payloadEdit?.config?.pizza[0]?.toppings?.countAsOneToppings.map(
+        (items) => {
+          if (items?.toppingsCode === data?.toppingsCode) {
+            setTpsButton(true);
+            setTpsButttonColor("#e40000");
+            tpsRef.current.value = items?.toppingsPlacement;
+          }
         }
-      });
+      );
     }
   }, [payloadEdit]);
 

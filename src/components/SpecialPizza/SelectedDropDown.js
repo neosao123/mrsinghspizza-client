@@ -62,8 +62,8 @@ export const SpecialbasesDropDown = ({
           handleSpecialbases(e, count);
         }}
         value={
-          pizzaState[count - 1]?.specialbases?.specialbasesCode
-            ? pizzaState[count - 1]?.specialbases?.specialbasesCode
+          pizzaState[count - 1]?.specialBases?.specialbasesCode
+            ? pizzaState[count - 1]?.specialBases?.specialbasesCode
             : ""
         }
       >

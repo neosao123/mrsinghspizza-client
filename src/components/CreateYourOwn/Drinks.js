@@ -11,8 +11,8 @@ function Drinks({ data, setDrinksArr, drinksArr, reset, payloadEdit }) {
       const drinksObject = {
         drinksCode: data.softdrinkCode,
         drinksName: data.softDrinksName,
-        price: data.price,
-        qauntity: qauntity,
+        drinksPrice: data.price,
+        quantity: qauntity,
         totalPrice: totalPrice.toFixed(2),
       };
       setDrinksArr((prev) => [...prev, drinksObject]);
@@ -35,7 +35,7 @@ function Drinks({ data, setDrinksArr, drinksArr, reset, payloadEdit }) {
         if (drinks.drinksCode === data.softdrinkCode) {
           return {
             ...drinks,
-            qauntity: e.target.value,
+            quantity: e.target.value,
           };
         }
         return drinks;
@@ -46,7 +46,7 @@ function Drinks({ data, setDrinksArr, drinksArr, reset, payloadEdit }) {
             return {
               ...drinks,
               totalPrice: (
-                Number(drinks.qauntity) * Number(drinks.price)
+                Number(drinks.quantity) * Number(drinks.drinksPrice)
               ).toFixed(2),
             };
           }

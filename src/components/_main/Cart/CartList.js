@@ -86,14 +86,14 @@ function CartList({
   };
 
   const handleEdit = () => {
-    if (cData?.productType === "customized") {
+    if (cData?.productType === "custom_pizza") {
       if (location.pathname === "/create-your-own") {
         handleCurrentEdit();
       } else {
         handleRedirectToEdit("/create-your-own");
       }
     }
-    if (cData?.productType === "special") {
+    if (cData?.productType === "special_pizza") {
       if (location.pathname === `/special-pizza/${cData?.productCode}`) {
         handleCurrentEdit();
       } else {
@@ -123,11 +123,11 @@ function CartList({
         <p>Quantity :</p> <span className="mx-2">{cData?.quantity}</span>
       </div>
       {/* Pizza Size */}
-      {cData?.config?.size && (
+      {cData?.config?.sidesSize && (
         <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
           <p className="">Size : </p>
           <span className="mx-2">
-            {cData?.config?.size ? cData?.config?.size : ""}
+            {cData?.config?.sidesSize ? cData?.config?.sidesSize : ""}
           </span>
         </div>
       )}
@@ -157,7 +157,7 @@ function CartList({
               key={index}
             >
               <h4 className="mb-1">
-                {cData?.productType === "customized"
+                {cData?.productType === "custom_pizza"
                   ? "Pizza"
                   : "Pizza " + (index + 1)}
               </h4>
@@ -173,11 +173,11 @@ function CartList({
                   <span>{data?.cheese?.cheeseName}</span>
                 </div>
               )}
-              {data?.specialbases &&
-                isEmptyObject(data?.specialbases) === false && (
+              {data?.specialBases &&
+                isEmptyObject(data?.specialBases) === false && (
                   <div className="mb-1">
                     <p>Specialbases :</p>
-                    <span>{data?.specialbases?.specialbaseName}</span>
+                    <span>{data?.specialBases?.specialbaseName}</span>
                   </div>
                 )}
               <div className="mb-1">
@@ -185,10 +185,14 @@ function CartList({
                 {data?.toppings?.countAsTwoToppings.length > 0 && (
                   <div className="mb-1">
                     <p>Toppings (Count 2) : </p>
-                    {data?.toppings?.countAsTwoToppings?.map((data) => {
+                    {data?.toppings?.countAsTwoToppings?.map((data, index) => {
                       return (
                         <span className="mx-1">
-                          {data?.toppingsName} ({data?.toppingsPlacement}),
+                          {data?.toppingsName} (
+                          {data?.toppingsPlacement === "whole" && "W"}
+                          {data?.toppingsPlacement === "lefthalf" && "L"}
+                          {data?.toppingsPlacement === "righthalf" && "R"}
+                          {data?.toppingsPlacement === "1/4" && "1/4"}),
                         </span>
                       );
                     })}
@@ -198,10 +202,14 @@ function CartList({
                 {data?.toppings?.countAsOneToppings?.length > 0 && (
                   <div className="mb-1">
                     <p>Toppings (Count 1) : </p>
-                    {data?.toppings?.countAsOneToppings?.map((data) => {
+                    {data?.toppings?.countAsOneToppings?.map((data, index) => {
                       return (
                         <span className="mx-1">
-                          {data?.toppingsName} ({data?.toppingsPlacement}),
+                          {data?.toppingsName} (
+                          {data?.toppingsPlacement === "whole" && "W"}
+                          {data?.toppingsPlacement === "lefthalf" && "L"}
+                          {data?.toppingsPlacement === "righthalf" && "R"}
+                          {data?.toppingsPlacement === "1/4" && "1/4"}),
                         </span>
                       );
                     })}
@@ -211,10 +219,14 @@ function CartList({
                 {data?.toppings?.freeToppings?.length > 0 && (
                   <div>
                     <p>Indian Style Toppings: </p>
-                    {data?.toppings?.freeToppings?.map((data) => {
+                    {data?.toppings?.freeToppings?.map((data, index) => {
                       return (
                         <span className="mx-1">
-                          {data?.toppingsName} ({data?.toppingsPlacement}),
+                          {data?.toppingsName} (
+                          {data?.toppingsPlacement === "whole" && "W"}
+                          {data?.toppingsPlacement === "lefthalf" && "L"}
+                          {data?.toppingsPlacement === "righthalf" && "R"}
+                          {data?.toppingsPlacement === "1/4" && "1/4"}),
                         </span>
                       );
                     })}
@@ -233,8 +245,11 @@ function CartList({
           {cData?.config?.sides?.map((data, index) => {
             return (
               <span>
-                {data?.sideName} ({data?.sideSize})
-                {cData?.config?.sides?.length === index + 1 ? "" : ","}
+                {data?.sideName} (
+                {cData?.productType === "custom_pizza"
+                  ? data?.sideSize
+                  : data?.lineEntries?.[0]?.size}
+                ){cData?.config?.sides?.length === index + 1 ? "" : ","}
               </span>
             );
           })}
@@ -262,7 +277,7 @@ function CartList({
           {cData?.config?.drinks?.map((data, index) => {
             return (
               <span>
-                {data?.drinksName}{" "}
+                {data?.drinksName}
                 {cData?.config?.drinks?.length === index + 1 ? "" : ","}
               </span>
             );
@@ -277,8 +292,8 @@ function CartList({
           aria-hidden="true"
           onClick={handleDelete}
         ></i>
-        {cData.productType === "special" ||
-        cData.productType === "customized" ? (
+        {cData.productType === "special_pizza" ||
+        cData.productType === "custom_pizza" ? (
           <i
             className="fa fa-edit mx-3 editIcon"
             aria-hidden="true"

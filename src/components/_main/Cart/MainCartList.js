@@ -36,7 +36,7 @@ function MainCartList({ cData, setLoading }) {
   };
   // Handle Edit Product
   const handleEdit = () => {
-    if (cData?.productType === "customized" && cData?.id) {
+    if (cData?.productType === "custom_pizza" && cData?.id) {
       setPayloadEdit(cData);
       setLoading(true);
       setTimeout(() => {
@@ -44,7 +44,7 @@ function MainCartList({ cData, setLoading }) {
         navigate("/create-your-own");
       }, 1200);
     }
-    if (cData?.productType === "special" && cData?.id) {
+    if (cData?.productType === "special_pizza" && cData?.id) {
       setPayloadEdit(cData);
       setLoading(true);
       setTimeout(() => {
@@ -80,8 +80,8 @@ function MainCartList({ cData, setLoading }) {
               aria-hidden="true"
               onClick={handleDelete}
             ></i>
-            {cData.productType === "special" ||
-            cData.productType === "customized" ? (
+            {cData.productType === "special_pizza" ||
+            cData.productType === "custom_pizza" ? (
               <i
                 className="fa fa-edit mx-2 editIcon"
                 aria-hidden="true"
@@ -93,11 +93,11 @@ function MainCartList({ cData, setLoading }) {
           </div>
         </div>
         {/* Pizza Size */}
-        {cData?.config?.size && (
+        {cData?.config?.sidesSize && (
           <div className="w-100 d-flex mb-2 text-start main-cartPizzaSize">
             <p className="">Size : </p>
             <span className="mx-2">
-              {cData?.config?.size ? cData?.config?.size : ""}
+              {cData?.config?.sidesSize ? cData?.config?.sidesSize : ""}
             </span>
           </div>
         )}
@@ -128,7 +128,7 @@ function MainCartList({ cData, setLoading }) {
                   key={index}
                 >
                   <h4 className="mb-1 mt-1">
-                    {cData?.productType === "customized"
+                    {cData?.productType === "custom_pizza"
                       ? "Pizza"
                       : "Pizza " + (index + 1)}
                   </h4>
@@ -147,12 +147,12 @@ function MainCartList({ cData, setLoading }) {
                       </span>
                     </div>
                   )}
-                  {data?.specialbases &&
-                    isEmptyObject(data?.specialbases) === false && (
+                  {data?.specialBases &&
+                    isEmptyObject(data?.specialBases) === false && (
                       <div className="mb-1 specialbases">
                         <p className="d-inline">Specialbases :</p>
                         <span className="d-inline">
-                          {data?.specialbases?.specialbaseName}
+                          {data?.specialBases?.specialbaseName}
                         </span>
                       </div>
                     )}
@@ -209,8 +209,11 @@ function MainCartList({ cData, setLoading }) {
               {cData?.config?.sides?.map((data, index) => {
                 return (
                   <span>
-                    {data?.sideName} ({data?.sideSize}){" "}
-                    {cData?.config?.sides?.length === index + 1 ? "" : ","}
+                    {data?.sideName} (
+                    {cData?.productType === "custom_pizza"
+                      ? data?.sideSize
+                      : data?.lineEntries?.[0]?.size}
+                    ){cData?.config?.sides?.length === index + 1 ? "" : ","}
                   </span>
                 );
               })}

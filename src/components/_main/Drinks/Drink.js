@@ -1,6 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import GlobalContext from "../../../context/GlobalContext";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
 const Drink = ({ data, cartFn }) => {
   const globalctx = useContext(GlobalContext);
@@ -9,6 +10,17 @@ const Drink = ({ data, cartFn }) => {
 
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
+
+  const { user } = useSelector((state) => state.user);
+
+  let taxPer = Number(0).toFixed(2);
+  if (settings !== undefined) {
+    settings?.map((data) => {
+      if (data?.settingCode === "STG_2" && data?.type === "percent") {
+        taxPer = data?.settingValue;
+      }
+    });
+  }
 
   // Count Decrease
   const countDec = () => {
@@ -27,6 +39,8 @@ const Drink = ({ data, cartFn }) => {
     const totalPrice = data?.price * count;
     const obj = {
       id: uuidv4(),
+      customerCode: user?.data?.customerCode,
+      cashierCode: "#NA",
       productCode: data.softdrinkCode,
       productName: data.softDrinksName,
       productType: "drinks",
@@ -34,8 +48,8 @@ const Drink = ({ data, cartFn }) => {
       price: data.price,
       quantity: count,
       amount: totalPrice,
+      taxPer: taxPer,
       pizzaSize: "",
-      pizzaPrice: "",
       comments: "",
     };
     setProduct(obj);
@@ -56,7 +70,7 @@ const Drink = ({ data, cartFn }) => {
         ct?.product.map((data) => {
           if (data.productCode === pCode.productCode) {
             pCode.quantity = pCode.quantity + product.quantity;
-            pCode.amount = pCode.amount + product.amount;
+            pCode.amount = Number(pCode.amount) + Number(product.amount);
           }
         });
         const cartProduct = ct.product;

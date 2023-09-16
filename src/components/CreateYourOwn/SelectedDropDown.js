@@ -90,12 +90,12 @@ export const SelectedSpecialbasesDropDown = ({
         price: selectedSb.price,
       });
     } else {
-      setSpecialbases("");
+      setSpecialbases({});
     }
   };
   useEffect(() => {
     if (reset) {
-      setSpecialbases("");
+      setSpecialbases({});
     }
   }, [reset]);
   return (

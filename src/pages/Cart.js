@@ -91,13 +91,16 @@ function Cart() {
               ) {
                 toast.error(error.response.data.message);
               }
+              setLoading(false);
             });
         } else {
           navigate("/address-details");
+          setLoading(false);
         }
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
         navigate("/registration");
+        setLoading(false);
       }
     } else {
       toast.error("Cart is Empty...");

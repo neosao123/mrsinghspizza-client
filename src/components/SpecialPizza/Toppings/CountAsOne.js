@@ -35,7 +35,7 @@ function CountAsOne({
     } else {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      oneTpsRef.current.value = "Whole";
+      oneTpsRef.current.value = "whole";
       const updatedArr = pizzaState[
         count - 1
       ].toppings.countAsOneToppings.filter(
@@ -78,7 +78,7 @@ function CountAsOne({
     if (reset) {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      oneTpsRef.current.value = "Whole";
+      oneTpsRef.current.value = "whole";
     }
   }, [reset]);
   // Populate - Edit
@@ -86,7 +86,7 @@ function CountAsOne({
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
-      payloadEdit.productType === "special"
+      payloadEdit.productType === "special_pizza"
     ) {
       payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsOneToppings.map(
         (items) => {
@@ -115,9 +115,9 @@ function CountAsOne({
           ref={oneTpsRef}
           onChange={handleOneTpsPlacement}
         >
-          <option value="Whole">Whole</option>
-          <option value="Left Half">Left Half</option>
-          <option value="Right Half">Right Half</option>
+          <option value="whole">Whole</option>
+          <option value="lefthalf">Left Half</option>
+          <option value="righthalf">Right Half</option>
           <option value="1/4">1/4</option>
         </select>
         <button

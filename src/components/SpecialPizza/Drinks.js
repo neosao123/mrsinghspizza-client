@@ -14,8 +14,7 @@ function Drinks({
     const Obj = {
       drinksCode: object?.code,
       drinksName: object?.softDrinkName,
-      price: object?.price,
-      amount: Number(0).toFixed(2),
+      drinksPrice: object?.price,
     };
     setDrinksObj([Obj]);
   };

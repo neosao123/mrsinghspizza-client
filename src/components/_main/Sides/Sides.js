@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useRef, useState } from "react";
 import pizzaimage from "../../../assets/images/pz.png";
 import GlobalContext from "../../../context/GlobalContext";
 import { v4 as uuidv4 } from "uuid";
+import { useSelector } from "react-redux";
 
 function Sides({ data, cartFn }) {
   const globalctx = useContext(GlobalContext);
@@ -11,6 +12,8 @@ function Sides({ data, cartFn }) {
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
   const sPlacementRef = useRef(null);
+
+  const user = useSelector((state) => state?.user);
 
   // Count Deacrease
   const countDec = () => {
@@ -31,31 +34,45 @@ function Sides({ data, cartFn }) {
         (code) => code.lineCode === selectedCode
       );
     }
+    let taxPer = Number(0).toFixed(2);
+    if (settings !== undefined) {
+      settings?.map((data) => {
+        if (data?.settingCode === "STG_2" && data?.type === "percent") {
+          taxPer = data?.settingValue;
+        }
+      });
+    }
+
     const totalPrice = combinationData?.price * count;
     const obj = {
       id: uuidv4(),
+      customerCode: user?.data?.customerCode,
+      cashierCode: "#NA",
       productCode: data.sideCode,
       productName: data.sideName,
-      productType: "sides",
+      productType: "side",
       config: {
         lineCode: combinationData?.lineCode,
-        size: combinationData?.size,
+        sidesSize: combinationData?.size,
       },
       price: combinationData?.price,
       quantity: count,
       amount: totalPrice,
+      taxPer: taxPer,
       pizzaSize: "",
-      pizzaPrice: "",
       comments: "",
     };
     setProduct(obj);
     setCount(1);
+    sPlacementRef.current.value = data?.combination?.[0]?.lineCode;
   };
 
+  // Create Cart if Cart Key Not Present
   useEffect(() => {
     cartFn.createCart(setCart);
   }, [setCart]);
 
+  // Add to Cart - Logic
   useEffect(() => {
     if (product !== null) {
       let ct = JSON.parse(localStorage.getItem("cart"));

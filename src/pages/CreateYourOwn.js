@@ -81,6 +81,16 @@ function CreateYourOwn() {
   // Healper Function
   const cartFn = new CartFunction();
 
+  // Tax Percentage
+  let taxPer = Number(0).toFixed(2);
+  if (settings !== undefined) {
+    settings?.map((data) => {
+      if (data?.settingCode === "STG_2" && data?.type === "percent") {
+        taxPer = data?.settingValue;
+      }
+    });
+  }
+
   // Handle Pizza Size and Its Price
   const handlePizzaSize = () => {
     if (pizzaSizeRef.current) {
@@ -143,19 +153,19 @@ function CreateYourOwn() {
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
-      payloadEdit.productType === "customized"
+      payloadEdit.productType === "custom_pizza" /// Changes
     ) {
       const editedPayload = {
         id: payloadEdit?.id,
         productCode: "#NA",
-        productName: "Customized Pizza",
-        productType: "customized",
+        productName: "Create Your Own",
+        productType: "custom_pizza", /// Changes
         config: {
           pizza: [
             {
               crust: crust,
               cheese: cheese,
-              specialbases: specialbases,
+              specialBases: specialbases, /// Changes
               toppings: {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
@@ -170,6 +180,7 @@ function CreateYourOwn() {
         quantity: Number(1),
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
+        taxPer: taxPer, /// changes
         pizzaSize: pizzaSize,
         pizzaPrice: pizzaSizePrice,
         comments: "",
@@ -189,14 +200,14 @@ function CreateYourOwn() {
       const payload = {
         id: uuidv4(),
         productCode: "#NA",
-        productName: "Customized Pizza",
-        productType: "customized",
+        productName: "Create Your Own",
+        productType: "custom_pizza", /// changes
         config: {
           pizza: [
             {
               crust: crust,
               cheese: cheese,
-              specialbases: specialbases,
+              specialBases: specialbases, /// changes - camalcase
               toppings: {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
@@ -211,6 +222,7 @@ function CreateYourOwn() {
         quantity: Number(1),
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
+        taxPer: taxPer, /// changes
         pizzaSize: pizzaSize,
         pizzaPrice: pizzaSizePrice,
         comments: "",
@@ -227,7 +239,6 @@ function CreateYourOwn() {
 
   const paymentGateway = () => {
     let custFullName = regUser.firstName + " " + regUser?.lastName;
-    console.log(process.env.REACT_APP_CALLBACKURL);
     const payload = {
       callbackUrl: process.env.REACT_APP_CALLBACKURL,
       cancelUrl: process.env.REACT_APP_CANCEL,
@@ -257,6 +268,7 @@ function CreateYourOwn() {
         }
       });
   };
+
   // Handle Place Order
   const handlePlaceOrder = async () => {
     if (cart?.product?.length > 0) {
@@ -303,6 +315,7 @@ function CreateYourOwn() {
       toast.error("Cart is Empty...");
     }
   };
+
   // Reset Controls
   const resetControls = () => {
     // Reset All Fields
@@ -384,6 +397,7 @@ function CreateYourOwn() {
         cheeseName: allIngredients?.cheese[0].cheeseName,
         price: allIngredients?.cheese[0].price,
       });
+      setSpecialbases({});
       setPizzaSize(pizzaSizeArr[0].size);
       setPizzaSizePrice(pizzaSizeArr[0].price);
     }
@@ -391,6 +405,7 @@ function CreateYourOwn() {
   // UseEffect For Calculate Function
   useEffect(() => {
     calulatePrice();
+    console.log("Dips Array *********", drinksArr);
   }, [
     crust,
     cheese,
@@ -410,7 +425,7 @@ function CreateYourOwn() {
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
-      payloadEdit.productType === "customized"
+      payloadEdit.productType === "custom_pizza"
     ) {
       setPizzaSize(payloadEdit?.pizzaSize);
       const filteredData = pizzaSizeArr.find(
@@ -419,7 +434,7 @@ function CreateYourOwn() {
       setPizzaSizePrice(filteredData?.price);
       setCrust(payloadEdit?.config?.pizza[0]?.crust);
       setCheese(payloadEdit?.config?.pizza[0]?.cheese);
-      setSpecialbases(payloadEdit?.config?.pizza[0]?.specialbases);
+      setSpecialbases(payloadEdit?.config?.pizza[0]?.specialBases);
       setCountTwoToppingsArr(
         payloadEdit?.config?.pizza[0]?.toppings?.countAsTwoToppings
       );
@@ -666,7 +681,7 @@ function CreateYourOwn() {
                   <b>
                     {payloadEdit &&
                     payloadEdit !== undefined &&
-                    payloadEdit?.productType === "customized"
+                    payloadEdit?.productType === "custom_pizza"
                       ? "Update Pizza"
                       : "Add To Cart"}
                   </b>

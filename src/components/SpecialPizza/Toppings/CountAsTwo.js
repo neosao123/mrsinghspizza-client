@@ -35,8 +35,10 @@ function CountAsTwo({
     } else {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      twoTpsRef.current.value = "Whole";
-      const updatedArr = pizzaState[count - 1].toppings.countAsTwoToppings.filter(
+      twoTpsRef.current.value = "whole";
+      const updatedArr = pizzaState[
+        count - 1
+      ].toppings.countAsTwoToppings.filter(
         (item) => item.toppingsCode !== data.toppingsCode
       );
       let arr = [...pizzaState];
@@ -76,7 +78,7 @@ function CountAsTwo({
     if (reset) {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      twoTpsRef.current.value = "Whole";
+      twoTpsRef.current.value = "whole";
     }
   }, [reset]);
   // Populate - Edit
@@ -84,7 +86,7 @@ function CountAsTwo({
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
-      payloadEdit.productType === "special"
+      payloadEdit.productType === "special_pizza"
     ) {
       payloadEdit?.config?.pizza[count - 1]?.toppings?.countAsTwoToppings.map(
         (items) => {
@@ -113,9 +115,9 @@ function CountAsTwo({
           ref={twoTpsRef}
           onChange={handleTwoTpsPlacement}
         >
-          <option value="Whole">Whole</option>
-          <option value="Left Half">Left Half</option>
-          <option value="Right Half">Right Half</option>
+          <option value="whole">Whole</option>
+          <option value="lefthalf">Left Half</option>
+          <option value="righthalf">Right Half</option>
           <option value="1/4">1/4</option>
         </select>
         <button

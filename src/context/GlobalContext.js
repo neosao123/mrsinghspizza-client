@@ -13,7 +13,7 @@ export const GlobalProvider = ({ children }) => {
   const [productType, setProductType] = useState();
   const [settings, setSettings] = useState();
   const [regUser, setRegUser] = useState(
-    localStorage.getItem("registeredUser")
+    JSON.parse(localStorage.getItem("registeredUser"))
   );
   const [reset, setReset] = useState(false);
 

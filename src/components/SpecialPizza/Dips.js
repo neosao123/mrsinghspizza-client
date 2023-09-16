@@ -11,7 +11,6 @@ function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
       dipsName: object?.dipsName,
       price: object?.price,
       quantity: freeDips,
-      amount: Number(0).toFixed(2),
     };
     setDipsObj([Obj]);
   };

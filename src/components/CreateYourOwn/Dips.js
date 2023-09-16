@@ -11,8 +11,8 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
       const dipsObject = {
         dipsCode: data.dipsCode,
         dipsName: data.dipsName,
-        price: data.price,
-        qauntity: qauntity,
+        dipsPrice: data.price,
+        quantity: qauntity,
         totalPrice: totalPrice.toFixed(2),
       };
       setDipsArr((prev) => [...prev, dipsObject]);
@@ -35,7 +35,7 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
         if (dips.dipsCode === data.dipsCode) {
           return {
             ...dips,
-            qauntity: e.target.value,
+            quantity: e.target.value,
           };
         }
         return dips;
@@ -45,9 +45,9 @@ function Dips({ data, reset, setDipsArr, dipsArr, payloadEdit }) {
           if (dips.dipsCode === data.dipsCode) {
             return {
               ...dips,
-              totalPrice: (Number(dips.qauntity) * Number(dips.price)).toFixed(
-                2
-              ),
+              totalPrice: (
+                Number(dips.quantity) * Number(dips.dipsPrice)
+              ).toFixed(2),
             };
           }
           return dips;

@@ -28,7 +28,7 @@ function FreeToppings({
     } else {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      tpsRef.current.value = "Whole";
+      tpsRef.current.value = "whole";
       setFreeToppingsArr((prev) =>
         prev.filter((item) => item.toppingsCode !== data.toppingsCode)
       );
@@ -52,7 +52,7 @@ function FreeToppings({
     if (reset) {
       setTpsButton(false);
       setTpsButttonColor("#606060");
-      tpsRef.current.value = "Whole";
+      tpsRef.current.value = "whole";
     }
   }, [reset]);
 
@@ -84,9 +84,9 @@ function FreeToppings({
           ref={tpsRef}
           onChange={handlePlacement}
         >
-          <option value="Whole">Whole</option>
-          <option value="Left Half">Left Half</option>
-          <option value="Right Half">Right Half</option>
+          <option value="whole">Whole</option>
+          <option value="lefthalf">Left Half</option>
+          <option value="righthalf">Right Half</option>
           <option value="1/4">1/4</option>
         </select>
         <button

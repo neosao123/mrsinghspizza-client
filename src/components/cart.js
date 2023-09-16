@@ -42,7 +42,6 @@ export default class CartFunction {
         });
         if (settings !== undefined) {
           settings?.map((data) => {
-            console.log(data);
             if (data?.settingCode === "STG_4" && data?.type === "percent") {
               convinenceCharges = data?.settingValue;
             }

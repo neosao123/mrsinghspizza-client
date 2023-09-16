@@ -14,7 +14,6 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
       code: data?.code,
       sideName: data?.sideName,
       type: data?.type,
-      image: data?.image,
       lineEntries: [
         {
           code: combinationData?.code,
@@ -22,7 +21,7 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
           price: combinationData?.price,
         },
       ],
-      qty: 1,
+      quantity: 1,
     };
 
     setSidesArr([sidesObject]);

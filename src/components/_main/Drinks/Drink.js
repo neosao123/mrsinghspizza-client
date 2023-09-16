@@ -11,7 +11,7 @@ const Drink = ({ data, cartFn }) => {
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
 
-  const { user } = useSelector((state) => state.user);
+  const user = useSelector((state) => state.user);
 
   let taxPer = Number(0).toFixed(2);
   if (settings !== undefined) {

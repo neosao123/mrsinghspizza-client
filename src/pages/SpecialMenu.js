@@ -122,7 +122,7 @@ function SpecialMenu() {
       (data) => data.code === e.target.value
     );
     let specialbasesObject = {
-      specialbasesCode: selectedSpecialbases?.code,
+      specialbaseCode: selectedSpecialbases?.code,
       specialbaseName: selectedSpecialbases?.specialbaseName,
       price: selectedSpecialbases?.price,
     };

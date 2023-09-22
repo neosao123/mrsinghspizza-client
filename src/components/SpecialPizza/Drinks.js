@@ -15,6 +15,8 @@ function Drinks({
       drinksCode: object?.code,
       drinksName: object?.softDrinkName,
       drinksPrice: object?.price,
+      quantity: 1,
+      totalPrice: Number(0.0).toFixed(2),
     };
     setDrinksObj([Obj]);
   };

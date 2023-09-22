@@ -15,9 +15,12 @@ function Sides({ data, setSidesArr, sidesArr, reset, payloadEdit }) {
         const sidesObject = {
           sideCode: data?.sideCode,
           sideName: data?.sideName,
+          sideType: data?.type,
           lineCode: combinationData?.lineCode,
           sidePrice: combinationData?.price,
           sideSize: combinationData?.size,
+          quantity: 1,
+          totalPrice: Number(combinationData?.price).toFixed(2),
         };
         setSidesArr((prev) => [...prev, sidesObject]);
         setSideButton(true);

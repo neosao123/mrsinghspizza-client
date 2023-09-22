@@ -245,11 +245,8 @@ function CartList({
           {cData?.config?.sides?.map((data, index) => {
             return (
               <span>
-                {data?.sideName} (
-                {cData?.productType === "custom_pizza"
-                  ? data?.sideSize
-                  : data?.lineEntries?.[0]?.size}
-                ){cData?.config?.sides?.length === index + 1 ? "" : ","}
+                {data?.sideName} ({data?.sideSize})
+                {cData?.config?.sides?.length === index + 1 ? "" : ","}
               </span>
             );
           })}

@@ -125,117 +125,351 @@ function ViewOrder({ selectedCode }) {
               <strong>Product Details</strong>
             </h4>
           </div>
-          <div className="col-12 mx-1 mt-3 w-100 py-2">
-            <div className="table-responsive">
-              <table className="table productTable table-striped">
-                <thead className="text-start ">
-                  <tr>
-                    <th className="tableHead" scope="col">
-                      Sr. No.
-                    </th>
-                    <th className="tableHead" scope="col">
-                      Products
-                    </th>
-                    <th className="tableHead" scope="col">
-                      Quantity
-                    </th>
-                    <th className="tableHead" scope="col">
-                      Amount
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {orderData?.orderItems &&
-                  orderData?.orderItems?.length > 0 ? (
-                    orderData?.orderItems?.map((order, index) => {
-                      return (
-                        <>
-                          <tr key={order?.id}>
-                            {console.log(order)}
-                            <td className="tableData">{index + 1}</td>
-                            <td className="tableData">
-                              <p className="productName py-1">
-                                {order?.productName}
-                              </p>
-                              {order?.productType === "side" && (
-                                <div className="mt-2">
-                                  {order?.config?.sidesSize}
+          <div className="col-12 mx-1 mt-3 py-2">
+            <div className="w-100 mainDiv">
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
+                <div className="text-start fw-bold products mx-1">Products</div>
+                <div className="text-center fw-bold qty mx-1">Quantity</div>
+                <div className="text-center fw-bold amount mx-1">Amount</div>
+              </div>
+
+              {orderData?.orderItems && orderData?.orderItems?.length > 0 ? (
+                orderData?.orderItems?.map((order, index) => {
+                  return (
+                    <>
+                      <div className="w-auto py-1 d-flex justify-content-around productDetails contentDiv">
+                        <div
+                          className="products d-flex justify-content-start mx-1"
+                          key={order?.id}
+                        >
+                          <span className="productName p-0">
+                            {order?.productName}
+                          </span>
+                        </div>
+                        <div className="text-center qty mx-1" key={order?.id}>
+                          {order?.quantity}
+                        </div>
+                        <div
+                          className="text-center amount mx-1"
+                          key={order?.id}
+                        >
+                          {order?.productType === "special_pizza"
+                            ? order?.pizzaPrice
+                            : order?.amount}
+                        </div>
+                      </div>
+
+                      {order?.productType === "side" && (
+                        <div className="w-auto d-flex justify-content-around productDetails">
+                          <div
+                            className="products d-flex justify-content-start mx-1"
+                            key={order?.id}
+                          >
+                            <span className="subText">
+                              {order?.config?.sidesSize}
+                            </span>
+                          </div>
+                          <div className="text-center qty mx-1" key={order?.id}>
+                            {" "}
+                          </div>
+                          <div
+                            className="text-center amount mx-1"
+                            key={order?.id}
+                          >
+                            {" "}
+                          </div>
+                        </div>
+                      )}
+
+                      {(order?.productType === "custom_pizza" ||
+                        order?.productType === "special_pizza") &&
+                        order?.config?.pizza?.map((data, index) => {
+                          return (
+                            <>
+                              {/* Crust */}
+                              {data?.crust?.crustName === "Regular" ? (
+                                ""
+                              ) : (
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText fw-Bold">
+                                      Crust :
+                                    </span>
+                                    <span className="subText mx-2">
+                                      {data?.crust?.crustName}
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {" "}
+                                  </div>
                                 </div>
                               )}
-                              {order?.productType === "custom_pizza" && (
+
+                              {/* Cheese */}
+                              {data?.cheese?.cheeseName === "Mozzarella" ? (
+                                ""
+                              ) : (
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText">
+                                      <strong>Cheese :</strong>
+                                    </span>
+                                    <span className="subText mx-2">
+                                      {data?.cheese?.cheeseName}
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {" "}
+                                  </div>
+                                </div>
+                              )}
+
+                              {/* Specialbases */}
+                              {data?.specialBases &&
+                                Object.keys(data?.specialBases).length !==
+                                  0 && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText">
+                                        <strong>Specialbases :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.specialBases?.specialbaseName}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {" "}
+                                    </div>
+                                  </div>
+                                )}
+
+                              {/* Toppings */}
+                              {(data?.toppings?.countAsTwoToppings.length > 0 ||
+                                data?.toppings?.countAsOneToppings.length > 0 ||
+                                data?.toppings?.freeToppings.length > 0) && (
                                 <>
-                                  <PizzaDetails pizzaData={order} />
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText">
+                                        <strong>Toppings :</strong>
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {" "}
+                                    </div>
+                                  </div>
                                 </>
                               )}
-                              {order?.productType === "special_pizza" && (
-                                <>
-                                  <PizzaDetails pizzaData={order} />
-                                </>
-                              )}
-                            </td>
-                            <td className="tableData">{order?.quantity}</td>
-                            <td className="tableData">
-                              ${" "}
-                              {order?.productType === "special_pizza"
-                                ? order?.pizzaPrice
-                                : order?.amount}
-                            </td>
-                          </tr>
-                        </>
-                      );
-                    })
-                  ) : (
-                    <tr>Data Not Found</tr>
-                  )}
-                  {/* Sub Total */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className="tableHead">Sub Total :</td>
-                    <td className="tableData">
-                      <span>$ {orderData?.subTotal}</span>
-                    </td>
-                  </tr>
-                  {/* Tax Percentage */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className="tableHead">Tax Per :</td>
-                    <td className="tableData">
-                      <span>% {orderData?.taxPer}</span>
-                    </td>
-                  </tr>
-                  {/* Tax Amount */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className="tableHead">Tax Amount :</td>
-                    <td className="tableData">
-                      <span>$ {orderData?.taxAmount}</span>
-                    </td>
-                  </tr>
-                  {/* Delivery Charges */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className="tableHead">Delivery Charges :</td>
-                    <td className="tableData">
-                      <span>$ {orderData?.deliveryCharges}</span>
-                    </td>
-                  </tr>
-                  {/* Delivery Charges */}
-                  <tr>
-                    <td></td>
-                    <td></td>
-                    <td className="tableHead">Grand Total :</td>
-                    <td className="tableData">
-                      <span>
-                        <strong>$ {orderData?.grandTotal}</strong>
-                      </span>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+
+                              {data?.toppings?.countAsTwoToppings &&
+                                data?.toppings?.countAsTwoToppings?.length >
+                                  0 && (
+                                  <>
+                                    <ToppingsDetails
+                                      tpsDetails={
+                                        data?.toppings?.countAsTwoToppings
+                                      }
+                                      count={2}
+                                    />
+                                  </>
+                                )}
+
+                              {data?.toppings?.countAsOneToppings &&
+                                data?.toppings?.countAsOneToppings?.length >
+                                  0 && (
+                                  <>
+                                    <ToppingsDetails
+                                      tpsDetails={
+                                        data?.toppings?.countAsOneToppings
+                                      }
+                                      count={1}
+                                    />
+                                  </>
+                                )}
+
+                              {data?.toppings?.freeToppings &&
+                                data?.toppings?.freeToppings?.length > 0 && (
+                                  <>
+                                    {data?.toppings?.freeToppings?.length >=
+                                    6 ? (
+                                      <>
+                                        <div className="w-auto d-flex justify-content-around productDetails">
+                                          <div className="products d-flex justify-content-start mx-1">
+                                            <span className="subText">
+                                              <strong>
+                                                Indian Style Toppings
+                                              </strong>
+                                            </span>
+                                          </div>
+                                          <div className="text-center qty mx-1">
+                                            {" "}
+                                          </div>
+                                          <div className="text-center amount mx-1">
+                                            {" "}
+                                          </div>
+                                        </div>
+                                      </>
+                                    ) : (
+                                      <ToppingsDetails
+                                        tpsDetails={
+                                          data?.toppings?.freeToppings
+                                        }
+                                        count={0}
+                                      />
+                                    )}
+                                  </>
+                                )}
+
+                              {order?.config?.sides &&
+                                order?.config?.sides.length > 0 && (
+                                  <>
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          <strong>Sides :</strong>
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {" "}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        {" "}
+                                      </div>
+                                    </div>
+                                    {order?.config?.sides?.map(
+                                      (data, index) => {
+                                        return (
+                                          <div className="w-auto d-flex justify-content-around productDetails">
+                                            <div className="products d-flex justify-content-start mx-1">
+                                              <span className="subText">
+                                                {data?.sideName} ({" "}
+                                                {data?.sideSize} )
+                                              </span>
+                                            </div>
+                                            <div className="text-center qty mx-1">
+                                              {data?.quantity}
+                                            </div>
+                                            <div className="text-center amount mx-1">
+                                              $ {data?.totalPrice}
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </>
+                                )}
+
+                              {order?.config?.dips &&
+                                order?.config?.dips.length > 0 && (
+                                  <>
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          <strong>Dips :</strong>
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {" "}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        {" "}
+                                      </div>
+                                    </div>
+                                    {order?.config?.dips?.map((data, index) => {
+                                      return (
+                                        <div className="w-auto d-flex justify-content-around productDetails">
+                                          <div className="products d-flex justify-content-start mx-1">
+                                            <span className="subText">
+                                              {data?.dipsName}{" "}
+                                              {order?.config?.dips.length -
+                                                1 ===
+                                              index
+                                                ? ""
+                                                : ","}
+                                            </span>
+                                          </div>
+                                          <div className="text-center qty mx-1">
+                                            {data?.quantity}
+                                          </div>
+                                          <div className="text-center amount mx-1">
+                                            $ {data?.totalPrice}
+                                          </div>
+                                        </div>
+                                      );
+                                    })}
+                                  </>
+                                )}
+
+                              {order?.config?.drinks &&
+                                order?.config?.drinks.length > 0 && (
+                                  <>
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          <strong>Drinks :</strong>
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {" "}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        {" "}
+                                      </div>
+                                    </div>
+                                    {order?.config?.drinks?.map(
+                                      (data, index) => {
+                                        return (
+                                          <div className="w-auto d-flex justify-content-around productDetails">
+                                            <div className="products d-flex justify-content-start mx-1">
+                                              <span className="subText">
+                                                {data?.drinksName}
+                                                {order?.config?.drinks.length -
+                                                  1 ===
+                                                index
+                                                  ? ""
+                                                  : ","}
+                                              </span>
+                                            </div>
+                                            <div className="text-center qty mx-1">
+                                              {data?.quantity}
+                                            </div>
+                                            <div className="text-center amount mx-1">
+                                              $ {data?.totalPrice}
+                                            </div>
+                                          </div>
+                                        );
+                                      }
+                                    )}
+                                  </>
+                                )}
+                            </>
+                          );
+                        })}
+
+                      <hr
+                        className="m-0 p-0 my-1"
+                        style={{
+                          maxHeight: "1px !important",
+                        }}
+                      />
+                    </>
+                  );
+                })
+              ) : (
+                <>
+                  <div className="w-100 text-center fw-bold amount">
+                    No Data Found
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -248,196 +482,50 @@ function ViewOrder({ selectedCode }) {
 
 export default ViewOrder;
 
-// Pizza Details
-export const PizzaDetails = ({ pizzaData }) => {
-  // isEmptyObject
-  function isEmptyObject(obj) {
-    return Object.keys(obj).length === 0;
-  }
-
-  return (
-    <div>
-      {pizzaData?.config?.pizza?.map((data, index) => {
-        return (
-          <div className="w-100" key={index}>
-            {(data?.crust?.crustName !== "Regular" ||
-              data?.cheese?.cheeseName !== "Mozzarella") && (
-              <div className="pizzaDetailsTitle my-1">
-                {pizzaData?.productType === "special_pizza"
-                  ? "Next Pizza :"
-                  : ""}
-              </div>
-            )}
-
-            {/* Crust */}
-            {data?.crust?.crustName === "Regular" ? (
-              ""
-            ) : (
-              <div className="py-1">
-                <span className="pizzaDetailsTitle ">Crust : </span>
-                <span>{data?.crust?.crustName}</span>
-              </div>
-            )}
-            {/* Cheese */}
-            {data?.cheese?.cheeseName === "Mozzarella" ? (
-              ""
-            ) : (
-              <div className="py-1">
-                <span className="pizzaDetailsTitle pt-3">Cheese : </span>
-                <span>{data?.cheese?.cheeseName}</span>
-              </div>
-            )}
-            {/* Specialbases */}
-            {data?.specialBases &&
-              isEmptyObject(data?.specialBases) === false && (
-                <div className="py-1">
-                  <span className="pizzaDetailsTitle pt-3">
-                    Specialbases :{" "}
-                  </span>
-                  <span>{data?.specialBases?.specialbaseName}</span>
-                </div>
-              )}
-
-            {/* Toppings */}
-            {(data?.toppings?.countAsTwoToppings.length > 0 ||
-              data?.toppings?.countAsOneToppings.length > 0 ||
-              data?.toppings?.freeToppings.length > 0) && (
-              <>
-                <div className="py-1">
-                  <span className="pizzaDetailsTitle pt-3">Toppings : </span>
-                </div>
-              </>
-            )}
-            <div className="">
-              {data?.toppings?.countAsTwoToppings &&
-                data?.toppings?.countAsTwoToppings?.length > 0 && (
-                  <>
-                    <ToppingsDetails
-                      tpsDetails={data?.toppings?.countAsTwoToppings}
-                      count={2}
-                    />
-                  </>
-                )}
-              {data?.toppings?.countAsOneToppings &&
-                data?.toppings?.countAsOneToppings?.length > 0 && (
-                  <>
-                    <ToppingsDetails
-                      tpsDetails={data?.toppings?.countAsOneToppings}
-                      count={1}
-                    />
-                  </>
-                )}
-              {data?.toppings?.freeToppings &&
-                data?.toppings?.freeToppings?.length > 0 && (
-                  <>
-                    {data?.toppings?.freeToppings?.length >= 6 ? (
-                      <>
-                        <div className="py-1">
-                          <span className="pizzaDetailsTitle pt-3">
-                            Indian Style Toppings
-                          </span>
-                        </div>
-                      </>
-                    ) : (
-                      <ToppingsDetails
-                        tpsDetails={data?.toppings?.freeToppings}
-                        count={0}
-                      />
-                    )}
-                  </>
-                )}
-            </div>
-          </div>
-        );
-      })}
-      {pizzaData?.config?.sides && pizzaData?.config?.sides.length > 0 && (
-        <>
-          <div className="py-1">
-            <span className="pizzaDetailsTitle pt-3">Sides : </span>
-          </div>
-          {pizzaData?.config?.sides?.map((data, index) => {
-            return (
-              <div className="py-1">
-                <span>
-                  {data?.sideName} ({" "}
-                  {pizzaData?.productType === "custom_pizza"
-                    ? data?.sideSize
-                    : data?.lineEntries?.[0]?.size}
-                  )
-                </span>
-              </div>
-            );
-          })}
-        </>
-      )}
-      {pizzaData?.config?.dips && pizzaData?.config?.dips.length > 0 && (
-        <>
-          <div className="py-1">
-            <span className="pizzaDetailsTitle pt-3">Dips : </span>
-            {pizzaData?.config?.dips?.map((data, index) => {
-              return (
-                <span>
-                  {data?.dipsName}{" "}
-                  {pizzaData?.config?.dips.length - 1 === index ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
-        </>
-      )}
-      {pizzaData?.config?.drinks && pizzaData?.config?.drinks.length > 0 && (
-        <>
-          <div className="py-1">
-            <span className="pizzaDetailsTitle pt-3">Drinks : </span>
-            {pizzaData?.config?.drinks?.map((data, index) => {
-              return (
-                <span>
-                  {data?.drinksName}
-                  {pizzaData?.config?.drinks.length - 1 === index ? "" : ","}
-                </span>
-              );
-            })}
-          </div>
-        </>
-      )}
-    </div>
-  );
-};
-
 export const ToppingsDetails = ({ tpsDetails, count }) => {
   return (
-    <div>
+    <>
       {tpsDetails?.map((data) => {
         const keyToCheck = "amount";
         const keyExists = data.hasOwnProperty(keyToCheck);
         return (
-          <div className="w-100 row py-1">
-            <div className="col-8">
-              {count === 2 ? <> ( 2 ) </> : ""}
-              <span>{data?.toppingsName} </span>
-              <span>
-                ({" "}
-                {data.toppingsPlacement === "whole"
-                  ? "W"
-                  : data.toppingsPlacement === "lefthalf"
-                  ? "L"
-                  : data.toppingsPlacement === "1/4"
-                  ? "1/4"
-                  : "R"}{" "}
-                )
-              </span>
-            </div>
-            <div className="col-4 text-end">
-              <span>
+          <>
+            <div className="w-auto d-flex justify-content-around productDetails">
+              <div className="products d-flex justify-content-start mx-1">
+                {count === 2 ? (
+                  <>
+                    ( <span className="subText px-1">2</span> )
+                  </>
+                ) : (
+                  ""
+                )}
+                <span className="subText mx-1">{data?.toppingsName} </span>
+                <span className="subText">
+                  ({" "}
+                  {data.toppingsPlacement === "whole"
+                    ? "W"
+                    : data.toppingsPlacement === "lefthalf"
+                    ? "L"
+                    : data.toppingsPlacement === "1/4"
+                    ? "1/4"
+                    : "R"}{" "}
+                  )
+                </span>
+                <span className="subText mx-2">
+                  {data?.specialBases?.specialbaseName}
+                </span>
+              </div>
+              <div className="text-center qty mx-1"> </div>
+              <div className="text-center amount mx-1">
                 ${" "}
                 {keyExists
                   ? Number(data?.amount).toFixed(2)
                   : data?.toppingsPrice}
-              </span>
+              </div>
             </div>
-          </div>
+          </>
         );
       })}
-    </div>
+    </>
   );
 };

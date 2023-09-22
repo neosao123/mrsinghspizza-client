@@ -11,62 +11,17 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
       (data) => data.code === sidesRef.current.value
     );
     const sidesObject = {
-      code: data?.code,
+      sideCode: data?.code,
       sideName: data?.sideName,
-      type: data?.type,
-      lineEntries: [
-        {
-          code: combinationData?.code,
-          size: combinationData?.size,
-          price: combinationData?.price,
-        },
-      ],
+      sideType: data?.type,
+      lineCode: combinationData?.code,
+      sidePrice: combinationData?.price,
+      sideSize: combinationData?.size,
       quantity: 1,
+      totalPrice: Number(0.0).toFixed(2),
     };
 
     setSidesArr([sidesObject]);
-    // if (sidesButton === false) {
-    //   if (sidesRef.current) {
-    //     const combinationData = data?.lineEntries?.find(
-    //       (data) => data.code === sidesRef.current.value
-    //     );
-    //     const sidesObject = {
-    //       sideCode: data?.code,
-    //       sideName: data?.sideName,
-    //       lineCode: combinationData?.code,
-    //       sidePrice: combinationData?.price,
-    //       sideSize: combinationData?.size,
-    //     };
-    //     setSidesArr((prev) => [...prev, sidesObject]);
-    //     setSidesButton(true);
-    //     setSidesButtonColor("#e40000");
-    //   }
-    // } else {
-    //   setSidesButton(false);
-    //   setSidesButtonColor("#606060");
-    //   sidesRef.current.value = data?.lineEntries[0]?.code;
-    //   setSidesArr((prev) => prev.filter((item) => item.sideCode !== data.code));
-    // }
-  };
-  // Handle Combinations
-  const handleCombination = () => {
-    if (sidesRef.current) {
-      const value = data?.lineEntries?.find(
-        (data) => data.code === sidesRef.current.value
-      );
-      // const updatedCombination = sidesArr?.map((sides) => {
-      //   if (sides.sideCode === data.code) {
-      //     return {
-      //       ...sides,
-      //       lineCode: value?.code,
-      //       sidePrice: value?.price,
-      //       sideSize: value?.size,
-      //     };
-      //   }
-      //   return sides;
-      // });
-      // setSidesArr(updatedCombination);
-    }
   };
 
   // ---- UseEffect ----
@@ -84,7 +39,7 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
           id={`sidesRadioBtn-${data?.code}`}
           value={`sidesRadioBtn-${data?.code}`}
           onChange={handleSides}
-          checked={data?.code === sidesArr[0]?.code ? true : false}
+          checked={data?.code === sidesArr[0]?.sideCode ? true : false}
         />
 
         <span className="px-2">
@@ -96,12 +51,7 @@ function Sides({ data, sidesArr, setSidesArr, reset, payloadEdit }) {
       </div>
       <div className="col-lg-7 col-md-7 col-sm-12 row p-md-0 py-md-2 py-2 pb-2 pt-3 d-flex justify-content-md-end justify-content-start">
         <div className="col-lg-7 col-md-8 col-sm-12">
-          <select
-            className="w-100 mx-2 form-select"
-            ref={sidesRef}
-            onClick={handleCombination}
-            disabled
-          >
+          <select className="w-100 mx-2 form-select" ref={sidesRef} disabled>
             {data.lineEntries.map((combination) => {
               return (
                 <option value={combination.code} key={combination.code}>

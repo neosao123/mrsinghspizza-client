@@ -27,3 +27,25 @@
   font-size: 0.9rem;
   font-weight: 500;
 }
+
+.products {
+  width: 500px;
+  line-height: 1.4rem;
+}
+.qty {
+  width: 100px;
+}
+.amount {
+  width: 150px;
+}
+.productName {
+  font-weight: 550;
+}
+
+.subText {
+  font-size: 0.85rem;
+}
+
+/* .contentDiv:not(:first-child) {
+  border-top: 1px solid #606060;
+} */

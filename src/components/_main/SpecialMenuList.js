@@ -69,11 +69,18 @@ function SpecialMenuList() {
                     </p>
                   </>
                 )}
-                <p className="sppizzasize text-secondary mb-2">
+                {/* <p className="sppizzasize text-secondary mb-2">
                   Size : <span className="mx-2">Large / Extra Large</span>
-                </p>
+                </p> */}
                 <p className="sppizzaPrice text-dark mb-2">
-                  Price : <span className="mx-2">$ {data.largePizzaPrice}</span>
+                  Price :{" "}
+                  <span className="mx-2">
+                    ${" "}
+                    {Number(data.largePizzaPrice)?.toFixed(2) !==
+                    Number(0).toFixed(2)
+                      ? Number(data.largePizzaPrice)?.toFixed(2)
+                      : Number(data.extraLargePizzaPrice)?.toFixed(2)}
+                  </span>
                 </p>
               </div>
               <div className="d-flex justify-content-center flex-column align-items-center">

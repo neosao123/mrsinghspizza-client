@@ -9,8 +9,9 @@ function Dips({ dipsData, dipsObj, setDipsObj, reset, payloadEdit, noofDips }) {
     const Obj = {
       dipsCode: object?.dipsCode,
       dipsName: object?.dipsName,
-      price: object?.price,
+      dipsPrice: object?.price,
       quantity: freeDips,
+      totalPrice: Number(0.0).toFixed(2),
     };
     setDipsObj([Obj]);
   };

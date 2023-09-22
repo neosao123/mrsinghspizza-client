@@ -133,7 +133,7 @@ function CreateYourOwn() {
       dipsArr.map((dips) => (totalDips += Number(dips.totalPrice)));
     }
     if (sidesArr) {
-      sidesArr.map((side) => (totalSides += Number(side.sidePrice)));
+      sidesArr.map((side) => (totalSides += Number(side.totalPrice)));
     }
     calculatedPrice += Number(pizzaSizePrice) || 0;
     calculatedPrice += Number(crust?.price) || 0;

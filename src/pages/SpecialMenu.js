@@ -134,7 +134,7 @@ function SpecialMenu() {
     setPizzaState(arr);
   };
 
-  //Component - Special Pizza Selection
+  // Component - Special Pizza Selection
   const spSelection = [];
   for (let i = 1; i <= getSpecialData?.noofPizzas; i++) {
     spSelection.push(
@@ -174,8 +174,8 @@ function SpecialMenu() {
         ? Number(items?.cheese?.price)
         : 0;
       // OnChange Specialbases Price
-      calculatedPrice += items?.specialbases?.price
-        ? Number(items?.specialbases?.price)
+      calculatedPrice += items?.specialBases?.price
+        ? Number(items?.specialBases?.price)
         : 0;
     });
 
@@ -466,6 +466,8 @@ function SpecialMenu() {
           drinksCode: getSpecialData?.pops[0]?.code,
           drinksName: getSpecialData?.pops[0]?.softDrinkName,
           drinksPrice: getSpecialData?.pops[0]?.price,
+          quantity: 1,
+          totalPrice: Number(0.0).toFixed(2),
         },
       ]);
     } else {
@@ -474,17 +476,14 @@ function SpecialMenu() {
     if (getSpecialData?.freesides && getSpecialData?.freesides.length > 0) {
       const combinationData = getSpecialData?.freesides?.[0]?.lineEntries?.[0];
       const sidesObject = {
-        code: getSpecialData?.freesides?.[0]?.code,
+        sideCode: getSpecialData?.freesides?.[0]?.code,
         sideName: getSpecialData?.freesides?.[0]?.sideName,
-        type: getSpecialData?.freesides?.[0]?.type,
-        lineEntries: [
-          {
-            code: combinationData?.code,
-            size: combinationData?.size,
-            price: combinationData?.price,
-          },
-        ],
+        sideType: getSpecialData?.freesides?.[0]?.type,
+        lineCode: combinationData?.code,
+        sidePrice: combinationData?.price,
+        sideSize: combinationData?.size,
         quantity: 1,
+        totalPrice: Number(0.0).toFixed(2),
       };
       setSidesArr([sidesObject]);
     } else {
@@ -495,8 +494,9 @@ function SpecialMenu() {
         {
           dipsCode: dipsData?.[0]?.dipsCode,
           dipsName: dipsData?.[0]?.dipsName,
-          price: dipsData?.[0]?.price,
+          dipsPrice: dipsData?.[0]?.price,
           quantity: Number(getSpecialData?.noofDips),
+          totalPrice: Number(0.0).toFixed(2),
         },
       ]);
     } else {
@@ -622,17 +622,14 @@ function SpecialMenu() {
         const combinationData =
           getSpecialData?.freesides?.[0]?.lineEntries?.[0];
         const sidesObject = {
-          code: getSpecialData?.freesides?.[0]?.code,
+          sideCode: getSpecialData?.freesides?.[0]?.code,
           sideName: getSpecialData?.freesides?.[0]?.sideName,
-          type: getSpecialData?.freesides?.[0]?.type,
-          lineEntries: [
-            {
-              code: combinationData?.code,
-              size: combinationData?.size,
-              price: combinationData?.price,
-            },
-          ],
+          sideType: getSpecialData?.freesides?.[0]?.type,
+          lineCode: combinationData?.code,
+          sidePrice: combinationData?.price,
+          sideSize: combinationData?.size,
           quantity: 1,
+          totalPrice: Number(0.0).toFixed(2),
         };
         setSidesArr([sidesObject]);
       } else {
@@ -643,8 +640,9 @@ function SpecialMenu() {
           {
             dipsCode: dipsData?.[0]?.dipsCode,
             dipsName: dipsData?.[0]?.dipsName,
-            price: dipsData?.[0]?.price,
+            dipsPrice: dipsData?.[0]?.price,
             quantity: Number(getSpecialData?.noofDips),
+            totalPrice: Number(0.0).toFixed(2),
           },
         ]);
       } else {
@@ -656,6 +654,8 @@ function SpecialMenu() {
             drinksCode: getSpecialData?.pops[0]?.code,
             drinksName: getSpecialData?.pops[0]?.softDrinkName,
             drinksPrice: getSpecialData?.pops[0]?.price,
+            quantity: 1,
+            totalPrice: Number(0.0).toFixed(2),
           },
         ]);
       } else {

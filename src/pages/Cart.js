@@ -187,7 +187,7 @@ function Cart() {
                                   : Number(0).toFixed(2)}
                               </span>
                             </li>
-                            <li>
+                            <li className="d-none">
                               <span className="ttl">
                                 Convenience Charges (%)
                               </span>{" "}

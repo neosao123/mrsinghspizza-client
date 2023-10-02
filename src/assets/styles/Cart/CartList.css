@@ -1,5 +1,5 @@
 .selectedPizza p,
-.qty p,
+.cartQuantity p,
 .pSize p {
   font-size: 0.9rem;
   display: inline;
@@ -10,7 +10,7 @@
   font-weight: 800;
 }
 .selectedPizza span,
-.qty span,
+.cartQuantity span,
 .pSize span {
   font-size: 0.8rem;
   font-weight: 400;

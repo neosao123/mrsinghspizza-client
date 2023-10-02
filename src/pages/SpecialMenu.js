@@ -277,13 +277,71 @@ function SpecialMenu() {
           ];
         });
       }
+      // let arr = [...pizzaState];
+      // pizzaState?.map((item, index) => {
+      //   if (
+      //     toppingsData?.toppings?.freeToppings.length ===
+      //     item?.toppings?.freeToppings.length
+      //   ) {
+      //     if (arr[index]) {
+      //       arr[index] = {
+      //         ...arr[index],
+      //         toppings: {
+      //           ...arr[index].toppings,
+      //           isAllIndiansTps: true,
+      //         },
+      //       };
+      //     }
+      //   } else {
+      //     if (arr[index]) {
+      //       arr[index] = {
+      //         ...arr[index],
+      //         toppings: {
+      //           ...arr[index].toppings,
+      //           isAllIndiansTps: false,
+      //         },
+      //       };
+      //     }
+      //   }
+      // });
+      // setPizzaState(arr);
+
+      let arr = [...pizzaState];
+
+      pizzaState?.map((item, index) => {
+        if (
+          toppingsData?.toppings?.freeToppings.length ===
+          item?.toppings?.freeToppings.length
+        ) {
+          if (arr[index]) {
+            arr[index] = {
+              ...arr[index],
+              toppings: {
+                ...arr[index].toppings,
+                isAllIndiansTps: true,
+              },
+            };
+          }
+        } else {
+          if (arr[index]) {
+            arr[index] = {
+              ...arr[index],
+              toppings: {
+                ...arr[index].toppings,
+                isAllIndiansTps: false,
+              },
+            };
+          }
+        }
+      });
+
       const editedPayload = {
         id: payloadEdit?.id,
         productCode: payloadEdit?.productCode,
         productName: getSpecialData?.name,
         productType: "special_pizza",
         config: {
-          pizza: pizzaState,
+          pizza: arr,
           sides: sidesArr,
           dips: dipsObj,
           drinks: drinksObj,
@@ -295,6 +353,7 @@ function SpecialMenu() {
         pizzaPrice: pizzaSizePrice,
         comments: "",
       };
+      console.log("editedPayload ", pizzaState);
       if (editedPayload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         const filteredCart = ct?.product?.filter(
@@ -334,6 +393,22 @@ function SpecialMenu() {
           ];
         });
       }
+      let arr = [...pizzaState];
+      pizzaState?.map((item, index) => {
+        if (
+          toppingsData?.toppings?.freeToppings?.length ===
+          item?.toppings?.freeToppings?.length
+        ) {
+          if (arr[index]) {
+            arr[index].toppings.isAllIndiansTps = true; // Replace 'true' with the desired value
+          }
+        } else {
+          if (arr[index]) {
+            arr[index].toppings.isAllIndiansTps = false; // Replace 'true' with the desired value
+          }
+        }
+      });
+      setPizzaState(arr);
 
       const payload = {
         id: uuidv4(),
@@ -353,6 +428,8 @@ function SpecialMenu() {
         pizzaPrice: pizzaSizePrice,
         comments: "",
       };
+      console.log("arr Create : ", arr);
+      console.log("payload Create : ", pizzaState);
       if (payload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         ct.product.push(payload);
@@ -530,6 +607,7 @@ function SpecialMenu() {
         countAsTwoToppings: [],
         countAsOneToppings: [],
         freeToppings: [],
+        isAllIndiansTps: false,
       },
     }));
     setPizzaState(emptyObjectsArray);
@@ -895,13 +973,12 @@ function SpecialMenu() {
               </div>
             </div>
           </div>
-          {cart?.product?.length > 0 && (
-            <ResponsiveCart
-              handleAddToCart={handleAddToCart}
-              totalPrice={totalPrice}
-              payloadEdit={payloadEdit}
-            />
-          )}
+
+          <ResponsiveCart
+            handleAddToCart={handleAddToCart}
+            totalPrice={totalPrice}
+            payloadEdit={payloadEdit}
+          />
         </section>
       )}
       <Footer />

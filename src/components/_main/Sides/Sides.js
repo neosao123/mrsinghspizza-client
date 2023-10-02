@@ -54,6 +54,7 @@ function Sides({ data, cartFn }) {
       config: {
         lineCode: combinationData?.lineCode,
         sidesSize: combinationData?.size,
+        sidesType: data?.type,
       },
       price: combinationData?.price,
       quantity: count,

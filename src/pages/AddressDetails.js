@@ -101,6 +101,7 @@ function AddressDetails() {
       extraDeliveryCharges: cart?.extraDeliveryCharges,
       grandTotal: cart?.grandtotal,
     };
+    console.log(payload);
     orderPlace(payload)
       .then((response) => {
         localStorage.setItem("placedOrder", JSON.stringify(response));

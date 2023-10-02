@@ -34,7 +34,7 @@ function OrderSummary({ cart }) {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-between flex-wrap">
+        <div className="d-flex d-none justify-content-between flex-wrap">
           <div className="text-start mb-3">
             <strong>Convenience Charges (%)</strong>
           </div>

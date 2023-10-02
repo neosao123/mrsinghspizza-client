@@ -32,6 +32,8 @@ function ViewOrder({ selectedCode }) {
   useEffect(() => {
     orderDetailsAPI();
   }, []);
+
+  console.log(orderData);
   return (
     <>
       {loading === false ? (
@@ -146,13 +148,17 @@ function ViewOrder({ selectedCode }) {
                             {order?.productName}
                           </span>
                         </div>
-                        <div className="text-center qty mx-1" key={order?.id}>
+                        <div
+                          className="text-center orderSummaryText qty mx-1"
+                          key={order?.id}
+                        >
                           {order?.quantity}
                         </div>
                         <div
-                          className="text-center amount mx-1"
+                          className="text-center orderSummaryText amount mx-1"
                           key={order?.id}
                         >
+                          ${" "}
                           {order?.productType === "special_pizza"
                             ? order?.pizzaPrice
                             : order?.amount}
@@ -457,7 +463,7 @@ function ViewOrder({ selectedCode }) {
                       <hr
                         className="m-0 p-0 my-1"
                         style={{
-                          maxHeight: "1px !important",
+                          height: "1px !important",
                         }}
                       />
                     </>
@@ -470,6 +476,49 @@ function ViewOrder({ selectedCode }) {
                   </div>
                 </>
               )}
+
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
+                <div className="text-end orderSummaryTitle fw-bold subTotal mx-1">
+                  Sub Total :
+                </div>
+                <div className="text-center amount mx-1">
+                  <span className="orderSummaryText">
+                    $ {orderData?.subTotal}
+                  </span>
+                </div>
+              </div>
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
+                <div className="text-end orderSummaryTitle fw-bold taxPer mx-1">
+                  Tax Percentage (%) :
+                </div>
+                <div className="text-center orderSummaryText fw-bold amount mx-1">
+                  {orderData?.taxPer}
+                </div>
+              </div>
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
+                <div className="text-end orderSummaryTitle fw-bold taxAmount mx-1">
+                  Tax Amount :
+                </div>
+                <div className="text-center orderSummaryText fw-bold amount mx-1">
+                  $ {orderData?.taxAmount}
+                </div>
+              </div>
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
+                <div className="text-end fw-bold orderSummaryTitle deliveryCharge mx-1">
+                  Delivery Charges :
+                </div>
+                <div className="text-center orderSummaryText fw-bold amount mx-1">
+                  $ {orderData?.deliveryCharges}
+                </div>
+              </div>
+              <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails border-top">
+                <div className="text-end fw-bold orderSummaryTitle grandTotal mx-1">
+                  Grand Total :
+                </div>
+                <div className="text-center orderSummaryText fw-bold amount mx-1">
+                  $ {orderData?.grandTotal}
+                </div>
+              </div>
             </div>
           </div>
         </div>

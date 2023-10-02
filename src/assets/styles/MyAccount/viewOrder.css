@@ -46,6 +46,23 @@
   font-size: 0.85rem;
 }
 
+.subTotal,
+.taxPer,
+.taxAmount,
+.deliveryCharge,
+.grandTotal {
+  width: 650px;
+}
+
+.orderSummaryTitle {
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+.orderSummaryText {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
 /* .contentDiv:not(:first-child) {
   border-top: 1px solid #606060;
 } */

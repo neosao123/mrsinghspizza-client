@@ -77,7 +77,8 @@ function CreateYourOwn() {
   const [dipsArr, setDipsArr] = useState([]);
   const [sidesArr, setSidesArr] = useState([]);
   const [reset, setReset] = useState();
-  // const [reset, setReset] = useState(false);
+  const [isAllIndiansTps, setIsAllIndiansTps] = useState(false);
+
   // Healper Function
   const cartFn = new CartFunction();
 
@@ -101,6 +102,7 @@ function CreateYourOwn() {
       setPizzaSizePrice(filteredData?.price);
     }
   };
+
   // Calculate Price
   const calulatePrice = () => {
     let calculatedPrice = Number(0);
@@ -170,6 +172,7 @@ function CreateYourOwn() {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
                 freeToppings: freeToppingsArr,
+                isAllIndiansTps: isAllIndiansTps,
               },
             },
           ],
@@ -212,6 +215,7 @@ function CreateYourOwn() {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
                 freeToppings: freeToppingsArr,
+                isAllIndiansTps: isAllIndiansTps,
               },
             },
           ],
@@ -405,7 +409,13 @@ function CreateYourOwn() {
   // UseEffect For Calculate Function
   useEffect(() => {
     calulatePrice();
-    console.log("Dips Array *********", drinksArr);
+    if (
+      freeToppingsArr.length === allIngredients?.toppings?.freeToppings?.length
+    ) {
+      setIsAllIndiansTps(true);
+    } else {
+      setIsAllIndiansTps(false);
+    }
   }, [
     crust,
     cheese,
@@ -472,7 +482,6 @@ function CreateYourOwn() {
               </h2>
             </div>
           </div>
-
           <div className="row m-0 p-0 w-100 justify-content-center">
             {/* Pizza Selection */}
             <div className="col-lg-9 col-md-12 col-sm-12 pizzaSelection py-lg-4 px-lg-3 px-3 py-4">
@@ -718,13 +727,11 @@ function CreateYourOwn() {
               </div>
             </div>
           </div>
-          {cart?.product?.length > 0 && (
-            <ResponsiveCart
-              handleAddToCart={handleAddToCart}
-              totalPrice={totalPrice}
-              payloadEdit={payloadEdit}
-            />
-          )}
+          <ResponsiveCart
+            handleAddToCart={handleAddToCart}
+            totalPrice={totalPrice}
+            payloadEdit={payloadEdit}
+          />
         </section>
       )}
       <Footer />

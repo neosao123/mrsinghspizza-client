@@ -65,7 +65,7 @@ function MainCartList({ cData, setLoading }) {
           <h5 className="mb-2" style={{ wordWrap: "break-word" }}>
             {cData.productName}
           </h5>
-          <h5 className="mb-2 text-start mx-2 amount">
+          <h5 className="mb-2 text-end mx-2 amount">
             $ {Number(cData.amount).toFixed(2)}
           </h5>
         </div>

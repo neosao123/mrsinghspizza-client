@@ -119,7 +119,7 @@ function CartList({
         <span>$ {cData?.amount}</span>
       </div>
       {/* Quantity */}
-      <div className="col-lg-12 text-start mb-1 qty">
+      <div className="col-lg-12 text-start mb-1 cartQuantity">
         <p>Quantity :</p> <span className="mx-2">{cData?.quantity}</span>
       </div>
       {/* Pizza Size */}

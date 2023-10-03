@@ -79,3 +79,58 @@ export const SpecialbasesDropDown = ({
     </>
   );
 };
+
+export const SpecialSpicesDropdown = ({ getSpecialData }) => {
+  return (
+    <select
+      className="form-select form-drop w-100"
+      // onChange={(e) => handleCheese(e, count)}
+      // value={pizzaState[count - 1]?.spices?.spicyCode}
+    >
+      {getSpecialData?.spices?.map((data) => {
+        console.log("spicy", data);
+        return (
+          <option key={data.spicyCode} value={data.spicyCode}>
+            {data.spicy} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+export const SpecialSauceDropdown = ({ getSpecialData }) => {
+  return (
+    <select
+      className="form-select form-drop w-100"
+      // onChange={(e) => handleCheese(e, count)}
+      // value={pizzaState[count - 1]?.spices?.spicyCode}
+    >
+      {getSpecialData?.sauce?.map((data) => {
+        return (
+          <option key={data.sauceCode} value={data.sauceCode}>
+            {data.sauce} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+export const SpecialCookDropdown = ({ getSpecialData }) => {
+  return (
+    <select
+      className="form-select form-drop w-100"
+      // onChange={(e) => handleCheese(e, count)}
+      // value={pizzaState[count - 1]?.spices?.spicyCode}
+    >
+      {getSpecialData?.cook?.map((data) => {
+        return (
+          <option key={data.cookCode} value={data.cookCode}>
+            {data.cook} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};

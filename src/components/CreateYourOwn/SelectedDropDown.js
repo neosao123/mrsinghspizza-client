@@ -115,3 +115,129 @@ export const SelectedSpecialbasesDropDown = ({
     </select>
   );
 };
+
+// Spices
+export const SelectedSpicesDropDown = ({
+  allIngredients,
+  reset,
+  setSpicy,
+  spicy,
+}) => {
+  // handle Spices On Change
+  const handleSpices = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedSpices = allIngredients?.spices?.find(
+        (data) => data.spicyCode === e.target.value
+      );
+      setSpicy({
+        spicyCode: selectedSpices?.spicyCode,
+        spicy: selectedSpices?.spicy,
+        price: selectedSpices?.price,
+      });
+    }
+  };
+  useEffect(() => {
+    if (reset) {
+      setSpicy({});
+    }
+  }, [reset]);
+  return (
+    <select
+      className="form-select form-drop w-100"
+      onChange={handleSpices}
+      value={spicy?.spicyCode}
+    >
+      {allIngredients?.spices?.map((data) => {
+        return (
+          <option key={data.spicyCode} value={data.spicyCode}>
+            {data.spicy} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+// Sauce
+export const SelectedSauceDropDown = ({
+  allIngredients,
+  reset,
+  sauce,
+  setSauce,
+}) => {
+  // handle Sauce On Change
+  const handleSauce = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedSauce = allIngredients?.sauce?.find(
+        (data) => data.sauceCode === e.target.value
+      );
+      setSauce({
+        sauceCode: selectedSauce.sauceCode,
+        sauce: selectedSauce.sauce,
+        price: selectedSauce.price,
+      });
+    }
+  };
+  useEffect(() => {
+    if (reset) {
+      setSauce({});
+    }
+  }, [reset]);
+  return (
+    <select
+      className="form-select form-drop w-100"
+      onChange={handleSauce}
+      value={sauce?.sauceCode}
+    >
+      {allIngredients?.sauce?.map((data) => {
+        return (
+          <option key={data.sauceCode} value={data.sauceCode}>
+            {data.sauce} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
+// Cook
+export const SelectedCookDropDown = ({
+  allIngredients,
+  reset,
+  cook,
+  setCook,
+}) => {
+  // handle Cook On Change
+  const handleCook = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedCook = allIngredients?.cook?.find(
+        (data) => data.cookCode === e.target.value
+      );
+      setCook({
+        cookCode: selectedCook.cookCode,
+        cook: selectedCook.cook,
+        price: selectedCook.price,
+      });
+    }
+  };
+  useEffect(() => {
+    if (reset) {
+      setCook({});
+    }
+  }, [reset]);
+  return (
+    <select
+      className="form-select form-drop w-100"
+      onChange={handleCook}
+      value={cook?.cookCode}
+    >
+      {allIngredients?.cook?.map((data) => {
+        return (
+          <option key={data.cookCode} value={data.cookCode}>
+            {data.cook} - $ {data?.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};

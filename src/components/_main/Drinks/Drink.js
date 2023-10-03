@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect, useRef, useState } from "react";
 import GlobalContext from "../../../context/GlobalContext";
 import { v4 as uuidv4 } from "uuid";
 import { useSelector } from "react-redux";
@@ -10,6 +10,7 @@ const Drink = ({ data, cartFn }) => {
 
   const [count, setCount] = useState(1);
   const [product, setProduct] = useState(null);
+  const drinksTypeRef = useRef(null);
 
   const user = useSelector((state) => state.user);
 
@@ -44,7 +45,9 @@ const Drink = ({ data, cartFn }) => {
       productCode: data.softdrinkCode,
       productName: data.softDrinksName,
       productType: "drinks",
-      config: {},
+      config: {
+        drinkType: [drinksTypeRef.current.value],
+      },
       price: data.price,
       quantity: count,
       amount: totalPrice,
@@ -102,6 +105,18 @@ const Drink = ({ data, cartFn }) => {
         </div>
         {/* Quantity and Add To Cart - Button */}
         <div className="d-flex justify-content-center flex-column align-items-center">
+          <select
+            className="form-select w-75 sideSize mb-3"
+            ref={drinksTypeRef}
+          >
+            {data?.drinkType?.map((item, index) => {
+              return (
+                <option value={item} key={index}>
+                  {item}
+                </option>
+              );
+            })}
+          </select>
           <div className="mb-3 d-flex align-items-center">
             <button className="quantityBtn" onClick={countDec}>
               <i className="fa fa-minus" aria-hidden="true"></i>

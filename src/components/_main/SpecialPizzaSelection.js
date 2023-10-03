@@ -1,12 +1,16 @@
 import React from "react";
 import {
   SpecialCheeseDropdown,
+  SpecialCookDropdown,
   SpecialCrustDropdown,
+  SpecialSauceDropdown,
+  SpecialSpicesDropdown,
   SpecialbasesDropDown,
 } from "../SpecialPizza/SelectedDropDown";
 import CountAsOne from "../SpecialPizza/Toppings/CountAsOne";
 import CountAsTwo from "../SpecialPizza/Toppings/CountAsTwo";
 import FreeToppings from "../SpecialPizza/Toppings/FreeToppings";
+import { SelectedSpicesDropDown } from "../CreateYourOwn/SelectedDropDown";
 
 function SpecialPizzaSelection({
   getSpecialData,
@@ -63,6 +67,39 @@ function SpecialPizzaSelection({
               count={count}
               pizzaState={pizzaState}
               handleSpecialbases={handleSpecialbases}
+            />
+          </div>
+        </div>
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <div className="d-flex justify-content-center flex-column align-items-start w-100">
+            <p className="text-start mb-2">Spicy :</p>
+            <SpecialSpicesDropdown
+              getSpecialData={getSpecialData}
+              // count={count}
+              // pizzaState={pizzaState}
+              // handleSpecialbases={handleSpecialbases}
+            />
+          </div>
+        </div>
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <div className="d-flex justify-content-center flex-column align-items-start w-100">
+            <p className="text-start mb-2">Specialbases :</p>
+            <SpecialSauceDropdown
+              getSpecialData={getSpecialData}
+              // count={count}
+              // pizzaState={pizzaState}
+              // handleSpecialbases={handleSpecialbases}
+            />
+          </div>
+        </div>
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <div className="d-flex justify-content-center flex-column align-items-start w-100">
+            <p className="text-start mb-2">Specialbases :</p>
+            <SpecialCookDropdown
+              getSpecialData={getSpecialData}
+              // count={count}
+              // pizzaState={pizzaState}
+              // handleSpecialbases={handleSpecialbases}
             />
           </div>
         </div>

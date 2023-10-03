@@ -17,8 +17,11 @@ import CartList from "../components/_main/Cart/CartList";
 import OrderSummary from "../components/_main/Cart/OrderSummary";
 import {
   SelectedCheeseDropDown,
+  SelectedCookDropDown,
   SelectedCrustDropDown,
+  SelectedSauceDropDown,
   SelectedSpecialbasesDropDown,
+  SelectedSpicesDropDown,
 } from "../components/CreateYourOwn/SelectedDropDown";
 import CountAsTwo from "../components/CreateYourOwn/Toppings/CountAsTwo";
 import CountAsOne from "../components/CreateYourOwn/Toppings/CountAsOne";
@@ -78,6 +81,10 @@ function CreateYourOwn() {
   const [sidesArr, setSidesArr] = useState([]);
   const [reset, setReset] = useState();
   const [isAllIndiansTps, setIsAllIndiansTps] = useState(false);
+
+  const [spicy, setSpicy] = useState({});
+  const [sauce, setSauce] = useState({});
+  const [cook, setCook] = useState({});
 
   // Healper Function
   const cartFn = new CartFunction();
@@ -168,6 +175,9 @@ function CreateYourOwn() {
               crust: crust,
               cheese: cheese,
               specialBases: specialbases, /// Changes
+              spicy: spicy,
+              sauce: sauce,
+              cook: cook,
               toppings: {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
@@ -204,13 +214,16 @@ function CreateYourOwn() {
         id: uuidv4(),
         productCode: "#NA",
         productName: "Create Your Own",
-        productType: "custom_pizza", /// changes
+        productType: "custom_pizza",
         config: {
           pizza: [
             {
               crust: crust,
               cheese: cheese,
-              specialBases: specialbases, /// changes - camalcase
+              specialBases: specialbases,
+              spicy: spicy,
+              sauce: sauce,
+              cook: cook,
               toppings: {
                 countAsTwoToppings: countTwoToppingsArr,
                 countAsOneToppings: countOneToppingsArr,
@@ -226,7 +239,7 @@ function CreateYourOwn() {
         quantity: Number(1),
         price: Number(totalPrice).toFixed(2),
         amount: Number(totalPrice).toFixed(2) * Number(1),
-        taxPer: taxPer, /// changes
+        taxPer: taxPer,
         pizzaSize: pizzaSize,
         pizzaPrice: pizzaSizePrice,
         comments: "",
@@ -335,6 +348,21 @@ function CreateYourOwn() {
       cheeseName: allIngredients?.cheese[0].cheeseName,
       price: allIngredients?.cheese[0].price,
     });
+    setSpicy({
+      spicyCode: allIngredients?.spices[0].spicyCode,
+      spicy: allIngredients?.spices[0]?.spicy,
+      price: allIngredients?.spices[0]?.price,
+    });
+    setSauce({
+      sauceCode: allIngredients?.sauce[0]?.sauceCode,
+      sauce: allIngredients?.sauce[0]?.sauce,
+      price: allIngredients?.sauce[0]?.price,
+    });
+    setCook({
+      cookCode: allIngredients?.cook[0]?.cookCode,
+      cook: allIngredients?.cook[0]?.cook,
+      price: allIngredients?.cook[0]?.price,
+    });
     setSpecialbases({});
     setCountTwoToppingsArr([]);
     setCountOneToppingsArr([]);
@@ -401,6 +429,21 @@ function CreateYourOwn() {
         cheeseName: allIngredients?.cheese[0].cheeseName,
         price: allIngredients?.cheese[0].price,
       });
+      setSpicy({
+        spicyCode: allIngredients?.spices[0].spicyCode,
+        spicy: allIngredients?.spices[0]?.spicy,
+        price: allIngredients?.spices[0]?.price,
+      });
+      setSauce({
+        sauceCode: allIngredients?.sauce[0]?.sauceCode,
+        sauce: allIngredients?.sauce[0]?.sauce,
+        price: allIngredients?.sauce[0]?.price,
+      });
+      setCook({
+        cookCode: allIngredients?.cook[0]?.cookCode,
+        cook: allIngredients?.cook[0]?.cook,
+        price: allIngredients?.cook[0]?.price,
+      });
       setSpecialbases({});
       setPizzaSize(pizzaSizeArr[0].size);
       setPizzaSizePrice(pizzaSizeArr[0].price);
@@ -445,6 +488,11 @@ function CreateYourOwn() {
       setCrust(payloadEdit?.config?.pizza[0]?.crust);
       setCheese(payloadEdit?.config?.pizza[0]?.cheese);
       setSpecialbases(payloadEdit?.config?.pizza[0]?.specialBases);
+
+      setSpicy(payloadEdit?.config?.pizza[0]?.spicy);
+      setSauce(payloadEdit?.config?.pizza[0]?.sauce);
+      setCook(payloadEdit?.config?.pizza[0]?.cook);
+
       setCountTwoToppingsArr(
         payloadEdit?.config?.pizza[0]?.toppings?.countAsTwoToppings
       );
@@ -537,6 +585,39 @@ function CreateYourOwn() {
                       allIngredients={allIngredients}
                       setSpecialbases={setSpecialbases}
                       specialbases={specialbases}
+                      reset={reset}
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Spicy :</p>
+                    <SelectedSpicesDropDown
+                      allIngredients={allIngredients}
+                      spicy={spicy}
+                      setSpicy={setSpicy}
+                      reset={reset}
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Sauce :</p>
+                    <SelectedSauceDropDown
+                      allIngredients={allIngredients}
+                      sauce={sauce}
+                      setSauce={setSauce}
+                      reset={reset}
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Cook :</p>
+                    <SelectedCookDropDown
+                      allIngredients={allIngredients}
+                      cook={cook}
+                      setCook={setCook}
                       reset={reset}
                     />
                   </div>

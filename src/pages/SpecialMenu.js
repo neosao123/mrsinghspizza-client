@@ -133,6 +133,54 @@ function SpecialMenu() {
     };
     setPizzaState(arr);
   };
+  const handleSpicy = (e, count) => {
+    const seletcedSpicy = getSpecialData?.spices?.find(
+      (data) => data?.spicyCode === e.target.value
+    );
+    let spicyObject = {
+      spicyCode: seletcedSpicy?.spicyCode,
+      spicy: seletcedSpicy?.spicy,
+      price: seletcedSpicy?.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      spicy: spicyObject,
+    };
+    setPizzaState(arr);
+  };
+  const handleSauce = (e, count) => {
+    const selectedSauce = getSpecialData?.sauce?.find(
+      (data) => data?.sauceCode === e.target.value
+    );
+    let sauceObject = {
+      sauceCode: selectedSauce?.sauceCode,
+      sauce: selectedSauce?.sauce,
+      price: selectedSauce?.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      sauce: sauceObject,
+    };
+    setPizzaState(arr);
+  };
+  const handleCook = (e, count) => {
+    const selectedCook = getSpecialData?.cook?.find(
+      (data) => data?.cookCode === e.target.value
+    );
+    let cookObject = {
+      cookCode: selectedCook?.cookCode,
+      cook: selectedCook?.cook,
+      price: selectedCook?.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      cook: cookObject,
+    };
+    setPizzaState(arr);
+  };
 
   // Component - Special Pizza Selection
   const spSelection = [];
@@ -149,6 +197,9 @@ function SpecialMenu() {
         handleCrust={handleCrust}
         handleCheese={handleCheese}
         handleSpecialbases={handleSpecialbases}
+        handleSpicy={handleSpicy}
+        handleSauce={handleSauce}
+        handleCook={handleCook}
         setFreeTpsCount={setFreeTpsCount}
         freeTpsCount={freeTpsCount}
         additionalTps={additionalTps}
@@ -599,10 +650,28 @@ function SpecialMenu() {
       cheeseName: getSpecialData?.cheese[0].cheeseName,
       price: getSpecialData?.cheese[0].price,
     };
+    let spicyObject = {
+      spicyCode: getSpecialData?.spices[0].spicyCode,
+      spicy: getSpecialData?.spices[0]?.spicy,
+      price: getSpecialData?.spices[0]?.price,
+    };
+    let sauceObject = {
+      sauceCode: getSpecialData?.sauce[0]?.sauceCode,
+      sauce: getSpecialData?.sauce[0]?.sauce,
+      price: getSpecialData?.sauce[0]?.price,
+    };
+    let cookObject = {
+      cookCode: getSpecialData?.cook[0]?.cookCode,
+      cook: getSpecialData?.cook[0]?.cook,
+      price: getSpecialData?.cook[0]?.price,
+    };
     const emptyObjectsArray = Array.from({ length: count }, () => ({
       crust: crustObject,
       cheese: cheeseObject,
       specialBases: {},
+      spicy: spicyObject,
+      sauce: sauceObject,
+      cook: cookObject,
       toppings: {
         countAsTwoToppings: [],
         countAsOneToppings: [],

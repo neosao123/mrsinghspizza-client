@@ -180,6 +180,24 @@ function CartList({
                     <span>{data?.specialBases?.specialbaseName}</span>
                   </div>
                 )}
+              {data?.spicy && isEmptyObject(data?.spicy) === false && (
+                <div className="mb-1">
+                  <p>Spicy :</p>
+                  <span>{data?.spicy?.spicy}</span>
+                </div>
+              )}
+              {data?.sauce && isEmptyObject(data?.sauce) === false && (
+                <div className="mb-1">
+                  <p>Sauce :</p>
+                  <span>{data?.sauce?.sauce}</span>
+                </div>
+              )}
+              {data?.cook && isEmptyObject(data?.cook) === false && (
+                <div className="mb-1">
+                  <p>cook :</p>
+                  <span>{data?.cook?.cook}</span>
+                </div>
+              )}
               <div className="mb-1">
                 {/* Count As Two */}
                 {data?.toppings?.countAsTwoToppings.length > 0 && (

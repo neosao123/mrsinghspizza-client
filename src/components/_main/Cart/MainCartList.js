@@ -156,7 +156,24 @@ function MainCartList({ cData, setLoading }) {
                         </span>
                       </div>
                     )}
-
+                  {data?.spicy && isEmptyObject(data?.spicy) === false && (
+                    <div className="mb-1 cheese">
+                      <p className="d-inline">Spicy :</p>
+                      <span className="d-inline">{data?.spicy?.spicy}</span>
+                    </div>
+                  )}
+                  {data?.sauce && isEmptyObject(data?.sauce) === false && (
+                    <div className="mb-1 cheese">
+                      <p className="d-inline">Sauce :</p>
+                      <span className="d-inline">{data?.sauce?.sauce}</span>
+                    </div>
+                  )}
+                  {data?.cook && isEmptyObject(data?.cook) === false && (
+                    <div className="mb-1 cheese">
+                      <p className="d-inline">Cook :</p>
+                      <span className="d-inline">{data?.cook?.cook}</span>
+                    </div>
+                  )}
                   <div className="mb-1">
                     {/* Count As Two */}
                     {data?.toppings?.countAsTwoToppings.length > 0 && (

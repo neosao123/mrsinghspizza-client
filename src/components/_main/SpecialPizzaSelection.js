@@ -21,6 +21,9 @@ function SpecialPizzaSelection({
   handleCrust,
   handleCheese,
   handleSpecialbases,
+  handleSpicy,
+  handleSauce,
+  handleCook,
   reset,
   setFreeTpsCount,
   freeTpsCount,
@@ -75,31 +78,31 @@ function SpecialPizzaSelection({
             <p className="text-start mb-2">Spicy :</p>
             <SpecialSpicesDropdown
               getSpecialData={getSpecialData}
-              // count={count}
-              // pizzaState={pizzaState}
-              // handleSpecialbases={handleSpecialbases}
+              count={count}
+              pizzaState={pizzaState}
+              handleSpicy={handleSpicy}
             />
           </div>
         </div>
         <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
           <div className="d-flex justify-content-center flex-column align-items-start w-100">
-            <p className="text-start mb-2">Specialbases :</p>
+            <p className="text-start mb-2">Sauce :</p>
             <SpecialSauceDropdown
               getSpecialData={getSpecialData}
-              // count={count}
-              // pizzaState={pizzaState}
-              // handleSpecialbases={handleSpecialbases}
+              count={count}
+              pizzaState={pizzaState}
+              handleSauce={handleSauce}
             />
           </div>
         </div>
         <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
           <div className="d-flex justify-content-center flex-column align-items-start w-100">
-            <p className="text-start mb-2">Specialbases :</p>
+            <p className="text-start mb-2">Cook :</p>
             <SpecialCookDropdown
               getSpecialData={getSpecialData}
-              // count={count}
-              // pizzaState={pizzaState}
-              // handleSpecialbases={handleSpecialbases}
+              count={count}
+              pizzaState={pizzaState}
+              handleCook={handleCook}
             />
           </div>
         </div>

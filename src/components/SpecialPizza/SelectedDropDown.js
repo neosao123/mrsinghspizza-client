@@ -1,5 +1,6 @@
 import React from "react";
 
+// SpecialPizza - Crust
 export const SpecialCrustDropdown = ({
   getSpecialData,
   pizzaState,
@@ -25,6 +26,7 @@ export const SpecialCrustDropdown = ({
   );
 };
 
+// SpecialPizza - Cheese
 export const SpecialCheeseDropdown = ({
   getSpecialData,
   count,
@@ -48,6 +50,7 @@ export const SpecialCheeseDropdown = ({
   );
 };
 
+// SpecialPizza - SpecialBases
 export const SpecialbasesDropDown = ({
   getSpecialData,
   count,
@@ -80,15 +83,20 @@ export const SpecialbasesDropDown = ({
   );
 };
 
-export const SpecialSpicesDropdown = ({ getSpecialData }) => {
+// SpecialPizza - Spices
+export const SpecialSpicesDropdown = ({
+  getSpecialData,
+  count,
+  pizzaState,
+  handleSpicy,
+}) => {
   return (
     <select
       className="form-select form-drop w-100"
-      // onChange={(e) => handleCheese(e, count)}
-      // value={pizzaState[count - 1]?.spices?.spicyCode}
+      onChange={(e) => handleSpicy(e, count)}
+      value={pizzaState[count - 1]?.spices?.spicyCode}
     >
       {getSpecialData?.spices?.map((data) => {
-        console.log("spicy", data);
         return (
           <option key={data.spicyCode} value={data.spicyCode}>
             {data.spicy} - $ {data.price}
@@ -99,12 +107,18 @@ export const SpecialSpicesDropdown = ({ getSpecialData }) => {
   );
 };
 
-export const SpecialSauceDropdown = ({ getSpecialData }) => {
+// SpecialPizza - Sauce
+export const SpecialSauceDropdown = ({
+  getSpecialData,
+  handleSauce,
+  count,
+  pizzaState,
+}) => {
   return (
     <select
       className="form-select form-drop w-100"
-      // onChange={(e) => handleCheese(e, count)}
-      // value={pizzaState[count - 1]?.spices?.spicyCode}
+      onChange={(e) => handleSauce(e, count)}
+      value={pizzaState[count - 1]?.sauce?.sauceCode}
     >
       {getSpecialData?.sauce?.map((data) => {
         return (
@@ -117,12 +131,18 @@ export const SpecialSauceDropdown = ({ getSpecialData }) => {
   );
 };
 
-export const SpecialCookDropdown = ({ getSpecialData }) => {
+// SpecialPizza - Cook
+export const SpecialCookDropdown = ({
+  getSpecialData,
+  handleCook,
+  count,
+  pizzaState,
+}) => {
   return (
     <select
       className="form-select form-drop w-100"
-      // onChange={(e) => handleCheese(e, count)}
-      // value={pizzaState[count - 1]?.spices?.spicyCode}
+      onChange={(e) => handleCook(e, count)}
+      value={pizzaState[count - 1]?.cook?.cookCode}
     >
       {getSpecialData?.cook?.map((data) => {
         return (

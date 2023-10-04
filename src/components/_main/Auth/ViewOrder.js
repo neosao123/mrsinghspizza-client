@@ -193,44 +193,32 @@ function ViewOrder({ selectedCode }) {
                           return (
                             <>
                               {/* Crust */}
-                              {data?.crust?.crustName === "Regular" ? (
-                                ""
-                              ) : (
-                                <div className="w-auto d-flex justify-content-around productDetails">
-                                  <div className="products d-flex justify-content-start mx-1">
-                                    <span className="subText fw-Bold">
-                                      Crust :
-                                    </span>
-                                    <span className="subText mx-2">
-                                      {data?.crust?.crustName}
-                                    </span>
-                                  </div>
-                                  <div className="text-center qty mx-1"> </div>
-                                  <div className="text-center amount mx-1">
-                                    {" "}
-                                  </div>
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText fw-Bold">
+                                    <strong>Crust :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.crust?.crustName}
+                                  </span>
                                 </div>
-                              )}
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
 
                               {/* Cheese */}
-                              {data?.cheese?.cheeseName === "Mozzarella" ? (
-                                ""
-                              ) : (
-                                <div className="w-auto d-flex justify-content-around productDetails">
-                                  <div className="products d-flex justify-content-start mx-1">
-                                    <span className="subText">
-                                      <strong>Cheese :</strong>
-                                    </span>
-                                    <span className="subText mx-2">
-                                      {data?.cheese?.cheeseName}
-                                    </span>
-                                  </div>
-                                  <div className="text-center qty mx-1"> </div>
-                                  <div className="text-center amount mx-1">
-                                    {" "}
-                                  </div>
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText">
+                                    <strong>Cheese :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.cheese?.cheeseName}
+                                  </span>
                                 </div>
-                              )}
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
 
                               {/* Specialbases */}
                               {data?.specialBases &&
@@ -253,6 +241,48 @@ function ViewOrder({ selectedCode }) {
                                     </div>
                                   </div>
                                 )}
+
+                              {/* Spicy */}
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText">
+                                    <strong>Spicy :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.spicy?.spicy}
+                                  </span>
+                                </div>
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
+
+                              {/* Sauce */}
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText">
+                                    <strong>Sauce :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.sauce?.sauce}
+                                  </span>
+                                </div>
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
+
+                              {/* Cook */}
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText">
+                                    <strong>Cook :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.cook?.cook}
+                                  </span>
+                                </div>
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
 
                               {/* Toppings */}
                               {(data?.toppings?.countAsTwoToppings.length > 0 ||
@@ -333,132 +363,124 @@ function ViewOrder({ selectedCode }) {
                                     )}
                                   </>
                                 )}
-
-                              {order?.config?.sides &&
-                                order?.config?.sides.length > 0 && (
-                                  <>
-                                    <div className="w-auto d-flex justify-content-around productDetails">
-                                      <div className="products d-flex justify-content-start mx-1">
-                                        <span className="subText">
-                                          <strong>Sides :</strong>
-                                        </span>
-                                      </div>
-                                      <div className="text-center qty mx-1">
-                                        {" "}
-                                      </div>
-                                      <div className="text-center amount mx-1">
-                                        {" "}
-                                      </div>
-                                    </div>
-                                    {order?.config?.sides?.map(
-                                      (data, index) => {
-                                        return (
-                                          <div className="w-auto d-flex justify-content-around productDetails">
-                                            <div className="products d-flex justify-content-start mx-1">
-                                              <span className="subText">
-                                                {data?.sideName} ({" "}
-                                                {data?.sideSize} )
-                                              </span>
-                                            </div>
-                                            <div className="text-center qty mx-1">
-                                              {data?.quantity}
-                                            </div>
-                                            <div className="text-center amount mx-1">
-                                              $ {data?.totalPrice}
-                                            </div>
-                                          </div>
-                                        );
-                                      }
-                                    )}
-                                  </>
-                                )}
-
-                              {order?.config?.dips &&
-                                order?.config?.dips.length > 0 && (
-                                  <>
-                                    <div className="w-auto d-flex justify-content-around productDetails">
-                                      <div className="products d-flex justify-content-start mx-1">
-                                        <span className="subText">
-                                          <strong>Dips :</strong>
-                                        </span>
-                                      </div>
-                                      <div className="text-center qty mx-1">
-                                        {" "}
-                                      </div>
-                                      <div className="text-center amount mx-1">
-                                        {" "}
-                                      </div>
-                                    </div>
-                                    {order?.config?.dips?.map((data, index) => {
-                                      return (
-                                        <div className="w-auto d-flex justify-content-around productDetails">
-                                          <div className="products d-flex justify-content-start mx-1">
-                                            <span className="subText">
-                                              {data?.dipsName}{" "}
-                                              {order?.config?.dips.length -
-                                                1 ===
-                                              index
-                                                ? ""
-                                                : ","}
-                                            </span>
-                                          </div>
-                                          <div className="text-center qty mx-1">
-                                            {data?.quantity}
-                                          </div>
-                                          <div className="text-center amount mx-1">
-                                            $ {data?.totalPrice}
-                                          </div>
-                                        </div>
-                                      );
-                                    })}
-                                  </>
-                                )}
-
-                              {order?.config?.drinks &&
-                                order?.config?.drinks.length > 0 && (
-                                  <>
-                                    <div className="w-auto d-flex justify-content-around productDetails">
-                                      <div className="products d-flex justify-content-start mx-1">
-                                        <span className="subText">
-                                          <strong>Drinks :</strong>
-                                        </span>
-                                      </div>
-                                      <div className="text-center qty mx-1">
-                                        {" "}
-                                      </div>
-                                      <div className="text-center amount mx-1">
-                                        {" "}
-                                      </div>
-                                    </div>
-                                    {order?.config?.drinks?.map(
-                                      (data, index) => {
-                                        return (
-                                          <div className="w-auto d-flex justify-content-around productDetails">
-                                            <div className="products d-flex justify-content-start mx-1">
-                                              <span className="subText">
-                                                {data?.drinksName}
-                                                {order?.config?.drinks.length -
-                                                  1 ===
-                                                index
-                                                  ? ""
-                                                  : ","}
-                                              </span>
-                                            </div>
-                                            <div className="text-center qty mx-1">
-                                              {data?.quantity}
-                                            </div>
-                                            <div className="text-center amount mx-1">
-                                              $ {data?.totalPrice}
-                                            </div>
-                                          </div>
-                                        );
-                                      }
-                                    )}
-                                  </>
-                                )}
                             </>
                           );
                         })}
+
+                      {(order?.productType === "custom_pizza" ||
+                        order?.productType === "special_pizza") && (
+                        <>
+                          {order?.config?.sides &&
+                            order?.config?.sides.length > 0 && (
+                              <>
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText">
+                                      <strong>Sides :</strong>
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {" "}
+                                  </div>
+                                </div>
+                                {order?.config?.sides?.map((data, index) => {
+                                  return (
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          {data?.sideName} ( {data?.sideSize} )
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {data?.quantity}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        $ {data?.totalPrice}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </>
+                            )}
+
+                          {order?.config?.dips &&
+                            order?.config?.dips.length > 0 && (
+                              <>
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText">
+                                      <strong>Dips :</strong>
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {" "}
+                                  </div>
+                                </div>
+                                {order?.config?.dips?.map((data, index) => {
+                                  return (
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          {data?.dipsName}{" "}
+                                          {order?.config?.dips.length - 1 ===
+                                          index
+                                            ? ""
+                                            : ","}
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {data?.quantity}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        $ {data?.totalPrice}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </>
+                            )}
+
+                          {order?.config?.drinks &&
+                            order?.config?.drinks.length > 0 && (
+                              <>
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText">
+                                      <strong>Drinks :</strong>
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {" "}
+                                  </div>
+                                </div>
+                                {order?.config?.drinks?.map((data, index) => {
+                                  return (
+                                    <div className="w-auto d-flex justify-content-around productDetails">
+                                      <div className="products d-flex justify-content-start mx-1">
+                                        <span className="subText">
+                                          {data?.drinksName}
+                                          {order?.config?.drinks.length - 1 ===
+                                          index
+                                            ? ""
+                                            : ","}
+                                        </span>
+                                      </div>
+                                      <div className="text-center qty mx-1">
+                                        {data?.quantity}
+                                      </div>
+                                      <div className="text-center amount mx-1">
+                                        $ {data?.totalPrice}
+                                      </div>
+                                    </div>
+                                  );
+                                })}
+                              </>
+                            )}
+                        </>
+                      )}
 
                       <hr
                         className="m-0 p-0 my-1"

@@ -187,6 +187,29 @@ function ViewOrder({ selectedCode }) {
                         </div>
                       )}
 
+                      {order?.productType === "drinks" && (
+                        <div className="w-auto d-flex justify-content-around productDetails">
+                          <div
+                            className="products d-flex justify-content-start mx-1"
+                            key={order?.id}
+                          >
+                            <span className="subText">
+                              <strong>Comments : </strong>
+                              {order?.comments}
+                            </span>
+                          </div>
+                          <div className="text-center qty mx-1" key={order?.id}>
+                            {" "}
+                          </div>
+                          <div
+                            className="text-center amount mx-1"
+                            key={order?.id}
+                          >
+                            {" "}
+                          </div>
+                        </div>
+                      )}
+
                       {(order?.productType === "custom_pizza" ||
                         order?.productType === "special_pizza") &&
                         order?.config?.pizza?.map((data, index) => {
@@ -200,6 +223,20 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                   <span className="subText mx-2">
                                     {data?.crust?.crustName}
+                                  </span>
+                                </div>
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1"> </div>
+                              </div>
+
+                              {/* Crust Type */}
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText fw-Bold">
+                                    <strong>Crust Type :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.crustType?.crustType}
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>

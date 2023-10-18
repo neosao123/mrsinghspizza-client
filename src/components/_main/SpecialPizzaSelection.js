@@ -3,6 +3,7 @@ import {
   SpecialCheeseDropdown,
   SpecialCookDropdown,
   SpecialCrustDropdown,
+  SpecialCrustTypeDropdown,
   SpecialSauceDropdown,
   SpecialSpicesDropdown,
   SpecialbasesDropDown,
@@ -19,6 +20,7 @@ function SpecialPizzaSelection({
   pizzaState,
   setPizzaState,
   handleCrust,
+  handleCrustTypeChange,
   handleCheese,
   handleSpecialbases,
   handleSpicy,
@@ -48,6 +50,17 @@ function SpecialPizzaSelection({
               count={count}
               pizzaState={pizzaState}
               handleCrust={handleCrust}
+            />
+          </div>
+        </div>
+        <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+          <div className="d-flex justify-content-center flex-column align-items-start w-100">
+            <p className="text-start mb-2">Crust Type :</p>
+            <SpecialCrustTypeDropdown
+              getSpecialData={getSpecialData}
+              count={count}
+              pizzaState={pizzaState}
+              handleCrustTypeChange={handleCrustTypeChange}
             />
           </div>
         </div>

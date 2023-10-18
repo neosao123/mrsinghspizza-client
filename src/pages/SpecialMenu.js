@@ -97,6 +97,26 @@ function SpecialMenu() {
     };
     setPizzaState(arr);
   };
+
+  // handle crust change
+  const handleCrustTypeChange = (event, count) => {
+    const selectedValue = event.target.value;
+    const selectedCrustType = getSpecialData?.crustType?.find(
+      (option) => option.crustTypeCode === selectedValue
+    );
+    let crustTypeObject = {
+      crustTypeCode: selectedCrustType?.crustTypeCode,
+      crustType: selectedCrustType?.crustType,
+      price: selectedCrustType?.price,
+    };
+    let arr = [...pizzaState];
+    arr[count - 1] = {
+      ...arr[count - 1],
+      crustType: crustTypeObject,
+    };
+    setPizzaState(arr);
+  };
+
   // Handle Cheese
   const handleCheese = (e, count) => {
     const selectedCheese = getSpecialData?.cheese?.find(
@@ -195,6 +215,7 @@ function SpecialMenu() {
         pizzaState={pizzaState}
         setPizzaState={setPizzaState}
         handleCrust={handleCrust}
+        handleCrustTypeChange={handleCrustTypeChange}
         handleCheese={handleCheese}
         handleSpecialbases={handleSpecialbases}
         handleSpicy={handleSpicy}
@@ -220,6 +241,10 @@ function SpecialMenu() {
     pizzaState.forEach((items) => {
       // OnChange Crust Price
       calculatedPrice += items?.crust?.price ? Number(items?.crust?.price) : 0;
+      // OnChnage CrustType Price
+      calculatedPrice += items?.crustType?.price
+        ? Number(items?.crustType?.price)
+        : 0;
       // OnChange Cheese Price
       calculatedPrice += items?.cheese?.price
         ? Number(items?.cheese?.price)
@@ -645,6 +670,11 @@ function SpecialMenu() {
       crustName: getSpecialData?.crust[0].crustName,
       price: getSpecialData?.crust[0].price,
     };
+    let crustTypeObject = {
+      crustTypeCode: getSpecialData?.crustType[0].crustTypeCode,
+      crustType: getSpecialData?.crustType[0].crustType,
+      price: getSpecialData?.crustType[0].price ?? 0,
+    };
     let cheeseObject = {
       cheeseCode: getSpecialData?.cheese[0].code,
       cheeseName: getSpecialData?.cheese[0].cheeseName,
@@ -668,6 +698,7 @@ function SpecialMenu() {
     const emptyObjectsArray = Array.from({ length: count }, () => ({
       crust: crustObject,
       cheese: cheeseObject,
+      crustType: crustTypeObject,
       specialBases: {},
       spicy: spicyObject,
       sauce: sauceObject,

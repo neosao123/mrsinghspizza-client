@@ -36,6 +36,42 @@ export const SelectedCrustDropDown = ({ allIngredients, setCrust, crust }) => {
   );
 };
 
+export const SelectedCrustTypeDropDown = ({
+  allIngredients,
+  setCrustType,
+  crustType,
+}) => {
+  // handle Cheese On Change
+  const handleCrustType = (e) => {
+    if (e.target.value !== null && e.target.value !== "") {
+      const selectedCrustType = allIngredients?.crustType?.find(
+        (data) => data.crustTypeCode === e.target.value
+      );
+      setCrustType({
+        crustTypeCode: selectedCrustType?.crustTypeCode,
+        crustType: selectedCrustType?.crustType,
+        price: selectedCrustType?.price,
+      });
+    }
+  };
+  useEffect(() => {}, []);
+  return (
+    <select
+      className="form-select form-drop w-100"
+      onChange={handleCrustType}
+      value={crustType?.crustTypeCode}
+    >
+      {allIngredients?.crustType?.map((data) => {
+        return (
+          <option key={data.crustTypeCode} value={data.crustTypeCode}>
+            {data.crustType} - $ {data.price}
+          </option>
+        );
+      })}
+    </select>
+  );
+};
+
 export const SelectedCheeseDropDown = ({
   allIngredients,
   setCheese,

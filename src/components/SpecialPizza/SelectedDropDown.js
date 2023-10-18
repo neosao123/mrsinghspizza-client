@@ -26,6 +26,32 @@ export const SpecialCrustDropdown = ({
   );
 };
 
+// SpecialPizza - CrustType
+export const SpecialCrustTypeDropdown = ({
+  getSpecialData,
+  pizzaState,
+  handleCrustTypeChange,
+  count,
+}) => {
+  return (
+    <>
+      <select
+        className="form-select form-drop w-100"
+        value={pizzaState[count - 1]?.crustType?.crustTypeCode}
+        onChange={(e) => handleCrustTypeChange(e, count)}
+      >
+        {getSpecialData?.crustType?.map((data) => {
+          return (
+            <option key={data.crustTypeCode} value={data.crustTypeCode}>
+              {data.crustType} - $ {data.price}
+            </option>
+          );
+        })}
+      </select>
+    </>
+  );
+};
+
 // SpecialPizza - Cheese
 export const SpecialCheeseDropdown = ({
   getSpecialData,

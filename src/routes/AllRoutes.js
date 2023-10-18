@@ -13,6 +13,7 @@ import Cancel from "../pages/Payment/Cancel";
 import LoginReg from "../pages/Auth/LoginReg";
 import MyAccount from "../pages/Auth/MyAccount";
 import ForgetPassword from "../components/_main/Auth/ForgetPassword";
+import SelectedDrink from "../components/_main/Drinks/SelectedDrink";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -29,6 +30,7 @@ const AllRoutes = () => {
       <Route exact path="/login-registration" Component={LoginReg} />
       {/* <Route exact path="/forget-password" Component={ForgetPassword} /> */}
       <Route exact path="/create-your-own/" Component={CreateYourOwn} />
+      <Route exact path="/customize-drink/:did" Component={SelectedDrink} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={Cart} />
       <Route exact path="/address-details" Component={AddressDetails} />

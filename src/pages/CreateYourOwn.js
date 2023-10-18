@@ -19,6 +19,7 @@ import {
   SelectedCheeseDropDown,
   SelectedCookDropDown,
   SelectedCrustDropDown,
+  SelectedCrustTypeDropDown,
   SelectedSauceDropDown,
   SelectedSpecialbasesDropDown,
   SelectedSpicesDropDown,
@@ -85,6 +86,7 @@ function CreateYourOwn() {
   const [spicy, setSpicy] = useState({});
   const [sauce, setSauce] = useState({});
   const [cook, setCook] = useState({});
+  const [crustType, setCrustType] = useState({});
 
   // Healper Function
   const cartFn = new CartFunction();
@@ -146,6 +148,7 @@ function CreateYourOwn() {
     }
     calculatedPrice += Number(pizzaSizePrice) || 0;
     calculatedPrice += Number(crust?.price) || 0;
+    calculatedPrice += Number(crustType?.price) || 0;
     calculatedPrice += Number(cheese?.price) || 0;
     calculatedPrice += Number(specialbases?.price) || 0;
     calculatedPrice += Number(totalTwoToppings) || 0;
@@ -173,6 +176,7 @@ function CreateYourOwn() {
           pizza: [
             {
               crust: crust,
+              crustType: crustType,
               cheese: cheese,
               specialBases: specialbases, /// Changes
               spicy: spicy,
@@ -219,6 +223,7 @@ function CreateYourOwn() {
           pizza: [
             {
               crust: crust,
+              crustType: crustType,
               cheese: cheese,
               specialBases: specialbases,
               spicy: spicy,
@@ -343,6 +348,11 @@ function CreateYourOwn() {
       crustName: allIngredients?.crust[0].crustName,
       price: allIngredients?.crust[0].price,
     });
+    setCrustType({
+      crustTypeCode: allIngredients?.crustType[0]?.crustTypeCode,
+      crustType: allIngredients?.crustType[0]?.crustType,
+      price: allIngredients?.crustType[0]?.price,
+    });
     setCheese({
       cheeseCode: allIngredients?.cheese[0].cheeseCode,
       cheeseName: allIngredients?.cheese[0].cheeseName,
@@ -424,6 +434,11 @@ function CreateYourOwn() {
         crustName: allIngredients?.crust[0].crustName,
         price: allIngredients?.crust[0].price,
       });
+      setCrustType({
+        crustTypeCode: allIngredients?.crustType[0]?.crustTypeCode,
+        crustType: allIngredients?.crustType[0]?.crustType,
+        price: allIngredients?.crustType[0]?.price,
+      });
       setCheese({
         cheeseCode: allIngredients?.cheese[0].cheeseCode,
         cheeseName: allIngredients?.cheese[0].cheeseName,
@@ -461,6 +476,7 @@ function CreateYourOwn() {
     }
   }, [
     crust,
+    crustType,
     cheese,
     specialbases,
     countTwoToppingsArr,
@@ -474,7 +490,6 @@ function CreateYourOwn() {
   ]);
   // Populate All Fields - Edit Pizza
   useEffect(() => {
-    console.log("payloadEdit create your own", payloadEdit);
     if (
       payloadEdit &&
       payloadEdit !== undefined &&
@@ -486,6 +501,7 @@ function CreateYourOwn() {
       );
       setPizzaSizePrice(filteredData?.price);
       setCrust(payloadEdit?.config?.pizza[0]?.crust);
+      setCrustType(payloadEdit?.config?.pizza[0]?.crustType);
       setCheese(payloadEdit?.config?.pizza[0]?.cheese);
       setSpecialbases(payloadEdit?.config?.pizza[0]?.specialBases);
 
@@ -565,6 +581,16 @@ function CreateYourOwn() {
                       allIngredients={allIngredients}
                       setCrust={setCrust}
                       crust={crust}
+                    />
+                  </div>
+                </div>
+                <div className="col-lg-4 col-md-4 col-sm-12 mb-3">
+                  <div className="d-flex justify-content-center flex-column align-items-start w-100">
+                    <p className="text-start mb-2">Crust Type :</p>
+                    <SelectedCrustTypeDropDown
+                      allIngredients={allIngredients}
+                      setCrustType={setCrustType}
+                      crustType={crustType}
                     />
                   </div>
                 </div>

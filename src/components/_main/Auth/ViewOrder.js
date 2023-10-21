@@ -187,7 +187,9 @@ function ViewOrder({ selectedCode }) {
                         </div>
                       )}
 
-                      {order?.productType === "drinks" && (
+                      {(order?.productType === "side" ||
+                        order?.productType === "dips" ||
+                        order?.productType === "drinks") && (
                         <div className="w-auto d-flex justify-content-around productDetails">
                           <div
                             className="products d-flex justify-content-start mx-1"
@@ -516,6 +518,35 @@ function ViewOrder({ selectedCode }) {
                                 })}
                               </>
                             )}
+                        </>
+                      )}
+
+                      {(order?.productType === "custom_pizza" ||
+                        order?.productType === "special_pizza") && (
+                        <>
+                          <div className="w-auto d-flex justify-content-around productDetails">
+                            <div
+                              className="products d-flex justify-content-start mx-1"
+                              key={order?.id}
+                            >
+                              <span className="subText">
+                                <strong>Comments : </strong>
+                                {order?.comments}
+                              </span>
+                            </div>
+                            <div
+                              className="text-center qty mx-1"
+                              key={order?.id}
+                            >
+                              {" "}
+                            </div>
+                            <div
+                              className="text-center amount mx-1"
+                              key={order?.id}
+                            >
+                              {" "}
+                            </div>
+                          </div>
                         </>
                       )}
 

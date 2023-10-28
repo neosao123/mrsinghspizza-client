@@ -99,7 +99,7 @@ function Cart() {
         }
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
-        navigate("/registration");
+        navigate("/login-registration");
         setLoading(false);
       }
     } else {

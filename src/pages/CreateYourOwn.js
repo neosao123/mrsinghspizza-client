@@ -124,17 +124,17 @@ function CreateYourOwn() {
 
     if (countTwoToppingsArr) {
       countTwoToppingsArr.map(
-        (twoTps) => (totalTwoToppings += Number(twoTps.toppingsPrice))
+        (twoTps) => (totalTwoToppings += Number(twoTps.amount))
       );
     }
     if (countOneToppingsArr) {
       countOneToppingsArr.map(
-        (oneTps) => (totalOneToppings += Number(oneTps.toppingsPrice))
+        (oneTps) => (totalOneToppings += Number(oneTps.amount))
       );
     }
     if (freeToppingsArr) {
       freeToppingsArr.map(
-        (freeTps) => (totalFreeToppings += Number(freeTps.toppingsPrice))
+        (freeTps) => (totalFreeToppings += Number(freeTps.amount))
       );
     }
     if (drinksArr) {

@@ -159,7 +159,8 @@ function ViewOrder({ selectedCode }) {
                           key={order?.id}
                         >
                           ${" "}
-                          {order?.productType === "special_pizza"
+                          {order?.productType === "special_pizza" ||
+                          order?.productType === "custom_pizza"
                             ? order?.pizzaPrice
                             : order?.amount}
                         </div>
@@ -228,7 +229,28 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.crust?.price) !== 0
+                                    ? "$ " + data?.crust?.price
+                                    : ""}
+                                </div>
+                              </div>
+                              {/* Crust */}
+                              <div className="w-auto d-flex justify-content-around productDetails">
+                                <div className="products d-flex justify-content-start mx-1">
+                                  <span className="subText fw-Bold">
+                                    <strong>Crust :</strong>
+                                  </span>
+                                  <span className="subText mx-2">
+                                    {data?.crust?.crustName}
+                                  </span>
+                                </div>
+                                <div className="text-center qty mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.crust?.price) !== 0
+                                    ? "$ " + data?.crust?.price
+                                    : ""}
+                                </div>
                               </div>
 
                               {/* Crust Type */}
@@ -242,7 +264,11 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.crustType?.price) !== 0
+                                    ? "$ " + data?.crustType?.price
+                                    : ""}
+                                </div>
                               </div>
 
                               {/* Cheese */}
@@ -256,7 +282,11 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.cheese?.price) !== 0
+                                    ? "$ " + data?.cheese?.price
+                                    : ""}
+                                </div>
                               </div>
 
                               {/* Specialbases */}
@@ -276,7 +306,9 @@ function ViewOrder({ selectedCode }) {
                                       {" "}
                                     </div>
                                     <div className="text-center amount mx-1">
-                                      {" "}
+                                      {Number(data?.specialBases?.price) !== 0
+                                        ? "$ " + data?.specialBases?.price
+                                        : ""}
                                     </div>
                                   </div>
                                 )}
@@ -292,7 +324,11 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.spicy?.price) !== 0
+                                    ? "$ " + data?.spicy?.price
+                                    : ""}{" "}
+                                </div>
                               </div>
 
                               {/* Sauce */}
@@ -306,7 +342,11 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.sauce?.price) !== 0
+                                    ? "$ " + data?.sauce?.price
+                                    : ""}{" "}
+                                </div>
                               </div>
 
                               {/* Cook */}
@@ -320,7 +360,11 @@ function ViewOrder({ selectedCode }) {
                                   </span>
                                 </div>
                                 <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1"> </div>
+                                <div className="text-center amount mx-1">
+                                  {Number(data?.cook?.price) !== 0
+                                    ? "$ " + data?.cook?.price
+                                    : ""}
+                                </div>
                               </div>
 
                               {/* Toppings */}
@@ -435,7 +479,9 @@ function ViewOrder({ selectedCode }) {
                                         {data?.quantity}
                                       </div>
                                       <div className="text-center amount mx-1">
-                                        $ {data?.totalPrice}
+                                        {Number(data?.totalPrice) !== 0
+                                          ? "$ " + data?.totalPrice
+                                          : ""}
                                       </div>
                                     </div>
                                   );
@@ -473,7 +519,9 @@ function ViewOrder({ selectedCode }) {
                                         {data?.quantity}
                                       </div>
                                       <div className="text-center amount mx-1">
-                                        $ {data?.totalPrice}
+                                        {Number(data?.totalPrice) !== 0
+                                          ? "$ " + data?.totalPrice
+                                          : ""}
                                       </div>
                                     </div>
                                   );
@@ -511,7 +559,9 @@ function ViewOrder({ selectedCode }) {
                                         {data?.quantity}
                                       </div>
                                       <div className="text-center amount mx-1">
-                                        $ {data?.totalPrice}
+                                        {Number(data?.totalPrice) !== 0
+                                          ? "$ " + data?.totalPrice
+                                          : ""}
                                       </div>
                                     </div>
                                   );
@@ -625,8 +675,8 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
   return (
     <>
       {tpsDetails?.map((data) => {
-        const keyToCheck = "amount";
-        const keyExists = data.hasOwnProperty(keyToCheck);
+        // const keyToCheck = "amount";
+        // const keyExists = data.hasOwnProperty(keyToCheck);
         return (
           <>
             <div className="w-auto d-flex justify-content-around productDetails">
@@ -656,10 +706,15 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
               </div>
               <div className="text-center qty mx-1"> </div>
               <div className="text-center amount mx-1">
-                ${" "}
+                {/* ${" "}
                 {keyExists
                   ? Number(data?.amount).toFixed(2)
-                  : data?.toppingsPrice}
+                  : data?.toppingsPrice} */}
+
+                {Number(data?.amount) !== undefined &&
+                Number(data?.amount) !== 0
+                  ? "$ " + data?.amount
+                  : ""}
               </div>
             </div>
           </>

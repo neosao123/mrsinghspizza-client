@@ -18,8 +18,9 @@ function CountAsOne({
         const toppingsObject = {
           toppingsCode: data?.toppingsCode,
           toppingsName: data?.toppingsName,
-          toppingsPrice: data?.price ? data?.price : "0",
+          toppingsPrice: data?.price ? data?.price : 0,
           toppingsPlacement: tpsRef.current.value,
+          amount: data?.price ? data?.price : 0,
         };
         setCountOneToppingsArr((prev) => [...prev, toppingsObject]);
         setTpsButton(true);

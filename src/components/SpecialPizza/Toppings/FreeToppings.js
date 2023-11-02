@@ -18,8 +18,9 @@ function FreeToppings({
         const tpsObject = {
           toppingsCode: data?.toppingsCode,
           toppingsName: data?.toppingsName,
-          toppingsPrice: data?.price ? data?.price : "0",
+          toppingsPrice: data?.price ? data?.price : 0,
           toppingsPlacement: freeTpsRef.current.value,
+          amount: 0,
         };
         let arr = [...pizzaState];
         arr[count - 1].toppings.freeToppings = [

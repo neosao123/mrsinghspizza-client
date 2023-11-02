@@ -218,81 +218,94 @@ function ViewOrder({ selectedCode }) {
                         order?.config?.pizza?.map((data, index) => {
                           return (
                             <>
+                              {/* Next Pizza */}
+                              {order?.productType === "special_pizza" &&
+                              index > 0 ? (
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText fw-Bold">
+                                      <strong>Next Pizza</strong>
+                                    </span>
+                                    <span className="subText mx-2"></span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1"></div>
+                                </div>
+                              ) : null}
+
                               {/* Crust */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText fw-Bold">
-                                    <strong>Crust :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.crust?.crustName}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.crust?.price) !== 0
-                                    ? "$ " + data?.crust?.price
-                                    : ""}
-                                </div>
-                              </div>
-                              {/* Crust */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText fw-Bold">
-                                    <strong>Crust :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.crust?.crustName}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.crust?.price) !== 0
-                                    ? "$ " + data?.crust?.price
-                                    : ""}
-                                </div>
-                              </div>
+                              {data?.crust &&
+                                data?.crust?.crustName !== "Regular" && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText fw-Bold">
+                                        <strong>Crust :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.crust?.crustName}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {Number(data?.crust?.price) !== 0
+                                        ? "$ " + data?.crust?.price
+                                        : ""}
+                                    </div>
+                                  </div>
+                                )}
 
                               {/* Crust Type */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText fw-Bold">
-                                    <strong>Crust Type :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.crustType?.crustType}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.crustType?.price) !== 0
-                                    ? "$ " + data?.crustType?.price
-                                    : ""}
-                                </div>
-                              </div>
+                              {data?.crustType &&
+                                data?.crustType?.crustType !== "Regular" && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText fw-Bold">
+                                        <strong>Crust Type :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.crustType?.crustType}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {Number(data?.crustType?.price) !== 0
+                                        ? "$ " + data?.crustType?.price
+                                        : ""}
+                                    </div>
+                                  </div>
+                                )}
 
                               {/* Cheese */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText">
-                                    <strong>Cheese :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.cheese?.cheeseName}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.cheese?.price) !== 0
-                                    ? "$ " + data?.cheese?.price
-                                    : ""}
-                                </div>
-                              </div>
+                              {data?.cheese &&
+                                data?.cheese?.cheeseName !== "Mozzarella" && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText">
+                                        <strong>Cheese :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.cheese?.cheeseName}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {Number(data?.cheese?.price) !== 0
+                                        ? "$ " + data?.cheese?.price
+                                        : ""}
+                                    </div>
+                                  </div>
+                                )}
 
                               {/* Specialbases */}
                               {data?.specialBases &&
-                                Object.keys(data?.specialBases).length !==
-                                  0 && (
+                                (Object.keys(data?.specialBases).length !== 0 ||
+                                  data?.specialBases?.length !== 0) && (
                                   <div className="w-auto d-flex justify-content-around productDetails">
                                     <div className="products d-flex justify-content-start mx-1">
                                       <span className="subText">
@@ -314,58 +327,70 @@ function ViewOrder({ selectedCode }) {
                                 )}
 
                               {/* Spicy */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText">
-                                    <strong>Spicy :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.spicy?.spicy}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.spicy?.price) !== 0
-                                    ? "$ " + data?.spicy?.price
-                                    : ""}{" "}
-                                </div>
-                              </div>
+                              {data?.spicy &&
+                                data?.spicy?.spicy !== "Regular" && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText">
+                                        <strong>Spicy :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.spicy?.spicy}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {Number(data?.spicy?.price) !== 0
+                                        ? "$ " + data?.spicy?.price
+                                        : ""}{" "}
+                                    </div>
+                                  </div>
+                                )}
 
                               {/* Sauce */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText">
-                                    <strong>Sauce :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.sauce?.sauce}
-                                  </span>
-                                </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.sauce?.price) !== 0
-                                    ? "$ " + data?.sauce?.price
-                                    : ""}{" "}
-                                </div>
-                              </div>
+                              {data?.sauce &&
+                                data?.sauce?.sauce !== "Regular" && (
+                                  <div className="w-auto d-flex justify-content-around productDetails">
+                                    <div className="products d-flex justify-content-start mx-1">
+                                      <span className="subText">
+                                        <strong>Sauce :</strong>
+                                      </span>
+                                      <span className="subText mx-2">
+                                        {data?.sauce?.sauce}
+                                      </span>
+                                    </div>
+                                    <div className="text-center qty mx-1">
+                                      {" "}
+                                    </div>
+                                    <div className="text-center amount mx-1">
+                                      {Number(data?.sauce?.price) !== 0
+                                        ? "$ " + data?.sauce?.price
+                                        : ""}{" "}
+                                    </div>
+                                  </div>
+                                )}
 
                               {/* Cook */}
-                              <div className="w-auto d-flex justify-content-around productDetails">
-                                <div className="products d-flex justify-content-start mx-1">
-                                  <span className="subText">
-                                    <strong>Cook :</strong>
-                                  </span>
-                                  <span className="subText mx-2">
-                                    {data?.cook?.cook}
-                                  </span>
+                              {data?.cook && data?.cook?.cook !== "Regular" && (
+                                <div className="w-auto d-flex justify-content-around productDetails">
+                                  <div className="products d-flex justify-content-start mx-1">
+                                    <span className="subText">
+                                      <strong>Cook :</strong>
+                                    </span>
+                                    <span className="subText mx-2">
+                                      {data?.cook?.cook}
+                                    </span>
+                                  </div>
+                                  <div className="text-center qty mx-1"> </div>
+                                  <div className="text-center amount mx-1">
+                                    {Number(data?.cook?.price) !== 0
+                                      ? "$ " + data?.cook?.price
+                                      : ""}
+                                  </div>
                                 </div>
-                                <div className="text-center qty mx-1"> </div>
-                                <div className="text-center amount mx-1">
-                                  {Number(data?.cook?.price) !== 0
-                                    ? "$ " + data?.cook?.price
-                                    : ""}
-                                </div>
-                              </div>
+                              )}
 
                               {/* Toppings */}
                               {(data?.toppings?.countAsTwoToppings.length > 0 ||
@@ -683,23 +708,25 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
               <div className="products d-flex justify-content-start mx-1">
                 {count === 2 ? (
                   <>
-                    ( <span className="subText px-1">2</span> )
+                    (<span className="subText px-1">2</span>)
                   </>
                 ) : (
                   ""
                 )}
                 <span className="subText mx-1">{data?.toppingsName} </span>
-                <span className="subText">
-                  ({" "}
-                  {data.toppingsPlacement === "whole"
-                    ? "W"
-                    : data.toppingsPlacement === "lefthalf"
-                    ? "L"
-                    : data.toppingsPlacement === "1/4"
-                    ? "1/4"
-                    : "R"}{" "}
-                  )
-                </span>
+                <strong>
+                  <span className="subText">
+                    (
+                    {data.toppingsPlacement === "whole"
+                      ? "W"
+                      : data.toppingsPlacement === "lefthalf"
+                      ? "L"
+                      : data.toppingsPlacement === "1/4"
+                      ? "1/4"
+                      : "R"}
+                    )
+                  </span>
+                </strong>
                 <span className="subText mx-2">
                   {data?.specialBases?.specialbaseName}
                 </span>
@@ -713,7 +740,7 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
 
                 {Number(data?.amount) !== undefined &&
                 Number(data?.amount) !== 0
-                  ? "$ " + data?.amount
+                  ? "$ " + Number(data?.amount)
                   : ""}
               </div>
             </div>

@@ -442,8 +442,8 @@ function ViewOrder({ selectedCode }) {
                               {data?.toppings?.freeToppings &&
                                 data?.toppings?.freeToppings?.length > 0 && (
                                   <>
-                                    {data?.toppings?.freeToppings?.length >=
-                                    6 ? (
+                                    {data?.toppings?.isAllIndiansTps ===
+                                    true ? (
                                       <>
                                         <div className="w-auto d-flex justify-content-around productDetails">
                                           <div className="products d-flex justify-content-start mx-1">
@@ -597,33 +597,34 @@ function ViewOrder({ selectedCode }) {
                       )}
 
                       {(order?.productType === "custom_pizza" ||
-                        order?.productType === "special_pizza") && (
-                        <>
-                          <div className="w-auto d-flex justify-content-around productDetails">
-                            <div
-                              className="products d-flex justify-content-start mx-1"
-                              key={order?.id}
-                            >
-                              <span className="subText">
-                                <strong>Comments : </strong>
-                                {order?.comments}
-                              </span>
+                        order?.productType === "special_pizza") &&
+                        order?.comments !== "" && (
+                          <>
+                            <div className="w-auto d-flex justify-content-around productDetails">
+                              <div
+                                className="products d-flex justify-content-start mx-1"
+                                key={order?.id}
+                              >
+                                <span className="subText">
+                                  <strong>Comments : </strong>
+                                  {order?.comments}
+                                </span>
+                              </div>
+                              <div
+                                className="text-center qty mx-1"
+                                key={order?.id}
+                              >
+                                {" "}
+                              </div>
+                              <div
+                                className="text-center amount mx-1"
+                                key={order?.id}
+                              >
+                                {" "}
+                              </div>
                             </div>
-                            <div
-                              className="text-center qty mx-1"
-                              key={order?.id}
-                            >
-                              {" "}
-                            </div>
-                            <div
-                              className="text-center amount mx-1"
-                              key={order?.id}
-                            >
-                              {" "}
-                            </div>
-                          </div>
-                        </>
-                      )}
+                          </>
+                        )}
 
                       <hr
                         className="m-0 p-0 my-1"
@@ -700,8 +701,6 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
   return (
     <>
       {tpsDetails?.map((data) => {
-        // const keyToCheck = "amount";
-        // const keyExists = data.hasOwnProperty(keyToCheck);
         return (
           <>
             <div className="w-auto d-flex justify-content-around productDetails">
@@ -727,17 +726,9 @@ export const ToppingsDetails = ({ tpsDetails, count }) => {
                     )
                   </span>
                 </strong>
-                <span className="subText mx-2">
-                  {data?.specialBases?.specialbaseName}
-                </span>
               </div>
               <div className="text-center qty mx-1"> </div>
               <div className="text-center amount mx-1">
-                {/* ${" "}
-                {keyExists
-                  ? Number(data?.amount).toFixed(2)
-                  : data?.toppingsPrice} */}
-
                 {Number(data?.amount) !== undefined &&
                 Number(data?.amount) !== 0
                   ? "$ " + Number(data?.amount)

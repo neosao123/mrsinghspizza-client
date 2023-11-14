@@ -95,15 +95,6 @@ const Home = () => {
                 <div className="title">
                   <p className="top-h">today special</p>
                   <h2>festive season offers</h2>
-                  <div className="btm-style">
-                    <span>
-                      <img
-                        src="images/btm-style.png"
-                        alt=""
-                        className="img-fluid"
-                      />
-                    </span>
-                  </div>
                 </div>
               </div>
 

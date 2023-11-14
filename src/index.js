@@ -18,7 +18,7 @@ root.render(
       <HelmetProvider>
         <MetaTag />
         <GlobalProvider>
-          <BrowserRouter basename="mrsinghsclient">
+          <BrowserRouter>
             <App />
           </BrowserRouter>
         </GlobalProvider>

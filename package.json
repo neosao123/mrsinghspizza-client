@@ -2,7 +2,7 @@
   "name": "mr-singh-pizza-frontend",
   "version": "0.1.0",
   "private": true,
-  "homepage": "http://192.168.128.25/mrsinghsclient",
+  "homepage": "https://neotesting.online/mrsinghspizza/",
   "dependencies": {
     "@reduxjs/toolkit": "^1.9.5",
     "@stripe/react-stripe-js": "^2.1.2",

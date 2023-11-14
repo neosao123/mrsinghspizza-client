@@ -48,9 +48,18 @@ const Header = () => {
     }
   };
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY > 100) {
+        setDropMenu(false);
+      }
+    };
+    window.addEventListener("scroll", handleScroll);
+  }, [dropMenu]);
+
   return (
     <>
-      <div className="position-sticky top-0 ">
+      <div className="">
         <header className="new-block main-header">
           <div className="main-nav new-block">
             <div className="container-fluid ">
@@ -150,109 +159,107 @@ const Header = () => {
         </header>
       </div>
 
-      {dropMenu === true ? (
-        <div
-          className="w-100 bg-white"
-          style={{
-            position: "fixed",
-            top: "6.5rem",
-            zIndex: "8",
-            transition: "1s all ease",
-          }}
-        >
-          <nav className="nav w-100 d-flex justify-content-center">
-            <ul className="w-100 text-center list-unstyled p-3">
-              <li className="border-bottom py-2">
+      <div
+        className={`w-100 bg-white menu ${
+          dropMenu ? "showResNav" : "hideResNav"
+        }`}
+        style={{
+          position: "absolute",
+          top: "6.5rem",
+          zIndex: "8",
+          transition: "transform 0.75s ease-in-out",
+        }}
+      >
+        <nav className="nav w-100 d-flex justify-content-center">
+          <ul className="w-100 text-center list-unstyled p-3">
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none text-dark"
+                to="/"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                Home
+              </Link>
+            </li>
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none  text-dark"
+                to="/sides"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                Sides
+              </Link>
+            </li>
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none text-dark"
+                to="/dips"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                Dips
+              </Link>
+            </li>
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none text-dark"
+                to="/drinks"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                Drinks
+              </Link>
+            </li>
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none text-dark"
+                to="/"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                About
+              </Link>
+            </li>
+            <li className="border-bottom py-2">
+              <Link
+                className="text-decoration-none text-dark"
+                to="/"
+                onClick={() => {
+                  setDropMenu(false);
+                }}
+              >
+                Contact Us
+              </Link>
+            </li>
+            {isAuthenticated === false ? (
+              <li className="py-2">
                 <Link
                   className="text-decoration-none text-dark"
-                  to="/"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
+                  to={"/login-registration"}
                 >
-                  Home
+                  Login / Signup
                 </Link>
               </li>
-              <li className="border-bottom py-2">
-                <Link
-                  className="text-decoration-none  text-dark"
-                  to="/sides"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
-                >
-                  Sides
-                </Link>
-              </li>
-              <li className="border-bottom py-2">
+            ) : (
+              <li className="py-2">
                 <Link
                   className="text-decoration-none text-dark"
-                  to="/dips"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
+                  to={"/my-account"}
                 >
-                  Dips
+                  My Account
                 </Link>
               </li>
-              <li className="border-bottom py-2">
-                <Link
-                  className="text-decoration-none text-dark"
-                  to="/drinks"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
-                >
-                  Drinks
-                </Link>
-              </li>
-              <li className="border-bottom py-2">
-                <Link
-                  className="text-decoration-none text-dark"
-                  to="/"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
-                >
-                  About
-                </Link>
-              </li>
-              <li className="border-bottom py-2">
-                <Link
-                  className="text-decoration-none text-dark"
-                  to="/"
-                  onClick={() => {
-                    setDropMenu(false);
-                  }}
-                >
-                  Contact Us
-                </Link>
-              </li>
-              {isAuthenticated === false ? (
-                <li className="py-2">
-                  <Link
-                    className="text-decoration-none text-dark"
-                    to={"/login-registration"}
-                  >
-                    Login / Signup
-                  </Link>
-                </li>
-              ) : (
-                <li className="py-2">
-                  <Link
-                    className="text-decoration-none text-dark"
-                    to={"/my-account"}
-                  >
-                    My Account
-                  </Link>
-                </li>
-              )}
-            </ul>
-          </nav>
-        </div>
-      ) : (
-        ""
-      )}
+            )}
+          </ul>
+        </nav>
+      </div>
     </>
   );
 };

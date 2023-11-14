@@ -15,6 +15,14 @@
   text-decoration: none;
 }
 
+.showResNav {
+  transform: translateY(0);
+}
+
+.hideResNav {
+  transform: translateY(-100%);
+}
+
 .box {
   width: auto;
   border: 0.1rem solid #fdfdfd;

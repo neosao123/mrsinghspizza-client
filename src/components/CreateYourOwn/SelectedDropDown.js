@@ -172,11 +172,6 @@ export const SelectedSpicesDropDown = ({
       });
     }
   };
-  useEffect(() => {
-    if (reset) {
-      setSpicy({});
-    }
-  }, [reset]);
   return (
     <select
       className="form-select form-drop w-100"
@@ -214,11 +209,6 @@ export const SelectedSauceDropDown = ({
       });
     }
   };
-  useEffect(() => {
-    if (reset) {
-      setSauce({});
-    }
-  }, [reset]);
   return (
     <select
       className="form-select form-drop w-100"
@@ -256,11 +246,6 @@ export const SelectedCookDropDown = ({
       });
     }
   };
-  useEffect(() => {
-    if (reset) {
-      setCook({});
-    }
-  }, [reset]);
   return (
     <select
       className="form-select form-drop w-100"

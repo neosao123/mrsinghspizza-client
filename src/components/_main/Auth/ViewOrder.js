@@ -33,7 +33,7 @@ function ViewOrder({ selectedCode }) {
     orderDetailsAPI();
   }, []);
 
-  console.log(orderData);
+  // console.log(orderData);
   return (
     <>
       {loading === false ? (
@@ -449,7 +449,7 @@ function ViewOrder({ selectedCode }) {
                                           <div className="products d-flex justify-content-start mx-1">
                                             <span className="subText">
                                               <strong>
-                                                Indian Style Toppings
+                                                Indian Style + Coriander
                                               </strong>
                                             </span>
                                           </div>

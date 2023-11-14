@@ -160,21 +160,21 @@ const Header = () => {
       </div>
 
       <div
-        className={`w-100 bg-white menu ${
-          dropMenu ? "showResNav" : "hideResNav"
-        }`}
+        className={`w-100 menu ${dropMenu ? "showResNav" : "hideResNav"}`}
         style={{
           position: "absolute",
           top: "6.5rem",
           zIndex: "8",
           transition: "transform 0.75s ease-in-out",
+          backgroundColor: "#ef831b",
+          fontSize: "1.18rem",
         }}
       >
         <nav className="nav w-100 d-flex justify-content-center">
           <ul className="w-100 text-center list-unstyled p-3">
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-white"
                 to="/"
                 onClick={() => {
                   setDropMenu(false);
@@ -183,9 +183,9 @@ const Header = () => {
                 Home
               </Link>
             </li>
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none  text-dark"
+                className="text-decoration-none  text-white"
                 to="/sides"
                 onClick={() => {
                   setDropMenu(false);
@@ -194,9 +194,9 @@ const Header = () => {
                 Sides
               </Link>
             </li>
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-white"
                 to="/dips"
                 onClick={() => {
                   setDropMenu(false);
@@ -205,9 +205,9 @@ const Header = () => {
                 Dips
               </Link>
             </li>
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-white"
                 to="/drinks"
                 onClick={() => {
                   setDropMenu(false);
@@ -216,9 +216,9 @@ const Header = () => {
                 Drinks
               </Link>
             </li>
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-white"
                 to="/"
                 onClick={() => {
                   setDropMenu(false);
@@ -227,9 +227,9 @@ const Header = () => {
                 About
               </Link>
             </li>
-            <li className="border-bottom py-2">
+            <li className="py-2">
               <Link
-                className="text-decoration-none text-dark"
+                className="text-decoration-none text-white"
                 to="/"
                 onClick={() => {
                   setDropMenu(false);
@@ -241,7 +241,7 @@ const Header = () => {
             {isAuthenticated === false ? (
               <li className="py-2">
                 <Link
-                  className="text-decoration-none text-dark"
+                  className="text-decoration-none text-white"
                   to={"/login-registration"}
                 >
                   Login / Signup
@@ -250,7 +250,7 @@ const Header = () => {
             ) : (
               <li className="py-2">
                 <Link
-                  className="text-decoration-none text-dark"
+                  className="text-decoration-none text-white"
                   to={"/my-account"}
                 >
                   My Account

@@ -5,6 +5,7 @@ import "../assets/styles/custom.css";
 import {
   deliverable,
   getAllIngredients,
+  getPizzaPrice,
   getSides,
   orderPlace,
 } from "../services";
@@ -40,11 +41,9 @@ function CreateYourOwn() {
   const pizzaSizeArr = [
     {
       size: "Large",
-      price: "11.49",
     },
     {
       size: "Extra Large",
-      price: "16.49",
     },
   ];
   // Global Context
@@ -68,6 +67,7 @@ function CreateYourOwn() {
   // Use Ref
   const pizzaSizeRef = useRef(null);
   // All State
+  const [pizzaPriceObj, setPizzaPriceObj] = useState({}); // Developer: Shreyas Mahamuni, 22-11-2023
   const [totalPrice, setTotalPrice] = useState();
   const [pizzaSizePrice, setPizzaSizePrice] = useState();
   const [pizzaSize, setPizzaSize] = useState();
@@ -108,7 +108,11 @@ function CreateYourOwn() {
         (data) => data.size === pizzaSizeRef.current.value
       );
       setPizzaSize(filteredData?.size);
-      setPizzaSizePrice(filteredData?.price);
+      setPizzaSizePrice(
+        filteredData?.size === "Large"
+          ? pizzaPriceObj?.largePizzaPrice
+          : pizzaPriceObj?.extraLargePizzaPrice
+      );
     }
   };
 
@@ -342,7 +346,11 @@ function CreateYourOwn() {
   const resetControls = () => {
     // Reset All Fields
     setPizzaSize(pizzaSizeArr[0]?.size);
-    setPizzaSizePrice(pizzaSizeArr[0]?.price);
+    setPizzaSizePrice(
+      pizzaSizeArr[0]?.size === "Large"
+        ? pizzaPriceObj?.largePizzaPrice
+        : pizzaPriceObj?.extraLargePizzaPrice
+    );
     setCrust({
       crustCode: allIngredients?.crust[0].crustCode,
       crustName: allIngredients?.crust[0].crustName,
@@ -411,6 +419,20 @@ function CreateYourOwn() {
         console.log("Error From Sides ", err);
       });
   };
+  // Developer: ShreyasM, Working Date: 22-11-2023
+  // This API for getting pizza prices
+  const pizzaPrice = async () => {
+    setLoading(true);
+    await getPizzaPrice()
+      .then((res) => {
+        setPizzaPriceObj(res.data);
+      })
+      .catch((error) => {
+        if (error.response.status === 400 || error.response.status === 500) {
+          toast.error(error.response.data.message);
+        }
+      });
+  };
 
   // ----- UseEffects ----
   useEffect(() => {
@@ -421,6 +443,7 @@ function CreateYourOwn() {
     // API
     allIngredinant();
     sides();
+    pizzaPrice();
   }, []);
   // UseEffect For CreateCart When Cart is Null
   useEffect(() => {
@@ -461,7 +484,11 @@ function CreateYourOwn() {
       });
       setSpecialbases({});
       setPizzaSize(pizzaSizeArr[0].size);
-      setPizzaSizePrice(pizzaSizeArr[0].price);
+      setPizzaSizePrice(
+        pizzaSizeArr[0]?.size === "Large"
+          ? pizzaPriceObj?.largePizzaPrice
+          : pizzaPriceObj?.extraLargePizzaPrice
+      ); // Developer: Shreyas Mahamuni, 22-11-2023
     }
   }, [allIngredients]);
   // UseEffect For Calculate Function
@@ -487,6 +514,7 @@ function CreateYourOwn() {
     sidesArr,
     pizzaSizePrice,
     pizzaSize,
+    pizzaPriceObj, // Developer: Shreyas Mahamuni, 22-11-2023
   ]);
   // Populate All Fields - Edit Pizza
   useEffect(() => {
@@ -495,11 +523,13 @@ function CreateYourOwn() {
       payloadEdit !== undefined &&
       payloadEdit.productType === "custom_pizza"
     ) {
+      console.log("payloadEdit: ", payloadEdit);
       setPizzaSize(payloadEdit?.pizzaSize);
-      const filteredData = pizzaSizeArr.find(
-        (data) => data.size === payloadEdit?.pizzaSize
-      );
-      setPizzaSizePrice(filteredData?.price);
+      setPizzaSizePrice(
+        payloadEdit?.pizzaSize === "Large"
+          ? pizzaPriceObj?.largePizzaPrice
+          : pizzaPriceObj?.extraLargePizzaPrice
+      ); // Developer: Shreyas Mahamuni, 22-11-2023
       setCrust(payloadEdit?.config?.pizza[0]?.crust);
       setCrustType(payloadEdit?.config?.pizza[0]?.crustType);
       setCheese(payloadEdit?.config?.pizza[0]?.cheese);
@@ -520,7 +550,7 @@ function CreateYourOwn() {
       setDipsArr(payloadEdit?.config?.dips);
       setDrinksArr(payloadEdit?.config?.drinks);
     }
-  }, [payloadEdit]);
+  }, [payloadEdit, pizzaPriceObj]);
 
   return (
     <div style={{ position: "relative" }}>

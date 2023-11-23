@@ -53,6 +53,13 @@ export const deliverable = async (payload) => {
   return response;
 };
 
+// Developer: Shreyas Mahamuni, 22-11-2023
+// It returns pizza prices for custom_pizza
+export const getPizzaPrice = async () => {
+  const { data: response } = await http.get(`/pizzaPrice`);
+  return response;
+};
+
 // Get Special Pizza Requirements
 export const getSpecialDetails = async (payload) => {
   const { data: response } = await http.post(`/getSpecialDetails`, payload);

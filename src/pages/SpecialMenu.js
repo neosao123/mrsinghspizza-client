@@ -292,11 +292,11 @@ function SpecialMenu() {
                 calcTwoTpsArr.push(tpsObj);
                 noOfFreeToppings -= Number(2);
               } else if (noOfFreeToppings === 1) {
-                // let tpsObj = {
-                //   ...items,
-                //   amount: Number(items?.toppingsPrice) / 2,
-                // };
-                calcTwoTpsArr.push(items);
+                let tpsObj = {
+                  ...items,
+                  amount: Number(items?.toppingsPrice) / 2,
+                };
+                calcTwoTpsArr.push(tpsObj);
                 noOfFreeToppings -= Number(1);
                 noOfAdditionalTps++;
               } else {

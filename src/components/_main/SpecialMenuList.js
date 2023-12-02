@@ -21,11 +21,16 @@ function SpecialMenuList() {
   }, []);
 
   return (
-    <div className="row gx-4 mt-3 mb-3">
+    <div className="row gx-4 mt-3 mb-3 position-relative">
       {specialData?.map((data) => {
         return (
           <div className="col-lg-3 col-md-4 col-sm-12 mb-3" key={data.code}>
             <div className="d-flex justify-content-center flex-column p-3 box">
+              {data?.dealType === "pickupdeal" && (
+                <div className="highlightedContent">
+                  <span className=""></span>
+                </div>
+              )}
               <div className="d-flex justify-content-center mb-3">
                 <div className="image-div d-flex justify-content-center">
                   <img
@@ -45,7 +50,11 @@ function SpecialMenuList() {
                 {data?.subtitle ? (
                   <>
                     <p
-                      className="sppizzasize mb-2 text-truncate"
+                      className={`sppizzasize mb-2 text-truncate ${
+                        data?.dealType === "pickupdeal"
+                          ? "pickup-deal-style"
+                          : ""
+                      }`}
                       style={{
                         overflow: "hidden",
                         whiteSpace: "nowrap",
@@ -83,7 +92,7 @@ function SpecialMenuList() {
                   </span>
                 </p>
               </div>
-              <div className="d-flex justify-content-center flex-column align-items-center">
+              <div className="d-flex `justify-content-center flex-column align-items-center">
                 <Link
                   to={`/special-pizza/${data.code}`}
                   className="customizedBtn btn btn-sm px-4 py-2 text-white"

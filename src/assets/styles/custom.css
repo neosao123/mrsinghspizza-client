@@ -108,6 +108,24 @@
 .pizzasize {
   font-size: 1rem;
 }
+.pickup-deal-style {
+  font-size: 1rem;
+  font-weight: 800;
+  color: #ff0000 !important;
+}
+.highlightedContent {
+  position: relative;
+  text-align: right;
+}
+.highlightedContent span {
+  position: absolute;
+  top: 0%;
+  left: 96%;
+  background-color: #373737;
+  border-radius: 25%;
+  width: 0.75rem;
+  height: 0.75rem;
+}
 
 .quantityBtn {
   width: 30px;

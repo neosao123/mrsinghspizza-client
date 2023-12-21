@@ -110,7 +110,21 @@ function AddressDetails() {
       })
       .catch((error) => {
         if (error.response.status === 400 || error.response.status === 500) {
-          toast.error(error.response.data.message);
+          if (error.response.data.isStoreError === true) {
+            swal({
+              title: "Store has been closed.",
+              text: `Unfortunately, placing an order is not possible at the moment. You can not place order right now.`,
+              icon: "warning",
+              buttons: "Ok",
+              dangerMode: true,
+            }).then(async (willOk) => {
+              if (willOk) {
+                navigate("/address-details");
+              }
+            });
+          } else {
+            toast.error(error.response.data.message);
+          }
         }
         setLoading(false);
       });
@@ -142,10 +156,11 @@ function AddressDetails() {
         }
       })
       .catch((err) => {
+        setLoading(false);
+
         if (err.response.status === 400 || err.response.status === 500) {
           toast.error(err.response.data.message);
         }
-        setLoading(false);
       });
   };
   // Use Formik

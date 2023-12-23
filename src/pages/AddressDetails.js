@@ -13,7 +13,15 @@ import Select from "react-select";
 import LoadingLayout from "../layouts/LoadingLayout";
 
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
-const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
+const canadianPostalCode = Yup.string().test(
+  "is-canadian-postal-code",
+  "Invalid Canadian Postal Code",
+  (value) => {
+    if (!value) return true;
+    const postalCodeRegex = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
+    return postalCodeRegex.test(value);
+  }
+);
 
 const ValidateSchema = Yup.object({
   firstname: Yup.string()
@@ -46,7 +54,7 @@ const ValidateSchema = Yup.object({
     )
     .min(3, "City must be at least 3 characters")
     .max(50, "City cannot be longer than 50 characters"),
-  postalcode: Yup.string().required("Postal Code is required"),
+  postalcode: canadianPostalCode.required("Postal Code is Required"),
   address: Yup.string()
     .required("Address is required")
     .min(20, "Address must be at least 20 characters")
@@ -54,40 +62,52 @@ const ValidateSchema = Yup.object({
 });
 
 function AddressDetails() {
-  const { user } = useSelector((state) => state);
+  const user = useSelector((state) => state.user);
   const globalctx = useContext(GlobalContext);
   const [cart, setCart] = globalctx.cart;
 
-  const [postalCodeOp, setPostalCodeOp] = useState(null);
+  const [postalCodeOp, setPostalCodeOp] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [loading, setLoading] = useState(false);
 
+  const [initialValues, setInitialValues] = useState({
+    firstname: user?.data?.firstName,
+    lastname: user?.data?.lastName,
+    phoneno: user?.data?.mobileNumber,
+    postalcode: "",
+    city: "",
+    address: "",
+  });
+
   const navigate = useNavigate();
 
+  let arr = [];
+
   const postalCodeList = async () => {
-    await getPostalcodeList()
-      .then((res) => {
-        console.log(res);
-        const options = res?.data?.map((item) => ({
-          value: item.code,
-          label: item.zipcode,
-        }));
-        setPostalCodeOp(options);
+    if (formik.values.postalcode.length >= 3) {
+      await getPostalcodeList({
+        search: formik.values.postalcode,
       })
-      .catch((err) => {
-        if (err.response.status === 400 || err.response.status === 500) {
-          toast.error(err.response.data.message);
-        }
-      });
+        .then((res) => {
+          setTimeout(() => {
+            setPostalCodeOp(res.data);
+          }, 200);
+        })
+        .catch((err) => {
+          if (err.response.status === 400 || err.response.status === 500) {
+            toast.error(err.response.data.message);
+          }
+        });
+    } else {
+      setPostalCodeOp([]);
+    }
   };
 
   const paymentGateway = (values) => {
     let custFullName = values.firstname + " " + values?.lastname;
-    console.log(process.env.REACT_APP_CALLBACKURL);
     const payload = {
-      callbackUrl: process.env.REACT_APP_CALLBACKURL,
-      cancelUrl: process.env.REACT_APP_CANCEL,
       customerCode: user?.data?.customerCode,
+      deliveryType: "delivery",
       customerName: custFullName,
       mobileNumber: values?.phoneno,
       address: values?.address,
@@ -101,7 +121,8 @@ function AddressDetails() {
       extraDeliveryCharges: cart?.extraDeliveryCharges,
       grandTotal: cart?.grandtotal,
     };
-    console.log(payload);
+
+    console.log("place order", payload);
     orderPlace(payload)
       .then((response) => {
         localStorage.setItem("placedOrder", JSON.stringify(response));
@@ -148,7 +169,8 @@ function AddressDetails() {
             dangerMode: true,
           }).then(async (willOk) => {
             if (willOk) {
-              navigate("/address-details");
+              navigate("/checkout-page");
+              setLoading(false);
             } else {
               navigate("/");
             }
@@ -163,105 +185,68 @@ function AddressDetails() {
         }
       });
   };
+
+  const handleUseAddress = () => {
+    formik.setValues({
+      ...formik.values,
+      address: user?.data?.address,
+      city: user?.data?.city,
+      postalcode: user?.data?.zipcode,
+    });
+  };
   // Use Formik
   const formik = useFormik({
-    initialValues: {
-      firstname: user?.data?.firstName,
-      lastname: user?.data?.lastName,
-      phoneno: user?.data?.mobileNumber,
-      postalcode: "",
-      city: "",
-      address: "",
-    },
+    initialValues: initialValues,
     validateOnBlur: true,
     validationSchema: ValidateSchema,
-    onSubmit,
     enableReinitialize: true,
+    onSubmit,
   });
 
   useEffect(() => {
     postalCodeList();
-  }, []);
+  }, [formik.values.postalcode]);
 
   return (
     <>
-      <Header />
       {loading === true ? (
         <>
           <LoadingLayout />
         </>
       ) : (
         <div
-          className="container-fluid d-flex justify-content-center align-items-center"
+          className="container-fluid d-flex justify-content-start align-items-start flex-column p-0 m-0"
           style={{ backgroundColor: "#ffffff" }}
         >
-          <div className="container row w-100">
-            <div className="col-lg-6 col-md-12 col-sm-12 p-lg-4 p-md-4 p-sm-1">
+          <div className="row checkout_pg text-start">
+            <h1 className="titleColor mb-3">Delivery</h1>
+            <p className="subTitleColor mb-4">Address Details For Checkout :</p>
+          </div>
+          <div className="container-fluid row w-100 p-0 m-0">
+            <div className="col-lg-6 col-md-12 col-sm-12 p-0 m-0">
               <div className="row gx-3">
-                <div className="content col-lg-10 col-md-12 col-sm-12 rounded px-lg-4 px-md-5 px-sm-1 py-4 ">
-                  <h3 className="mb-4">
-                    <strong>Address Details For Checkout</strong>
-                  </h3>
-
+                <div className="content col-lg-12 col-md-12 col-sm-12 rounded">
                   <form className="w-100" onSubmit={formik.handleSubmit}>
                     <div className="row gx-3">
-                      {/* FirstName */}
-                      <div className="col-lg-12 col-md-12 col-sm-12">
-                        <label className="form-label">
-                          First Name <small className="text-danger">*</small>
-                        </label>
-                        <input
-                          className="form-control mb-3"
-                          type="text"
-                          name="firstname"
-                          value={formik.values.firstname}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.firstname && formik.errors.firstname ? (
-                          <div className="text-danger mt-2 mb-3">
-                            {formik.errors.firstname}
-                          </div>
-                        ) : null}
-                      </div>
-
-                      {/* LastName */}
-                      <div className="col-lg-12 col-md-12 col-sm-12">
-                        <label className="form-label">
-                          Last Name <small className="text-danger">*</small>
-                        </label>
-                        <input
-                          className="form-control mb-3"
-                          type="text"
-                          name="lastname"
-                          value={formik.values.lastname}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.lastname && formik.errors.lastname ? (
-                          <div className="text-danger mt-2 mb-3">
-                            {formik.errors.lastname}
-                          </div>
-                        ) : null}
-                      </div>
-                      {/* Phone Number */}
-                      <div className="col-lg-12 col-md-12 col-sm-12">
-                        <label className="form-label">
-                          Phone Number <small className="text-danger">*</small>
-                        </label>
-                        <input
-                          className=" form-control mb-3"
-                          type="tel"
-                          name="phoneno"
-                          value={formik.values.phoneno}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.phoneno && formik.errors.phoneno ? (
-                          <div className="text-danger mt-2 mb-3">
-                            {formik.errors.phoneno}
-                          </div>
-                        ) : null}
+                      <div className="mb-4 py-1 p-0 m-0 row justify-content-center align-items-center">
+                        <div className="col-lg-8 col-md-7 col-7 text-wrap">
+                          <span className="fw-bolder text-secondary delivery_addressTxt">
+                            {user?.data?.address}, {user?.data?.city},{" "}
+                            {user?.data?.zipcode}
+                          </span>
+                        </div>
+                        <div className="col-lg-4 col-md-5 col-5 text-end">
+                          <button
+                            className="btn btn-sm btn-secondary shadow-sm fw-bold"
+                            type="button"
+                            onClick={handleUseAddress}
+                            style={{
+                              fontSize: "0.82rem",
+                            }}
+                          >
+                            Use This Address
+                          </button>
+                        </div>
                       </div>
 
                       {/* Address */}
@@ -269,8 +254,9 @@ function AddressDetails() {
                         <label className="form-label">
                           Address <small className="text-danger">*</small>
                         </label>
+                        {console.log(formik.values.address)}
                         <input
-                          className=" form-control mb-3"
+                          className="form-control mb-3"
                           type="text"
                           name="address"
                           value={formik.values.address}
@@ -303,30 +289,34 @@ function AddressDetails() {
                           </div>
                         ) : null}
                       </div>
+
                       {/* Postal Code */}
                       <div className="col-lg-12 col-md-12 col-sm-12">
                         <label className="form-label">
                           Postal Code <small className="text-danger">*</small>
                         </label>
-                        <Select
-                          className="basic-single"
-                          classNamePrefix="select"
-                          isClearable={true}
-                          isSearchable={true}
+                        <input
+                          className="form-control mb-3"
+                          type="text"
+                          id="postalcode"
                           name="postalcode"
-                          value={selectedOption?.find(
-                            (option) =>
-                              option.label === formik.values.postalcode
-                          )}
-                          onChange={(selectedOption) => {
-                            const selectedValue = selectedOption
-                              ? selectedOption.label
-                              : "";
-                            formik.setFieldValue("postalcode", selectedValue);
-                          }}
-                          options={postalCodeOp}
-                          onBlur={formik.handleBlur}
+                          list="options"
+                          placeholder="Select Option"
+                          onChange={formik.handleChange}
+                          value={formik.values.postalcode}
+                          autoComplete="off"
                         />
+                        <datalist id="options">
+                          {postalCodeOp?.map((option) => {
+                            return (
+                              <option
+                                key={option.code}
+                                value={option.zipcode}
+                              />
+                            );
+                          })}
+                        </datalist>
+
                         {formik.touched.postalcode &&
                         formik.errors.postalcode ? (
                           <div className="text-danger mt-2 mb-3">
@@ -334,13 +324,18 @@ function AddressDetails() {
                           </div>
                         ) : null}
                       </div>
-
+                      <div className="mt-3 d-flex justify-content-start align-items-center flex-row">
+                        <strong className="mb-2 me-4">Payment Mode : </strong>
+                        <span className="mb-2 fw-bolder text-danger">
+                          Pay on Delivery
+                        </span>
+                      </div>
                       <div className="w-100 text-center mb-3 mt-4">
                         <button
                           className="w-100 py-2 fw-bold btn btn-md regBtn"
                           type="submit"
                         >
-                          Checkout
+                          Confirm & Place Order
                         </button>
                       </div>
                     </div>
@@ -351,8 +346,6 @@ function AddressDetails() {
           </div>
         </div>
       )}
-
-      <Footer />
     </>
   );
 }

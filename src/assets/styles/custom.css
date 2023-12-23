@@ -92,6 +92,33 @@
   /* width: 166px; */
   border-radius: 0%;
 }
+
+.placeorderTab > .nav-tabs .nav-item.show .nav-link,
+.placeorderTab > .nav-tabs .nav-link {
+  background-color: #606060;
+  border-color: transparent !important;
+  color: #ffffff;
+  font-size: 1.2rem;
+  font-weight: 700;
+}
+
+.placeorderTab > .nav-tabs .nav-item.show .nav-link,
+.placeorderTab > .nav-tabs .nav-link.active,
+.placeorderTab > .nav-tabs .nav-item.show .nav-link,
+.placeorderTab > .nav-tabs .nav-link:focus {
+  background-color: #ee7c11;
+  border-color: transparent !important;
+  color: #ffffff;
+}
+.placeorderTab > .nav-tabs .nav-item.show .nav-link,
+.placeorderTab > .nav-tabs .nav-link:hover {
+  border-color: transparent;
+}
+.placeorderTab > .nav-tabs .nav-link {
+  /* width: 166px; */
+  border-radius: 0%;
+}
+
 .sidesTitle h3,
 .customizedTitle h3 {
   font-size: 1.1rem !important;
@@ -119,12 +146,15 @@
 }
 .highlightedContent span {
   position: absolute;
-  top: 0%;
-  left: 96%;
-  background-color: #373737;
-  border-radius: 25%;
-  width: 0.75rem;
-  height: 0.75rem;
+  top: -10px;
+  right: -10px;
+  background-color: #303f9f;
+  width: max-content;
+  height: auto;
+  color: #e2e2e2;
+  padding: 4px;
+  font-size: 14px;
+  font-weight: 500;
 }
 
 .quantityBtn {
@@ -226,4 +256,48 @@
 }
 .orderSummary div {
   font-size: 0.9rem;
+}
+
+.checkout_pg .titleColor {
+  color: #ee7c11;
+  font-size: 1.4rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+.checkout_pg .subTitleColor {
+  color: #ee7c11;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.store_content .chooseStoreBtn {
+  /* background-color: #44b10089; */
+  /* color: #2d2d2d !important; */
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.store_content .chooseStoreBtn:hover,
+.store_content .chooseStoreBtn.active {
+  background-color: #2e2e2e !important;
+  color: #eaeaea !important;
+}
+
+.store_content .store_header {
+  background-color: #fff9f4;
+  font-size: 1rem;
+  font-weight: 600;
+  color: #a85100;
+}
+
+.store_content {
+  border: none;
+}
+
+.customerTxt {
+  font-size: 1rem;
+  font-weight: 500;
+}
+.delivery_addressTxt {
+  line-height: 1.5;
 }

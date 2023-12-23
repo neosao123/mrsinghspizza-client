@@ -516,79 +516,12 @@ function SpecialMenu() {
     }
   };
 
-  const paymentGateway = () => {
-    let custFullName = regUser.firstName + " " + regUser?.lastName;
-    console.log(process.env.REACT_APP_CALLBACKURL);
-    const payload = {
-      callbackUrl: process.env.REACT_APP_CALLBACKURL,
-      cancelUrl: process.env.REACT_APP_CANCEL,
-      customerCode: user?.data?.customerCode,
-      customerName: custFullName,
-      mobileNumber: regUser?.mobileNumber,
-      address: regUser?.address,
-      zipCode: regUser?.zipcode,
-      products: cart?.product,
-      subTotal: cart?.subtotal,
-      discountAmount: cart?.discountAmount,
-      taxPer: cart?.taxPer,
-      taxAmount: cart?.taxAmount,
-      deliveryCharges: cart?.deliveryCharges,
-      extraDeliveryCharges: cart?.extraDeliveryCharges,
-      grandTotal: cart?.grandtotal,
-    };
-    orderPlace(payload)
-      .then((response) => {
-        localStorage.setItem("placedOrder", JSON.stringify(response));
-        navigate("/order/verify");
-        setLoading(false);
-      })
-      .catch((error) => {
-        if (error.response.status === 400 || error.response.status === 500) {
-          toast.error(error.response.data.message);
-        }
-        setLoading(false);
-      });
-  };
   // Handle Place Order
   const handlePlaceOrder = async () => {
     if (cart?.product?.length > 0) {
       if (isAuthenticated && user !== null) {
-        const previousUrl = localStorage.getItem("prevUrl");
-        if (previousUrl && previousUrl !== null) {
-          console.log(regUser.zipcode);
-          const payload = { zipcode: regUser.zipcode };
-          setLoading(true);
-          await deliverable(payload)
-            .then((res) => {
-              if (res?.deliverable === true) {
-                paymentGateway();
-              } else {
-                swal({
-                  title: "Postal Code is Undeliverable",
-                  text: `postal code cannot deliverable. Please change the postal code and try again`,
-                  icon: "warning",
-                  buttons: {
-                    ok: "Ok",
-                  },
-                  dangerMode: true,
-                }).then(async (willOk) => {
-                  if (willOk) {
-                  }
-                });
-              }
-            })
-            .catch((error) => {
-              if (
-                error.response.status === 400 ||
-                error.response.status === 500
-              ) {
-                toast.error(error.response.data.message);
-              }
-              setLoading(false);
-            });
-        } else {
-          navigate("/address-details");
-        }
+        navigate("/checkout-page");
+        setLoading(false);
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
         navigate("/login-registration");

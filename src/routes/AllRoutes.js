@@ -14,6 +14,7 @@ import LoginReg from "../pages/Auth/LoginReg";
 import MyAccount from "../pages/Auth/MyAccount";
 import ForgetPassword from "../components/_main/Auth/ForgetPassword";
 import SelectedDrink from "../components/_main/Drinks/SelectedDrink";
+import CheckoutPage from "../pages/CheckoutPage";
 
 const AllRoutes = () => {
   const navigate = useNavigate();
@@ -33,9 +34,10 @@ const AllRoutes = () => {
       <Route exact path="/customize-drink/:did" Component={SelectedDrink} />
       <Route exact path="/special-pizza/:sid" Component={SpecialMenu} />
       <Route exact path="/addtocart" Component={Cart} />
-      <Route exact path="/address-details" Component={AddressDetails} />
+      {/* <Route exact path="/address-details" Component={AddressDetails} /> */}
       <Route exact path="/order/verify" Component={Success} />
       <Route exact path="/my-account" Component={MyAccount} />
+      <Route exact path="/checkout-page" Component={CheckoutPage} />
     </Routes>
   );
 };

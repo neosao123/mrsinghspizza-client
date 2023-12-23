@@ -20,7 +20,15 @@ const getCharacterValidationError = (str) => {
   return `Your password must have at least 1 ${str}`;
 };
 const canadianPhoneNumberRegExp = /^\d{3}\d{3}\d{4}$/;
-const canadianPostalCode = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
+const canadianPostalCode = Yup.string().test(
+  "is-canadian-postal-code",
+  "Invalid Canadian Postal Code",
+  (value) => {
+    if (!value) return true;
+    const postalCodeRegex = /^[A-Za-z]\d[A-Za-z]\d[A-Za-z]\d$/;
+    return postalCodeRegex.test(value);
+  }
+);
 
 const ValidateSchema = Yup.object({
   firstname: Yup.string()
@@ -64,7 +72,7 @@ const ValidateSchema = Yup.object({
     )
     .min(3, "City must be at least 3 characters")
     .max(50, "City cannot be longer than 50 characters"),
-  postalcode: Yup.string().required("Postal Code is required"),
+  postalcode: canadianPostalCode.required("Postal Code is Required"),
   address: Yup.string()
     .required("Address is required")
     .min(20, "Address must be at least 20 characters")
@@ -92,20 +100,23 @@ function Registration({ setLoading }) {
   const location = useLocation();
 
   const postalCodeList = async () => {
-    await getPostalcodeList()
-      .then((res) => {
-        console.log(res);
-        const options = res.data.map((item) => ({
-          value: item.code,
-          label: item.zipcode,
-        }));
-        setPostalCodeOp(options);
+    if (formik.values.postalcode.length >= 3) {
+      await getPostalcodeList({
+        search: formik.values.postalcode,
       })
-      .catch((err) => {
-        if (err.response.status === 400 || err.response.status === 500) {
-          toast.error(err.response.data.message);
-        }
-      });
+        .then((res) => {
+          setTimeout(() => {
+            setPostalCodeOp(res.data);
+          }, 200);
+        })
+        .catch((err) => {
+          if (err.response.status === 400 || err.response.status === 500) {
+            toast.error(err.response.data.message);
+          }
+        });
+    } else {
+      setPostalCodeOp([]);
+    }
   };
 
   const onSubmit = async (values) => {
@@ -141,7 +152,7 @@ function Registration({ setLoading }) {
               const redirectTo = localStorage.getItem("redirectTo");
               navigate(redirectTo !== null ? redirectTo : "/");
               localStorage.removeItem("redirectTo");
-              localStorage.setItem("prevUrl", location?.pathname);
+              // localStorage.setItem("prevUrl", location?.pathname);
               toast.success("Account registered successfully...");
               setLoading(false);
             })
@@ -194,7 +205,7 @@ function Registration({ setLoading }) {
 
   useEffect(() => {
     postalCodeList();
-  }, []);
+  }, [formik.values.postalcode]);
   return (
     <>
       <div className="row gx-3">
@@ -336,23 +347,22 @@ function Registration({ setLoading }) {
                   Postal Code <small className="text-danger">*</small>
                 </label>
                 <p className="text-secondary noteTxt mb-2">Format: A1A1A1</p>
-                <Select
-                  className="basic-single mb-3"
-                  classNamePrefix="select"
-                  isClearable={true}
-                  isSearchable={true}
+                <input
+                  className="form-control mb-3"
+                  type="text"
+                  id="postalcode"
                   name="postalcode"
-                  value={selectedOption?.find(
-                    (option) => option.label === formik.values.postalcode
-                  )}
-                  onChange={(selectedOption) => {
-                    const selectedValue = selectedOption
-                      ? selectedOption.label
-                      : "";
-                    formik.setFieldValue("postalcode", selectedValue);
-                  }}
-                  options={postalCodeOp}
+                  list="options"
+                  placeholder="Select Option"
+                  onChange={formik.handleChange}
+                  value={formik.values.postalcode}
+                  autoComplete="off"
                 />
+                <datalist id="options">
+                  {postalCodeOp?.map((option) => {
+                    return <option key={option.code} value={option.zipcode} />;
+                  })}
+                </datalist>
                 {formik.touched.postalcode && formik.errors.postalcode ? (
                   <div className="text-danger formErrMsg mt-2 mb-3">
                     {formik.errors.postalcode}

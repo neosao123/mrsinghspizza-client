@@ -21,7 +21,7 @@ function DipsMenu() {
     dips();
   }, []);
   return (
-    <div className="row gx-4 d-flex justify-content-center mt-3 mb-3">
+    <div className="row gx-4 d-flex justify-content-xl-center justify-content-start mt-3 mb-3">
       {dipsData?.map((data) => {
         return <Dips key={data.dipsCode} data={data} cartFn={cartFn} />;
       })}

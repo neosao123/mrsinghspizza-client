@@ -207,7 +207,7 @@ const Home = () => {
                       aria-labelledby="creatyourown-tab"
                     >
                       <div className="row gx-4 d-flex justify-content-center mt-3 mb-3">
-                        <div className="col-lg-3 col-md-4 col-sm-12 mb-3">
+                        <div className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3">
                           <div className="text-center p-3 box">
                             <div className="d-flex justify-content-center mb-3">
                               <div className="image-div d-flex justify-content-center">

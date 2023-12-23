@@ -84,7 +84,10 @@ function Sides({ data, cartFn }) {
   }, [product]);
 
   return (
-    <div className="col-lg-3 col-md-4 col-sm-12 mb-3" key={data.sideCode}>
+    <div
+      className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3"
+      key={data.sideCode}
+    >
       <div className="d-flex justify-content-center flex-column p-3 box">
         <div className="text-end text-black">
           <span

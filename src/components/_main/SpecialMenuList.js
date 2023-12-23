@@ -24,11 +24,14 @@ function SpecialMenuList() {
     <div className="row gx-4 mt-3 mb-3 position-relative">
       {specialData?.map((data) => {
         return (
-          <div className="col-lg-3 col-md-4 col-sm-12 mb-3" key={data.code}>
+          <div
+            className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3"
+            key={data.code}
+          >
             <div className="d-flex justify-content-center flex-column p-3 box">
               {data?.dealType === "pickupdeal" && (
                 <div className="highlightedContent">
-                  <span className=""></span>
+                  <span className="rounded">Pickup Deal</span>
                 </div>
               )}
               <div className="d-flex justify-content-center mb-3">

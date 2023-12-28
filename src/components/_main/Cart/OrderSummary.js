@@ -12,25 +12,17 @@ function OrderSummary({ cart }) {
           </div>
           <div className="text-end mb-3">
             <span className="mx-2">
-              {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+              $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
             </span>
           </div>
         </div>
         <div className="d-flex justify-content-between flex-wrap">
           <div className="text-start mb-3">
-            <strong>Tax Percentage (%) : </strong>
-          </div>
-          <div className="text-end mb-3">
-            <span className="mx-2">{cart?.taxPer ? cart?.taxPer : 0}</span>
-          </div>
-        </div>
-        <div className="d-flex justify-content-between flex-wrap">
-          <div className="text-start mb-3">
-            <strong>Tax Amount : </strong>
+            <strong>Tax Amount ({cart?.taxPer ? cart?.taxPer : 0} %) : </strong>
           </div>
           <div className="text-end mb-3">
             <span className="mx-2">
-              {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
+              $ {cart?.taxAmount ? cart?.taxAmount : Number(0).toFixed(2)}
             </span>
           </div>
         </div>
@@ -44,12 +36,13 @@ function OrderSummary({ cart }) {
             </span>
           </div>
         </div>
-        <div className="d-flex justify-content-between flex-wrap">
+        <div className="d-flex d-none justify-content-between flex-wrap">
           <div className="text-start mb-3">
             <strong>Delivery Charges : </strong>
           </div>
           <div className="text-end mb-3">
             <span className="mx-2">
+              ${" "}
               {cart?.deliveryCharges
                 ? cart?.deliveryCharges
                 : Number(0).toFixed(2)}

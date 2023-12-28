@@ -48,9 +48,6 @@ export default class CartFunction {
             if (data?.settingCode === "STG_2" && data?.type === "percent") {
               taxPer = data?.settingValue;
             }
-            if (data?.settingCode === "STG_1" && data?.type === "amount") {
-              deliveryCharges = data?.settingValue;
-            }
           });
         }
         let discountedAmount = Number(sub) - Number(discountAmount);
@@ -62,12 +59,12 @@ export default class CartFunction {
           Number(taxableTotalAmount) +
           Number(deliveryCharges) +
           Number(extraDeliveryCharges);
-        console.log("discountedAmount", discountedAmount);
-        console.log("taxAmount", taxAmount);
-        console.log("convinenceAmount", convinenceAmount);
-        console.log("taxableTotal", taxableTotal);
-        console.log("taxableTotalAmount", taxableTotalAmount);
-        console.log("gTotal", gTotal);
+        // console.log("discountedAmount", discountedAmount);
+        // console.log("taxAmount", taxAmount);
+        // console.log("convinenceAmount", convinenceAmount);
+        // console.log("taxableTotal", taxableTotal);
+        // console.log("taxableTotalAmount", taxableTotalAmount);
+        // console.log("gTotal", gTotal);
 
         const currentCart = {
           product: cartProduct,

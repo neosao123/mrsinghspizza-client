@@ -51,7 +51,7 @@ function CheckoutPage() {
               className="container-fluid d-flex flex-column justify-content-center align-items-center p-0"
               style={{ backgroundColor: "#ffffff" }}
             >
-              <div className="container-fluid py-4 px-md-5 px-2">
+              <div className="container-fluid py-4 px-lg-5 px-2">
                 <div className="row gx-3 justify-content-center align-items-center">
                   <div className="col-lg-3 col-md-4 text-start">
                     <h1 className="fw-bolder text-secondary h5 mb-md-0 mb-3">
@@ -94,7 +94,7 @@ function CheckoutPage() {
                   </nav>
                 </div>
               </div>
-              <div className="container-fluid px-md-5 px-2">
+              <div className="container-fluid px-lg-5 px-2">
                 <div className="tab-content" id="nav-tabContent">
                   <div
                     className="tab-pane fade show active"

@@ -144,40 +144,7 @@ function SelectedDrink() {
   const handlePlaceOrder = async () => {
     if (cart?.product?.length > 0) {
       if (isAuthenticated && user !== null) {
-        const previousUrl = localStorage.getItem("prevUrl");
-        if (previousUrl && previousUrl !== null) {
-          console.log(regUser.zipcode);
-          const payload = { zipcode: regUser.zipcode };
-          await deliverable(payload)
-            .then((res) => {
-              if (res?.deliverable === true) {
-                paymentGateway();
-              } else {
-                swal({
-                  title: "Postal Code is Undeliverable",
-                  text: `postal code cannot deliverable. Please change the postal code and try again`,
-                  icon: "warning",
-                  buttons: {
-                    ok: "Ok",
-                  },
-                  dangerMode: true,
-                }).then(async (willOk) => {
-                  if (willOk) {
-                  }
-                });
-              }
-            })
-            .catch((error) => {
-              if (
-                error.response.status === 400 ||
-                error.response.status === 500
-              ) {
-                toast.error(error.response.data.message);
-              }
-            });
-        } else {
-          navigate("/address-details");
-        }
+        navigate("/checkout-page");
       } else {
         localStorage.setItem("redirectTo", location?.pathname);
         navigate("/login-registration");

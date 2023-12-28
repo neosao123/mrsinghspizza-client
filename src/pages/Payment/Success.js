@@ -78,12 +78,6 @@ function Success() {
                 >
                   Order Placed Successfully
                 </h5>
-                <p
-                  className="cart-text text-secondary my-1"
-                  style={{ fontSize: "1rem" }}
-                >
-                  <span>Order has been delivered soon.</span>
-                </p>
                 <h6
                   className="card-subtitle my-2 mt-3 text-secondary d-flex justify-content-between flex-wrap"
                   style={{ fontSize: ".95rem", fontWeight: "600" }}
@@ -119,7 +113,7 @@ function Success() {
                 >
                   <span className="fw-bold">Total Amount :</span>
                   <span className="fw-bold">
-                    $ {placeOrderData?.totalAmount}
+                    $ {Number(placeOrderData?.totalAmount).toFixed(2)}
                   </span>
                 </p>
               </div>

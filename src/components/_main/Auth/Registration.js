@@ -54,8 +54,11 @@ const ValidateSchema = Yup.object({
       "Invalid Canadian phone number format. Use (XXX) XXX-XXXX."
     ),
   email: Yup.string()
-    .email("Invalid email address")
-    .matches(/^\w+@[a-zA-Z_]+?\.[a-zA-Z]{2,3}$/, "Invalid Email Address")
+    .email("Invalid email address...")
+    .matches(
+      /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+      "Invalid Email Address"
+    )
     .required("Email is required"),
   password: Yup.string()
     .required("Password is required")
@@ -120,10 +123,10 @@ function Registration({ setLoading }) {
   };
 
   const onSubmit = async (values) => {
-    setLoading(true);
     await deliverable({ zipcode: values.postalcode })
       .then(async (res) => {
         if (res?.deliverable === true) {
+          setLoading(true);
           let payload = {
             firstName: values.firstname,
             lastName: values.lastname,
@@ -181,7 +184,6 @@ function Registration({ setLoading }) {
         if (error.response.status === 400 || error.response.status === 500) {
           toast.error(error.response.data.message);
         }
-        setLoading(false);
       });
   };
   // Use Formik

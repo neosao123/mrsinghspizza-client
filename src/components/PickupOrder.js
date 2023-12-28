@@ -61,8 +61,8 @@ function PickupOrder() {
       discountAmount: cart?.discountAmount,
       taxPer: cart?.taxPer,
       taxAmount: cart?.taxAmount,
-      deliveryCharges: cart?.deliveryCharges,
-      extraDeliveryCharges: cart?.extraDeliveryCharges,
+      deliveryCharges: Number(0).toFixed(2),
+      extraDeliveryCharges: Number(0).toFixed(2),
       grandTotal: cart?.grandtotal,
       storeCode: selectedStore?.code,
     };
@@ -107,8 +107,8 @@ function PickupOrder() {
             <h1 className="titleColor mb-3">Pick up</h1>
             <p className="subTitleColor mb-4">Store Location : </p>
           </div>
-          <div className="row mb-3">
-            <div className="col-lg-6 p-0 m-0 row">
+          <div className="row gx-4 mb-3 justify-content-between">
+            <div className="col-xl-6 col-lg-7 col-md-7 p-0 m-0 px-2 row">
               {storeDetails?.map((data) => {
                 return (
                   <div className="col-12 p-0 pb-2" key={data.code}>
@@ -139,6 +139,59 @@ function PickupOrder() {
                   </div>
                 );
               })}
+            </div>
+            <div className="col-xl-6 col-lg-5 col-md-5 col-sm-12 px-2 p-0 m-0">
+              <div className="row">
+                <div className="col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div className="block-stl10 odr-summary mb-0">
+                    <h3>Order Summary :</h3>
+                    <ul className="list-unstyled">
+                      <li>
+                        <span className="ttl">Sub Total</span>{" "}
+                        <span className="stts">
+                          $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+                        </span>
+                      </li>
+                      <li>
+                        <span className="ttl">
+                          Tax Amount ( {cart?.taxPer ? cart?.taxPer : 0} % )
+                        </span>{" "}
+                        <span className="stts">
+                          ${" "}
+                          {cart?.taxAmount
+                            ? cart?.taxAmount
+                            : Number(0).toFixed(2)}
+                        </span>
+                      </li>
+                      <li className="d-none">
+                        <span className="ttl">Convenience Charges (%)</span>{" "}
+                        <span className="stts">
+                          ${" "}
+                          {cart?.convinenceCharges
+                            ? cart?.convinenceCharges
+                            : 0}
+                        </span>
+                      </li>
+                      <li className="d-none">
+                        <span className="ttl">Delivery Charges</span>{" "}
+                        <span className="stts">
+                          ${" "}
+                          {cart?.deliveryCharges
+                            ? cart?.deliveryCharges
+                            : Number(0).toFixed(2)}
+                        </span>
+                      </li>
+                    </ul>
+                    <div className="ttl-all">
+                      <span className="ttlnm">Grand Total</span>
+                      <span className="odr-stts">
+                        ${" "}
+                        {cart?.grandtotal ? cart?.grandtotal : (0.0).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </>

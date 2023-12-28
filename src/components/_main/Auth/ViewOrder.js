@@ -654,16 +654,16 @@ function ViewOrder({ selectedCode }) {
                 </div>
               </div>
               <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
-                <div className="text-end orderSummaryTitle fw-bold taxPer mx-1">
-                  Tax Percentage (%) :
+                <div className="text-end orderSummaryTitle fw-bold taxAmount mx-1">
+                  Discount Amount :
                 </div>
                 <div className="text-center orderSummaryText fw-bold amount mx-1">
-                  {orderData?.taxPer}
+                  $ {orderData?.discountmount}
                 </div>
               </div>
               <div className="bg-light w-auto py-2 d-flex justify-content-around productDetails">
                 <div className="text-end orderSummaryTitle fw-bold taxAmount mx-1">
-                  Tax Amount :
+                  Tax Amount ({orderData?.taxPer} %) :
                 </div>
                 <div className="text-center orderSummaryText fw-bold amount mx-1">
                   $ {orderData?.taxAmount}

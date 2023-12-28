@@ -100,20 +100,20 @@ function Cart() {
                             <li>
                               <span className="ttl">Sub Total</span>{" "}
                               <span className="stts">
+                                ${" "}
                                 {cart?.subtotal
                                   ? cart?.subtotal
                                   : (0.0).toFixed(2)}
                               </span>
                             </li>
+
                             <li>
-                              <span className="ttl">Tax Percentage (%)</span>{" "}
+                              <span className="ttl">
+                                Tax Amount ( {cart?.taxPer ? cart?.taxPer : 0}{" "}
+                                %)
+                              </span>{" "}
                               <span className="stts">
-                                {cart?.taxPer ? cart?.taxPer : 0}
-                              </span>
-                            </li>
-                            <li>
-                              <span className="ttl">Tax Amount</span>{" "}
-                              <span className="stts">
+                                ${" "}
                                 {cart?.taxAmount
                                   ? cart?.taxAmount
                                   : Number(0).toFixed(2)}
@@ -124,14 +124,16 @@ function Cart() {
                                 Convenience Charges (%)
                               </span>{" "}
                               <span className="stts">
+                                ${" "}
                                 {cart?.convinenceCharges
                                   ? cart?.convinenceCharges
                                   : 0}
                               </span>
                             </li>
-                            <li>
+                            <li className="d-none">
                               <span className="ttl">Delivery Charges</span>{" "}
                               <span className="stts">
+                                ${" "}
                                 {cart?.deliveryCharges
                                   ? cart?.deliveryCharges
                                   : Number(0).toFixed(2)}

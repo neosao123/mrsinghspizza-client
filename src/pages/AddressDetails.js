@@ -4,7 +4,12 @@ import { useFormik } from "formik";
 import Header from "../components/_main/Header";
 import Footer from "../components/_main/Footer";
 import { useSelector } from "react-redux";
-import { deliverable, getPostalcodeList, orderPlace } from "../services";
+import {
+  deliverable,
+  getPostalcodeList,
+  orderPlace,
+  settingApi,
+} from "../services";
 import { toast } from "react-toastify";
 import { json, useNavigate } from "react-router-dom";
 import swal from "sweetalert";
@@ -69,6 +74,7 @@ function AddressDetails() {
   const [postalCodeOp, setPostalCodeOp] = useState([]);
   const [selectedOption, setSelectedOption] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [deliveryCh, setDeliveryCh] = useState(0.0);
 
   const [initialValues, setInitialValues] = useState({
     firstname: user?.data?.firstName,
@@ -82,6 +88,10 @@ function AddressDetails() {
   const navigate = useNavigate();
 
   let arr = [];
+  let gTotal = 0.0;
+  if (deliveryCh > 0) {
+    gTotal = Number(cart?.grandtotal) + Number(deliveryCh);
+  }
 
   const postalCodeList = async () => {
     if (formik.values.postalcode.length >= 3) {
@@ -103,7 +113,26 @@ function AddressDetails() {
     }
   };
 
+  // Developer: Shreyas Mahamuni, Working Date: 26-12-2023
+  const settingValues = async () => {
+    await settingApi()
+      .then((res) => {
+        if (res) {
+          res.data.map((data) => {
+            if (data?.settingCode === "STG_1" && data?.type === "amount") {
+              setDeliveryCh(data?.settingValue);
+            }
+          });
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+
   const paymentGateway = (values) => {
+    let deliveryCharges = deliveryCh || 0.0;
+
     let custFullName = values.firstname + " " + values?.lastname;
     const payload = {
       customerCode: user?.data?.customerCode,
@@ -117,12 +146,11 @@ function AddressDetails() {
       discountAmount: cart?.discountAmount,
       taxPer: cart?.taxPer,
       taxAmount: cart?.taxAmount,
-      deliveryCharges: cart?.deliveryCharges,
+      deliveryCharges: deliveryCharges,
       extraDeliveryCharges: cart?.extraDeliveryCharges,
-      grandTotal: cart?.grandtotal,
+      grandTotal: gTotal,
     };
 
-    console.log("place order", payload);
     orderPlace(payload)
       .then((response) => {
         localStorage.setItem("placedOrder", JSON.stringify(response));
@@ -155,10 +183,10 @@ function AddressDetails() {
     const payload = {
       zipcode: values.postalcode,
     };
-    setLoading(true);
     await deliverable(payload)
       .then((res) => {
         if (res?.deliverable === true) {
+          setLoading(true);
           paymentGateway(values);
         } else {
           swal({
@@ -170,7 +198,6 @@ function AddressDetails() {
           }).then(async (willOk) => {
             if (willOk) {
               navigate("/checkout-page");
-              setLoading(false);
             } else {
               navigate("/");
             }
@@ -207,6 +234,10 @@ function AddressDetails() {
     postalCodeList();
   }, [formik.values.postalcode]);
 
+  useEffect(() => {
+    settingValues();
+  }, []);
+
   return (
     <>
       {loading === true ? (
@@ -218,12 +249,12 @@ function AddressDetails() {
           className="container-fluid d-flex justify-content-start align-items-start flex-column p-0 m-0"
           style={{ backgroundColor: "#ffffff" }}
         >
-          <div className="row checkout_pg text-start">
+          <div className="row justify-content-start checkout_pg">
             <h1 className="titleColor mb-3">Delivery</h1>
             <p className="subTitleColor mb-4">Address Details For Checkout :</p>
           </div>
           <div className="container-fluid row w-100 p-0 m-0">
-            <div className="col-lg-6 col-md-12 col-sm-12 p-0 m-0">
+            <div className="col-xl-6 col-lg-7 col-md-7 col-sm-12 px-2 p-0 m-0">
               <div className="row gx-3">
                 <div className="content col-lg-12 col-md-12 col-sm-12 rounded">
                   <form className="w-100" onSubmit={formik.handleSubmit}>
@@ -324,23 +355,79 @@ function AddressDetails() {
                           </div>
                         ) : null}
                       </div>
-                      <div className="mt-3 d-flex justify-content-start align-items-center flex-row">
+                      <div className="mt-3 mb-3 d-flex justify-content-start align-items-center flex-row">
                         <strong className="mb-2 me-4">Payment Mode : </strong>
                         <span className="mb-2 fw-bolder text-danger">
                           Pay on Delivery
                         </span>
                       </div>
-                      <div className="w-100 text-center mb-3 mt-4">
-                        <button
-                          className="w-100 py-2 fw-bold btn btn-md regBtn"
-                          type="submit"
-                        >
-                          Confirm & Place Order
-                        </button>
-                      </div>
                     </div>
                   </form>
                 </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-5 col-md-5 col-sm-12 px-2 p-0 m-0">
+              <div className="row">
+                <div className="col-lg-12 col-md-12 col-sm-12 mb-2">
+                  <div className="block-stl10 odr-summary mb-0">
+                    <h3>Order Summary :</h3>
+                    <ul className="list-unstyled">
+                      <li>
+                        <span className="ttl">Sub Total</span>{" "}
+                        <span className="stts">
+                          $ {cart?.subtotal ? cart?.subtotal : (0.0).toFixed(2)}
+                        </span>
+                      </li>
+                      <li>
+                        <span className="ttl">
+                          Tax Amount ( {cart?.taxPer ? cart?.taxPer : 0} % )
+                        </span>{" "}
+                        <span className="stts">
+                          ${" "}
+                          {cart?.taxAmount
+                            ? cart?.taxAmount
+                            : Number(0).toFixed(2)}
+                        </span>
+                      </li>
+                      <li className="d-none">
+                        <span className="ttl">Convenience Charges (%)</span>{" "}
+                        <span className="stts">
+                          {cart?.convinenceCharges
+                            ? cart?.convinenceCharges
+                            : 0}
+                        </span>
+                      </li>
+                      <li>
+                        <span className="ttl">Delivery Charges</span>{" "}
+                        <span className="stts">
+                          ${" "}
+                          {deliveryCh
+                            ? Number(deliveryCh).toFixed(2)
+                            : Number(0).toFixed(2)}
+                        </span>
+                      </li>
+                    </ul>
+                    <div className="ttl-all">
+                      <span className="ttlnm">Grand Total</span>
+                      <span className="odr-stts">
+                        ${" "}
+                        {gTotal ? Number(gTotal).toFixed(2) : (0.0).toFixed(2)}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="col-xl-6 col-lg-7 col-md-7 col-sm-12 px-2 p-0 m-0">
+              <div className="w-100 text-center mb-3 mt-4">
+                <form onSubmit={formik.handleSubmit}>
+                  <button
+                    className="w-100 py-2 fw-bold btn btn-md regBtn"
+                    type="submit"
+                  >
+                    Confirm & Place Order
+                  </button>
+                </form>
               </div>
             </div>
           </div>

@@ -78,8 +78,8 @@ const ValidateSchema = Yup.object({
   postalcode: canadianPostalCode.required("Postal Code is Required"),
   address: Yup.string()
     .required("Address is required")
-    .min(20, "Address must be at least 20 characters")
-    .max(50, "Address cannot be longer than 50 characters"),
+    .min(10, "Address must be at least 10 characters")
+    .max(100, "Address cannot be longer than 100 characters"),
   passwordconfirmation: Yup.string()
     .oneOf(
       [Yup.ref("password"), null],

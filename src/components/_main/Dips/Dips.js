@@ -83,7 +83,7 @@ function Dips({ data, cartFn }) {
 
   return (
     <div
-      className="col-xl-3 col-lg-4 col-md-6 col-sm-12 mb-3"
+      className="col-xl-4 col-lg-6 col-md-6 col-sm-12 mb-3"
       key={data.dipsCode}
     >
       <div className="d-flex justify-content-center flex-column p-3 box">

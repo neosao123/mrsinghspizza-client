@@ -234,8 +234,23 @@ function SpecialMenu() {
     let calculatedPrice = Number(0);
     let totalOneTpsPrice = Number(0);
     let totalTwoTpsPrice = Number(0);
+
+    calculatedPrice +=
+      pizzaSize === "Large"
+        ? Number(getSpecialData?.largePizzaPrice)
+        : pizzaSize === "Extra Large"
+        ? Number(getSpecialData?.extraLargePizzaPrice)
+        : 0;
+
+    setPizzaSizePrice(
+      pizzaSize === "Large"
+        ? Number(getSpecialData?.largePizzaPrice)
+        : pizzaSize === "Extra Large"
+        ? Number(getSpecialData?.extraLargePizzaPrice)
+        : 0
+    );
     // OnChange Pizza Size - Price
-    calculatedPrice += Number(pizzaSizePrice) || 0;
+    // calculatedPrice += Number(pizzaSizePrice) || 0;
 
     // Crust, Cheese & Specialbases - Price
     pizzaState.forEach((items) => {
@@ -353,34 +368,6 @@ function SpecialMenu() {
           ];
         });
       }
-      // let arr = [...pizzaState];
-      // pizzaState?.map((item, index) => {
-      //   if (
-      //     toppingsData?.toppings?.freeToppings.length ===
-      //     item?.toppings?.freeToppings.length
-      //   ) {
-      //     if (arr[index]) {
-      //       arr[index] = {
-      //         ...arr[index],
-      //         toppings: {
-      //           ...arr[index].toppings,
-      //           isAllIndiansTps: true,
-      //         },
-      //       };
-      //     }
-      //   } else {
-      //     if (arr[index]) {
-      //       arr[index] = {
-      //         ...arr[index],
-      //         toppings: {
-      //           ...arr[index].toppings,
-      //           isAllIndiansTps: false,
-      //         },
-      //       };
-      //     }
-      //   }
-      // });
-      // setPizzaState(arr);
 
       let arr = [...pizzaState];
 
@@ -430,6 +417,7 @@ function SpecialMenu() {
         comments: "",
       };
       console.log("editedPayload ", pizzaState);
+      console.log("edit to cart payload: ", editedPayload);
       if (editedPayload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         const filteredCart = ct?.product?.filter(
@@ -506,6 +494,7 @@ function SpecialMenu() {
       };
       console.log("arr Create : ", arr);
       console.log("payload Create : ", pizzaState);
+      console.log("add to cart payload: ", payload);
       if (payload) {
         let ct = JSON.parse(localStorage.getItem("cart"));
         ct.product.push(payload);
@@ -782,12 +771,13 @@ function SpecialMenu() {
       payloadEdit.productType === "special_pizza"
     ) {
       setPizzaSize(payloadEdit?.pizzaSize);
-      if (payloadEdit?.pizzaSize === "Large") {
-        setPizzaSizePrice(getSpecialData?.largePizzaPrice);
-      }
-      if (payloadEdit?.pizzaSize === "Extra Large") {
-        setPizzaSizePrice(getSpecialData?.extraLargePizzaPrice);
-      }
+      // if (payloadEdit?.pizzaSize === "Large") {
+      //   setPizzaSizePrice(getSpecialData?.largePizzaPrice);
+      // }
+      // if (payloadEdit?.pizzaSize === "Extra Large") {
+      //   setPizzaSizePrice(getSpecialData?.extraLargePizzaPrice);
+      // }
+      setPizzaSizePrice(payloadEdit?.pizzaPrice);
       setPizzaState(payloadEdit?.config?.pizza);
       setSidesArr(payloadEdit?.config?.sides);
       setDipsObj(payloadEdit?.config?.dips);
